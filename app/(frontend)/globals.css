@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+.poppins{
+    font-family: var(--font-poppins);
+}
+
+.h1 {
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 74px;
+}
+
+.p1 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27px;
+}
+
+@layer utilities {
+  .border-custom {
+    border: 1px solid rgba(49, 158, 158, 0.301); 
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    
+  }
+}

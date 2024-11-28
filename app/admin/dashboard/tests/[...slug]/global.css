@@ -1,0 +1,9 @@
+ol {
+    margin: 0; /* Removes default margin */
+    padding-left: 20px; /* Adjusts indentation */
+  }
+  
+  li {
+    margin: 5px 0; /* Space between items */
+  }
+  

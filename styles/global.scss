@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .h1 {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 74px;
+  }
+  
+  .p1 {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+  }
+
+
+.poppins{
+    font-family: var(--font-poppins);
+}
+.jost {
+    font-family: var(--font-jost);
+}
+.barlow{
+    font-family: var(--font-barlow);
+}  
+.spaceGrotesk{
+    font-family: var(--font-spaceGrotesk);
+}
+
