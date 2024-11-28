@@ -153,9 +153,9 @@ const TestPage = () => {
       setNewTest({
         testTitle: "",
         testDescription: "",
-        testLiveDate: "",
+        testUploadDate: "",
         duration: "",
-        totalMarks: "",
+        Totalmarks: "",
         subjects: [],
         updatedAt: "",
         updatedBy: "",
@@ -351,7 +351,7 @@ const TestPage = () => {
 
       {isEditDialogOpen && (
         <EditTestModal
-          isOpen={isModalOpen}
+          isOpen={isEditDialogOpen}
           handleClose={handleCloseEditDialog}
           editTest={editTest}
           teachers={teachers}
