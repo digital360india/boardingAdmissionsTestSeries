@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { db } from "@/firebase/firebase";
-import { doc} from "firebase/firestore";
+import { doc } from "firebase/firestore";
 import { TestContext } from "@/providers/testProvider";
 import { UserContext } from "@/providers/userProvider";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -22,11 +22,11 @@ const TestPackagesList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editFormData, setEditFormData] = useState({
     packageName: "",
-    packagePrice: "",
-    packageDiscountedPrice: "",
-    packageLiveDate: "",
+    price: "",
+    discountedPrice: "",
+    dateOfCreation: "",
     packageImage: "",
-    testIds: [],
+    tests: [],
     packageDescription: "",
   });
   const [showModal, setShowModal] = useState(false);
@@ -35,9 +35,13 @@ const TestPackagesList = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
+
+    // Convert the value back to a Date object if the input is for startingDate
+    const newValue = name === "startingDate" ? new Date(value) : value;
+
     setEditFormData({
       ...editFormData,
-      [name]: value,
+      [name]: newValue,
     });
   };
 
@@ -51,12 +55,18 @@ const TestPackagesList = () => {
 
   const handleEdit = async (e, packageId) => {
     try {
+      // Check if startingDate is valid before using it
+      const startingDate = new Date(editFormData.startingDate);
+      if (isNaN(startingDate.getTime())) {
+        throw new Error("Invalid starting date provided.");
+      }
+
       const packageRef = doc(db, "testPackages", packageId);
       const updatedData = {
         ...editFormData,
-        packagePrice: parseFloat(editFormData.packagePrice),
-        packageDiscountedPrice: parseFloat(editFormData.packageDiscountedPrice),
-        packageLiveDate: new Date(editFormData.packageLiveDate).toISOString(),
+        price: parseFloat(editFormData.price),
+        discountedPrice: parseFloat(editFormData.discountedPrice),
+        dateOfCreation: startingDate.toISOString(), // Convert to ISO string
         updatedAt: new Date().toISOString(),
         ...(user && { updatedBy: user.id }),
       };
@@ -87,17 +97,17 @@ const TestPackagesList = () => {
     const { checked } = e.target;
 
     setEditFormData((prevFormData) => {
-      let updatedTestIds;
+      let updatedTests;
 
       if (checked) {
-        updatedTestIds = [...prevFormData.testIds, testId];
+        updatedTests = [...prevFormData.tests, testId];
       } else {
-        updatedTestIds = prevFormData.testIds.filter((id) => id !== testId);
+        updatedTests = prevFormData.tests.filter((id) => id !== testId);
       }
 
       return {
         ...prevFormData,
-        testIds: updatedTestIds,
+        tests: updatedTests,
       };
     });
   };
@@ -129,7 +139,7 @@ const TestPackagesList = () => {
   const handleDelete1 = (testId) => {
     setEditFormData((prevData) => ({
       ...prevData,
-      testIds: prevData.testIds.filter((id) => id !== testId),
+      tests: prevData.tests.filter((id) => id !== testId),
     }));
   };
   return (
@@ -149,7 +159,6 @@ const TestPackagesList = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ">
           <div className="relative w-[50vw] h-[80vh]  bg-white  rounded-lg shadow overflow-y-scroll border-2 border-background04">
             <div className="flex justify-between items-center pl-4 pt-5 sticky top-0 bg-white border-b-2 border-background04">
-              {" "}
               <h4 className="text-2xl font-semibold text-background04 ">
                 Edit Package
               </h4>{" "}
@@ -209,7 +218,7 @@ const TestPackagesList = () => {
                       type="number"
                       step="0.01"
                       name="packagePrice"
-                      value={editFormData.packagePrice}
+                      value={editFormData.price}
                       onChange={handleEditChange}
                       className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
                     />
@@ -222,25 +231,31 @@ const TestPackagesList = () => {
                       type="number"
                       step="0.01"
                       name="packageDiscountedPrice"
-                      value={editFormData.packageDiscountedPrice}
+                      value={editFormData.discountedPrice}
                       onChange={handleEditChange}
                       className=" block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
                     />
                   </div>
-                  <div className=" flex gap-1 justify-star items-center">
+                  <div className="flex gap-1 justify-start items-center">
                     <label className="block text-black font-medium">
                       Starting Date:
                     </label>
                     <input
                       type="date"
-                      name="packageLiveDate"
-                      value={editFormData.packageLiveDate}
+                      name="startingDate"
+                      value={
+                        editFormData.startingDate
+                          ? new Date(editFormData.startingDate)
+                              .toISOString()
+                              .split("T")[0] // Convert to 'YYYY-MM-DD'
+                          : ""
+                      }
                       onChange={handleEditChange}
-                      className="block  pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+                      className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
                     />
                   </div>
                 </div>
-                {editFormData.packageImage && (
+                {/* {editFormData.packageImage && (
                   <div className="mb-4">
                     <label className="block text-black font-medium">
                       Current Package Image:
@@ -251,10 +266,10 @@ const TestPackagesList = () => {
                       className="w-32 h-32 object-cover rounded"
                     />
                   </div>
-                )}
+                )} */}
               </div>
 
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block text-black font-medium">
                   Upload New Package Image:
                 </label>
@@ -264,23 +279,23 @@ const TestPackagesList = () => {
                   onChange={handleImageUpload}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
-              </div>
+              </div> */}
 
-              <div className="mb-4">
+              <div className="">
                 <label className="block text-black font-medium">
                   Test IDs:
                 </label>
-                {editFormData?.testIds && editFormData.testIds.length > 0 ? (
-                  <ul className="grid grid-cols-2 gap-x-5 pr-4 list-disc pl-5 min-h-28 overflow-y-scroll bg-gray-100">
-                    {editFormData.testIds.map((testId, index) => {
-                      const test = tests.find((t) => t.id === testId);
+                {editFormData?.tests && editFormData.tests.length > 0 ? (
+                  <ul className="grid grid-cols-2 gap-x-5 pr-4 list-disc pl-5 min-h-28 py-4 overflow-y-scroll bg-gray-100">
+                    {editFormData.tests.map((testId, index) => {
+                      const test = allTests?.find((t) => t.id === testId);
                       return (
                         <li
-                          key={testId}
+                          key={index}
                           className="text-gray-700 flex justify-between items-center"
                         >
                           <div>
-                            <span className="w-3 "> {index + 1}, </span>
+                            <span className="w-3">{index + 1}, </span>
                             {test
                               ? test.testTitle
                               : `No title found for test ID: ${testId}`}
@@ -310,7 +325,7 @@ const TestPackagesList = () => {
                       <input
                         type="checkbox"
                         value={course.id}
-                        checked={editFormData.testIds.includes(course.id)}
+                        checked={editFormData.tests.includes(course.id)}
                         onChange={(e) => handleTestSelection(e, course.id)}
                         className="mr-2"
                       />
@@ -320,7 +335,7 @@ const TestPackagesList = () => {
                 </div>
               </div>
               <div className="h-14"></div>
-              <div className="flex justify-between items-center pr-2 pb-2 pt-2 pl-2  space-x-2 mt-10 sticky bottom-0 bg-white border-2 border-background04 opacity-100 w-full ">
+              <div className="flex justify-between items-center pr-2 pb-2 pt-2 pl-2  space-x-2 mt-10 sticky bottom-0 bg-white  w-full ">
                 <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
@@ -358,7 +373,7 @@ const TestPackagesList = () => {
                       <strong>Package Name:</strong>
                     </td>
                     <td className="min-w-fit py-2 px-4 border-b border-gray-300">
-                      {selectedPackage.packageName}
+                      {selectedPackage?.packageName}
                     </td>
                   </tr>
                   <tr className="even:bg-gray-100 hover:bg-gray-300">
@@ -366,7 +381,7 @@ const TestPackagesList = () => {
                       <strong>Price:</strong>
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
-                      ₹{selectedPackage.packagePrice}
+                      ₹{selectedPackage?.price}
                     </td>
                   </tr>
                   <tr className="even:bg-gray-100 hover:bg-gray-300">
@@ -374,7 +389,7 @@ const TestPackagesList = () => {
                       <strong>Discounted Price:</strong>
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
-                      ₹{selectedPackage.packageDiscountedPrice}
+                      ₹{selectedPackage?.discountedPrice}
                     </td>
                   </tr>
                   <tr className="even:bg-gray-100 hover:bg-gray-300">
@@ -382,7 +397,9 @@ const TestPackagesList = () => {
                       <strong>Date of Creation:</strong>
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
-                      {new Date(selectedPackage.createdAt).toLocaleString()}
+                      {new Date(
+                        selectedPackage?.dateOfCreation
+                      ).toLocaleString()}
                     </td>
                   </tr>
                   <tr className="even:bg-gray-100 hover:bg-gray-300">
@@ -390,7 +407,7 @@ const TestPackagesList = () => {
                       <strong>Students Enrolled:</strong>
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
-                      {selectedPackage.studentsEnrolled.length}
+                      {selectedPackage?.studentsEnrolled}
                     </td>
                   </tr>
                   <tr className="even:bg-gray-100 hover:bg-gray-300">
@@ -399,7 +416,7 @@ const TestPackagesList = () => {
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
                       {new Date(
-                        selectedPackage.packageLiveDate
+                        selectedPackage?.startingDate
                       ).toLocaleDateString()}
                     </td>
                   </tr>
