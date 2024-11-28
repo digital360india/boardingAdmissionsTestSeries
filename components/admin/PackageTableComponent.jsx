@@ -17,17 +17,17 @@ const PackageTable = ({
   const [packageIdToDelete, setPackageIdToDelete] = useState(null);
 
   const handleEditClick = (pkg) => {
+    console.log(pkg)
     setEditingPackage(pkg.id);
     setEditFormData({
       packageName: pkg.packageName,
       packageDescription: pkg.packageDescription,
-      packagePrice: pkg.packagePrice,
-      testIds: pkg.testIds,
-      packageDiscountedPrice: pkg.packageDiscountedPrice,
-      packageImage: pkg.packageImage,
-      packageLiveDate: new Date(pkg.packageLiveDate)
-        .toISOString()
-        .split("T")[0],
+      price: pkg.price,
+      tests: pkg.tests,
+      discountedPrice: pkg.discountedPrice,
+      startingDate:   new Date(
+        pkg.startingDate
+      ).toLocaleDateString()
     });
   };
 
@@ -92,10 +92,10 @@ const PackageTable = ({
               <td className="py-2 px-4 border-b border-r">{index + 1}</td>
               <td className="py-2 px-4 border-b border-r">{pkg.packageName}</td>
               <td className="py-2 px-4 border-b border-r">
-                ₹{pkg.packagePrice}
+                ₹{pkg.price}
               </td>
               <td className="py-2 px-4 border-b border-r">
-                ₹{pkg.packageDiscountedPrice}
+                ₹{pkg.discountedPrice}
               </td>
               <td className="py-2 px-4 border-b">{renderActions(pkg)}</td>
             </tr>
