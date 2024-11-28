@@ -38,7 +38,7 @@ const TestPackagePage = () => {
       if (packageData) {
         setPackageData(packageData);
         const filteredTests = allTests.filter((test) =>
-          packageData.testIds.includes(test.id)
+          packageData.test.includes(test.id)
         );
         setTests(filteredTests);
       } else {
