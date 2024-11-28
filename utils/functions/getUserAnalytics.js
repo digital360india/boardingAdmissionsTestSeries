@@ -23,7 +23,7 @@ ChartJS.register(
 );
 
 const UserAnalytics = ({ data }) => {
-  const { myScores, myResults, name } = data;
+  const { myScores, myResults, displayName } = data;
   const [timeFilter, setTimeFilter] = useState("day");
 
   const filterScores = () => {
@@ -115,7 +115,7 @@ const UserAnalytics = ({ data }) => {
     <div className="p-8 bg-gradient-to-br from-gray-100 to-blue-100 rounded-2xl shadow-lg">
   
 
-      <h1 className="text-2xl text-center text-gray-800 mb-6">Hi, {name}!</h1>
+      <h1 className="text-2xl text-center text-gray-800 mb-6">Hi, {displayName}!</h1>
 
   
       <div className="flex flex-col lg:flex-row gap-8 mt-4">

@@ -3,9 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { updateDoc, doc, arrayUnion } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useRouter } from "next/navigation";
 import { UserContext } from "@/providers/userProvider";
-import { useSubscription } from "@/providers/subscriptionProvider";
 import Achievements from "@/components/admin/AchievementComponent";
 import Loading from "@/app/loading";
 import showError from "@/utils/functions/showError";
@@ -35,10 +33,9 @@ export default function Page() {
     returnPolicy: "",
   });
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const { user } = useContext(UserContext);
   const storage = getStorage();
-  const { subscriptionData } = useSubscription();
+
   console.log(user);
   useEffect(() => {
     const fetchData = async () => {

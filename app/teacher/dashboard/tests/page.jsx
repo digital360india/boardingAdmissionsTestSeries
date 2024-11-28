@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { IoIosAddCircle } from "react-icons/io";
-import { useSubscription } from "@/providers/subscriptionProvider";
 import { UserContext } from "@/providers/userProvider";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 
@@ -21,7 +20,6 @@ const TestPage = () => {
     id: "",
   };
   const [deletePopup, setDeletePopup] = useState(initial);
-  const { subscriptionData } = useSubscription();
   const [expandedRows, setExpandedRows] = useState({});
   const getFirst50Words = (text) => {
     return text.split(" ").slice(0, 10).join(" ");
@@ -73,11 +71,6 @@ const TestPage = () => {
     setInput(value);
     filterData(value);
   };
-
-  if (subscriptionData?.isActive == false) {
-    return router.push("/subscribe/teacher");
-  }
-
   const handleAddQuestions = (id)=>{
     router.push(`/teacher/dashboard/tests/${id}`)
   }

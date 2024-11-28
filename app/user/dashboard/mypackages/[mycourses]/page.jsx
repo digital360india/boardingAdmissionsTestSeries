@@ -5,7 +5,6 @@ import { db } from "@/firebase/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
 import { IoMdArrowBack } from "react-icons/io";
-import { useSubscription } from "@/providers/subscriptionProvider";
 import Loading from "@/app/loading";
 
 const Page = () => {
@@ -16,7 +15,6 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter(); 
-  const { subscriptionData } = useSubscription();
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -58,8 +56,6 @@ const Page = () => {
       return "";
     }
     
-    if (subscriptionData?.isActive == false) {      return router.push("/subscribe/user");
-    }
     const words = text.split(" ");
     if (words.length > limit) {
       return words.slice(0, limit).join(" ") + "...";

@@ -62,9 +62,7 @@ const Page = () => {
                 ? new Date(user?.createdAt).toLocaleDateString()
                 : "N/A"}
             </p>
-            <p>
-              <strong>Verified:</strong> {user?.isVerified ? "Yes" : "No"}
-            </p>
+           
           </div>
         </div>
       </div>

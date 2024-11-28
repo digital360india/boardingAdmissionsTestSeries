@@ -1,16 +1,15 @@
 "use client";
-import { useSubscription } from "@/providers/subscriptionProvider";
-import { UserContext } from "@/providers/userProvider";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
-import Loading from "@/app/loading";
+import { UserContext } from "@/providers/userProvider";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
+import Loading from "@/app/loading";
 
 export default function Page() {
   const [data, setData] = useState([]);
   const { user } = useContext(UserContext);
-  const router = useRouter();
   const { allTests } = useContext(TestSeriesContext);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTestTitles = () => {
@@ -27,12 +26,13 @@ export default function Page() {
           }
           return result;
         });
+
         const sortedResults = updatedResults.sort((a, b) => {
           const timeA = a.testSubmissionTime?.seconds || 0;
           const timeB = b.testSubmissionTime?.seconds || 0;
           return timeB - timeA;
         });
-  
+
         setData(sortedResults);
       }
     };
@@ -46,6 +46,10 @@ export default function Page() {
     return "bg-green-300";
   };
 
+  if (!user || !allTests) {
+    return <Loading />;
+  }
+
   return (
     <div className="container mx-auto p-4 pb-28 md:pb-0">
       <h1 className="text-2xl font-bold text-center text-background04 mb-6">
@@ -54,9 +58,11 @@ export default function Page() {
       {data.length > 0 ? (
         <div className="h-full">
           {data.map((test) => {
-            const maxScore = test.totalMarks || 100; 
+            const maxScore = test.totalMarks || 100;
             const score = test.score || 0;
-            const progressPercentage = Math.min((score / maxScore) * 100, 100); 
+            const progressPercentage = maxScore
+              ? Math.min((score / maxScore) * 100, 100)
+              : 0;
             const progressColor = getColor(progressPercentage);
 
             return (
@@ -70,13 +76,11 @@ export default function Page() {
                   </h2>
                   <p className="text-gray-600">{test.testDescription}</p>
                   <p className="text-gray-500 text-sm">
-                    Time Taken: {test.timeTaken} minutes
+                    Time Taken: {test.timeTaken || "N/A"} minutes
                   </p>
                   <p className="text-gray-500 text-sm">
                     Test Submission Date:{" "}
-                    {test.testSubmissionTime instanceof Date
-                      ? new Date(test.testSubmissionTime).toLocaleDateString()
-                      : test.testSubmissionTime?.seconds
+                    {test.testSubmissionTime?.seconds
                       ? new Date(
                           test.testSubmissionTime.seconds * 1000
                         ).toLocaleDateString()
@@ -108,7 +112,7 @@ export default function Page() {
           })}
         </div>
       ) : (
-        <Loading />
+        <p className="text-center text-gray-600">No results available.</p>
       )}
     </div>
   );

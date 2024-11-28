@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { db } from "@/firebase/firebase";
 import { updateDoc, doc, arrayUnion } from "firebase/firestore";
 import TestPackagesList from "@/components/admin/AllTestPackages";
-import { useSubscription } from "@/providers/subscriptionProvider";
 import { UserContext } from "@/providers/userProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -42,7 +41,6 @@ const Page = () => {
   const [selectedtests, setSelectedtests] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
-  const { subscriptionData } = useSubscription();
 
   useEffect(() => {
     if (allTests.length > 0) {

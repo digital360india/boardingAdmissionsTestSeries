@@ -27,18 +27,6 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       src: "/admin/dashboard/tests",
       icon: <FaEdit />,
     },
-
-    {
-      title: "Subscriptions",
-      src: "/admin/dashboard/subscriptions",
-      icon: <GrMoney />,
-    },
-   
-    {
-      title: "My Profile",
-      src: "/admin/dashboard/myprofile",
-      icon: <FaUser />,
-    },
     {
       title: "Users",
       src: "/admin/dashboard/allusers",
@@ -93,7 +81,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           >
             <Link href={"/dashboard"}>
               <img
-                src="/fullstar.svg"
+                src="/navbar.svg"
                 className="w-20 h-20 bg-[#fff] rounded-full"
               />
             </Link>

@@ -12,7 +12,9 @@ export const renderQuestionContent = (question) => {
       </div>
       <div className="flex">
         {" "}
-        <div className=" bg-background04 px-2 py-1 rounded-md text-white font-semibold ">{question.subject}</div>
+        <div className=" bg-background04 px-2 py-1 rounded-md text-white font-semibold ">
+          {question.subject}
+        </div>
       </div>{" "}
       <div className="flex justify-between items-center">
         <div className="text-lg flex justify-between w-full gap-4  ">
@@ -76,7 +78,7 @@ export const renderQuestionContent = (question) => {
                   </p>
                 </>
               );
-     
+
             case "mcq":
               return (
                 <>
@@ -161,7 +163,7 @@ export const renderQuestionContent = (question) => {
           Postive Marks: {question.totalmarks}
         </p>
         <p className="font-semibold text-red-400">
-          Negative Marks: - {question.neg_marks}
+          Negative Marks: {question.neg_marks ? question.neg_marks : 0}
         </p>
       </div>
     </div>

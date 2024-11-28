@@ -98,9 +98,9 @@ const TestTable = ({
               </td>
               <td className="border p-2 w-20">{test.duration || "N/A"}</td>
               <td className="border text-sm p-4 w-32">
-                {test.testLiveDate || "N/A"}
+                {test.testUploadDate || "N/A"}
               </td>
-              <td className="border p-2 w-14">{test.totalMarks || "N/A"}</td>
+              <td className="border p-2 w-14">{test.Totalmarks || "N/A"}</td>
               <td>
                 <div className="relative inline-block">
                   <button

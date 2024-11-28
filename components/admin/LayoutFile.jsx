@@ -1,22 +1,12 @@
 'use client';
-import React, { useContext, useEffect, useState } from "react";
+import React, {useState } from "react";
 import { SideNavBar } from "./SideNavBar";
 import { TopNavBar } from "./TopNavBar";
-import Verification from "../frontend/Verification";
-import { UserContext } from "@/providers/userProvider";
+
 
 export default function LayoutFile({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const { user } = useContext(UserContext);
 
-  useEffect(() => {
-    if (user && user.isVerified) {
-    }
-  }, [user]);
-
-  if (!user?.isVerified) {
-    return <Verification user={user} />;
-  }
   return (
     <div className="flex">
       <SideNavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />

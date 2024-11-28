@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
 
     setUser(null);
     toast.success("Logged out successfully");
-    router.push("/login");
+    router.push("/");
   };
 
   useEffect(() => {

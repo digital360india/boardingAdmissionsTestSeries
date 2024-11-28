@@ -13,7 +13,6 @@ import {
 import { useRouter } from "next/navigation";
 import { db } from "@/firebase/firebase";
 import { UserContext } from "@/providers/userProvider";
-import { useSubscription } from "@/providers/subscriptionProvider";
 import TestTable from "@/components/admin/TestTableComponent";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import Loading from "@/app/loading";
@@ -34,7 +33,6 @@ const TestPage = () => {
   const [input, setInput] = useState("");
   const [searchActive, setSearchActive] = useState(false);
   const [results, setResults] = useState([]);
-  const { subscriptionData } = useSubscription();
   const [newTest, setNewTest] = useState({
     testTitle: "",
     testDescription: "",

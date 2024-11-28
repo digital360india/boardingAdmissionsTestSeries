@@ -29,11 +29,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       src: "/user/dashboard/myresults",
       icon: <FaBook />,
     },
-    {
-      title: "Live Tests",
-      src: "/user/dashboard/livetests",
-      icon: <FaPen />,
-    },
+   
   ];
   const path = usePathname();
 
@@ -75,7 +71,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           >
             <Link href={"/dashboard"}>
               <img
-                src="/fullstar.svg"
+                src="/navbar.svg"
                 className="w-20 h-20 bg-[#fff] rounded-full"
               />
             </Link>

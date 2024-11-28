@@ -5,7 +5,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import { IoMdArrowBack } from "react-icons/io";
 import { FaArrowRightLong, FaArrowDownLong } from "react-icons/fa6";
-import { useSubscription } from "@/providers/subscriptionProvider";
 import Loading from "@/app/loading";
 
 const Page = () => {
@@ -19,7 +18,6 @@ const Page = () => {
   const [selectedChapterIndex, setSelectedChapterIndex] = useState(null);
   const [selectedLectureIndex, setSelectedLectureIndex] = useState(null);
   const [showFullText, setShowFullText] = useState(false);
-  const { subscriptionData } = useSubscription();
   const fetchCourseData = async () => {
     try {
       const courseDoc = await getDoc(doc(db, "courses", course));
@@ -40,9 +38,7 @@ const Page = () => {
   useEffect(() => {
     fetchCourseData();
   });
-  
-  if (subscriptionData?.isActive == false) {    return router.push("/subscribe/user");
-  }
+
   const handleChapterClick = (index) => {
     setSelectedChapterIndex(index === selectedChapterIndex ? null : index);
     setSelectedLectureIndex(null);

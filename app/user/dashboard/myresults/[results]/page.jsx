@@ -1,12 +1,9 @@
 "use client";
 
-import { useSubscription } from "@/providers/subscriptionProvider";
 import React, { useState } from "react";
 export default function Page() {
   const [showAttemptedques, setShowAttemptedques] = useState(true);
-  const { subscriptionData } = useSubscription();
-  if (subscriptionData?.isActive == false) {    return router.push("/subscribe/user");
-  }
+
   return (
     <>
       <div className="container mx-auto p-4 shadow-lg h-full w-full">

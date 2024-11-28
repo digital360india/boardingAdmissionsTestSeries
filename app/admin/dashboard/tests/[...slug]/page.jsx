@@ -1,27 +1,31 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
 import { db, storage } from "@/firebase/firebase";
-import { addDoc, doc, getDoc, updateDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  arrayUnion,
+} from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
 import { mcqQuestionModel } from "@/models/QuestionModel";
 import { RxCrossCircled } from "react-icons/rx";
 import { deleteDoc } from "firebase/firestore";
 import QuillEditor from "@/components/admin/QuillEditor";
 import "./global.css";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { getQuestionModel } from "@/utils/functions/getQuestionsModel";
 import { UserContext } from "@/providers/userProvider";
 import { serverTimestamp } from "firebase/firestore"; // Import serverTimestamp
 import { renderQuestionContent } from "@/utils/functions/renderQuestionContent";
 import { FiDelete, FiEdit } from "react-icons/fi";
-import GoBackButton from "@/components/backend/Gobackbutton";
 import Lottie from "lottie-react";
 import loadingAnimation1 from "@/public/lottie/lottiehello.json";
 import loadingAnimation2 from "@/public/lottie/lottieman.json";
 import { deleteImage, uploadImage } from "@/utils/functions/imageControls";
 import showError from "@/utils/functions/showError";
 import { toast } from "react-toastify";
-import MakeLiveTest from "@/components/admin/MarkTestAsLiveTest";
 import HeaderSection from "@/components/admin/HeaderSectionTestMaker";
 const AddQuestionsPage = () => {
   const [test, setTest] = useState(null);
@@ -49,23 +53,38 @@ const AddQuestionsPage = () => {
   const fetchTest = async () => {
     try {
       const docRef = doc(db, "tests", testId);
-      try {
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setTest(docSnap.data());
-          setQuestions(docSnap.data().questions || []);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const testData = docSnap.data();
+        setTest(testData);
+        const questionIds = testData.test || [];
+
+        if (Array.isArray(questionIds) && questionIds.length > 0) {
+          const questionsPromises = questionIds.map((id) =>
+            getDoc(doc(db, "questions", id))
+          );
+
+          const questionDocs = await Promise.all(questionsPromises);
+
+          const questionsData = questionDocs
+            .filter((doc) => doc.exists())
+            .map((doc) => doc.data());
+
+          setQuestions(questionsData);
         } else {
-          console.log("No such document!");
+          console.log("No questions found in test data.");
+          setQuestions([]);
         }
-      } catch (err) {
-        console.error("Error fetching all questions:", err);
-        showError(err.message);
+      } else {
+        console.log("No such test document!");
       }
     } catch (err) {
-      console.error("Error fetching test:", err);
+      console.error("Error fetching test or questions:", err);
       showError(err.message);
     }
   };
+
   useEffect(() => {
     if (showForm) {
       document.body.style.overflow = "hidden";
@@ -333,7 +352,7 @@ const AddQuestionsPage = () => {
               className=" block w-fit bg-gray-200 border-gray-800 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </label>
-          <label className="block mb-4">
+          {/* <label className="block mb-4">
             <span className="text-gray-700">Select Subject</span>
             <select
               name="subject"
@@ -348,7 +367,7 @@ const AddQuestionsPage = () => {
                 </option>
               ))}
             </select>
-          </label>
+          </label> */}
         </div>
         <div className=" ">
           <div className="text-gray-700 w-fit">
@@ -777,9 +796,10 @@ const AddQuestionsPage = () => {
       </div>
     );
   };
-  const handleEdit = (questionId) => {
-    const questionToEdit = test.questions.find((q) => q.id === questionId);
 
+  const handleEdit = (questionId) => {
+    console.log(questionId);
+    const questionToEdit = questions.find((q) => q.id === questionId);
     if (questionToEdit) {
       setNewQuestion(questionToEdit);
       setEditingQuestionId(questionId);
@@ -788,14 +808,10 @@ const AddQuestionsPage = () => {
       console.error("Question not found.");
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !newQuestion.sno ||
-      !newQuestion.question ||
-      !newQuestion.subject ||
-      !newQuestion.totalmarks
-    ) {
+    if (!newQuestion.sno || !newQuestion.question || !newQuestion.totalmarks) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -814,11 +830,10 @@ const AddQuestionsPage = () => {
           updatedAt: serverTimestamp(),
           updatedBy: user.id,
         });
-        const updatedQuestions = test.questions.map((q) =>
+        const updatedQuestions = questions.map((q) =>
           q.id === editingQuestionId ? { ...q, ...newQuestion } : q
         );
-        const testRef = doc(db, "tests", testId);
-        await updateDoc(testRef, { questions: updatedQuestions });
+        setQuestions(updatedQuestions);
         setEditingQuestionId(null);
         setImagePreview("");
         setImagePreviews("");
@@ -832,21 +847,19 @@ const AddQuestionsPage = () => {
           collection(db, "questions"),
           questionData
         );
-
-        const questionDoc = await getDoc(questionRef);
-        const questionWithId = { id: questionDoc.id, ...questionDoc.data() };
-        await updateDoc(questionRef, { id: questionDoc.id });
+        const questionId = questionRef.id;
         const testRef = doc(db, "tests", testId);
-        const updatedQuestions = [...(test.questions || []), questionWithId];
-        await updateDoc(testRef, { questions: updatedQuestions });
+        await updateDoc(testRef, {
+          test: arrayUnion(questionId),
+        });
+        fetchTest();
         setImagePreview("");
         setImagePreviews("");
       }
+
       setNewQuestion({ questionType: "mcq", ...mcqQuestionModel });
       setShowForm(false);
       setImagePreview("");
-
-      fetchTest();
     } catch (err) {
       console.error("Error adding/updating question:", err);
       showError(err.message);
@@ -887,8 +900,6 @@ const AddQuestionsPage = () => {
     setImagePreview(null); // Reset image preview after adding solution
   };
 
-
-
   return (
     <div className="">
       <HeaderSection
@@ -898,7 +909,7 @@ const AddQuestionsPage = () => {
         setEditingQuestionId={setEditingQuestionId}
         setNewQuestion={setNewQuestion}
         mcqQuestionModel={mcqQuestionModel}
-        testId={testId} 
+        testId={testId}
       />
       {showForm && (
         <>
