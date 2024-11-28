@@ -19,6 +19,7 @@
     "axios": "^1.7.7",
     "better-react-mathjax": "^2.0.3",
     "chart.js": "^4.4.5",
+    "cloudinary": "^2.5.1",
     "crypto-js": "^4.2.0",
     "emailjs-com": "^3.2.0",
     "express": "^4.21.1",
