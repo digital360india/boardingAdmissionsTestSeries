@@ -38,7 +38,7 @@ const TestPackagePage = () => {
       if (packageData) {
         setPackageData(packageData);
         const filteredTests = allTests.filter((test) =>
-          packageData.test.includes(test.id)
+          packageData.tests.includes(test.id)
         );
         setTests(filteredTests);
       } else {
@@ -105,13 +105,13 @@ const TestPackagePage = () => {
           </h1>
           <p className="mt-2 text-gray-600">{packageData.testDescription}</p>
           <p className="mt-2 text-gray-800 font-semibold">
-            Price: ₹{packageData.packagePrice}
+            Price: ₹{packageData.price}
           </p>
           <p className="mt-1 text-gray-800 font-semibold">
-            Discounted Price: ₹{packageData.packageDiscountedPrice}
+            Discounted Price: ₹{packageData.discountedPrice}
           </p>
           <p className="mt-1 text-gray-800">
-            Students Enrolled: {packageData.studentsEnrolled.length}
+            Students Enrolled: {packageData.studentsEnrolled}
           </p>
           <button
             className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
