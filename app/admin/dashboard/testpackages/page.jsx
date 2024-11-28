@@ -25,17 +25,17 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     packageName: "",
-    packagePrice: "",
-    packageLiveDate: "",
+    price: "",
+    startingDate: "",
     createdAt: "",
     createdBy: "",
     updatedBy: "",
     updatedAt: "",
     packageImage: null,
-    packageDiscountedPrice: "",
+    discountedPrice: "",
     studentsEnrolled: [],
     packageDescription: "",
-    testIds: [],
+    tests: [],
     studentFeedBack: [],
   });
   const [selectedtests, setSelectedtests] = useState([]);
@@ -113,12 +113,12 @@ const Page = () => {
 
       const packageData = {
         ...formData,
-        packagePrice: parseFloat(formData.packagePrice),
-        packageDiscountedPrice: parseFloat(formData.packageDiscountedPrice),
-        packageLiveDate: new Date(formData.packageLiveDate).toISOString(),
+        price: parseFloat(formData.price),
+        discountedPrice: parseFloat(formData.discountedPrice),
+        startingDate: new Date(formData.startingDate).toISOString(),
         createdAt: new Date().toISOString(),
         createdBy: user?.id,
-        testIds: selectedtests,
+        tests: selectedtests,
         packageImage: imageUrl || "",
       };
       const docRef = await addPackage(packageData);
@@ -133,9 +133,9 @@ const Page = () => {
 
       setFormData({
         packageName: "",
-        packagePrice: "",
-        packageDiscountedPrice: "",
-        packageLiveDate: "",
+        price: "",
+        discountedPrice: "",
+        startingDate: "",
         packageImage: null,
         packageDescription: "",
       });
@@ -159,9 +159,9 @@ const Page = () => {
   const handleOnClose = () => {
     setFormData({
       packageName: "",
-      packagePrice: "",
-      packageDiscountedPrice: "",
-      packageLiveDate: "",
+      price: "",
+      discountedPrice: "",
+      startingDate: "",
       packageImage: null,
       packageDescription: "",
     });
@@ -219,8 +219,8 @@ const Page = () => {
                   <input
                     type="number"
                     step="0.01"
-                    name="packagePrice"
-                    value={formData.packagePrice}
+                    name="price"
+                    value={formData.price}
                     onChange={handleInputChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     required
@@ -233,8 +233,8 @@ const Page = () => {
                   <input
                     type="number"
                     step="0.01"
-                    name="packageDiscountedPrice"
-                    value={formData.packageDiscountedPrice}
+                    name="discountedPrice"
+                    value={formData.discountedPrice}
                     onChange={handleInputChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     required
@@ -244,8 +244,8 @@ const Page = () => {
                   <label className="block text-gray-700">Starting Date:</label>
                   <input
                     type="date"
-                    name="packageLiveDate"
-                    value={formData.packageLiveDate}
+                    name="startingDate"
+                    value={formData.startingDate}
                     onChange={handleInputChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     required
