@@ -234,39 +234,39 @@ const AddQuestionsPage = () => {
     }
   };
 
-  const handleDeleteImage = async (option) => {
-    try {
-      const imageUrl = option ? imagePreviews[option] : imagePreview;
+  // const handleDeleteImage = async (option) => {
+  //   try {
+  //     const imageUrl = option ? imagePreviews[option] : imagePreview;
 
-      if (imageUrl) {
-        await deleteImage(imageUrl, "questions_Images");
-        if (option) {
-          setNewQuestion((prev) => ({
-            ...prev,
-            answers: {
-              ...prev.answers,
-              [option]: null, // Clear the specific answer's image
-            },
-          }));
-          setImagePreviews((prev) => ({
-            ...prev,
-            [option]: null, // Remove the specific image preview
-          }));
-        } else {
-          setNewQuestion((prev) => ({
-            ...prev,
-            imageUrl: null, // Clear the question's image URL
-          }));
-          setImagePreview(null); // Remove the main question's image preview
-        }
+  //     if (imageUrl) {
+  //       await deleteImage(imageUrl, "questions_Images");
+  //       if (option) {
+  //         setNewQuestion((prev) => ({
+  //           ...prev,
+  //           answers: {
+  //             ...prev.answers,
+  //             [option]: null, // Clear the specific answer's image
+  //           },
+  //         }));
+  //         setImagePreviews((prev) => ({
+  //           ...prev,
+  //           [option]: null, // Remove the specific image preview
+  //         }));
+  //       } else {
+  //         setNewQuestion((prev) => ({
+  //           ...prev,
+  //           imageUrl: null, // Clear the question's image URL
+  //         }));
+  //         setImagePreview(null); // Remove the main question's image preview
+  //       }
 
-        toast.success("Image deleted successfully");
-      }
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      toast.error("Error deleting image. Please try again.");
-    }
-  };
+  //       toast.success("Image deleted successfully");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting image:", error);
+  //     toast.error("Error deleting image. Please try again.");
+  //   }
+  // };
 
   const handleDelete = async (questionId) => {
     try {
@@ -299,44 +299,44 @@ const AddQuestionsPage = () => {
     setImagePreview(null);
   };
 
-  const deleteSolution = async (index) => {
-    try {
-      const solutionToDelete = newQuestion.solutions[index];
-      if (solutionToDelete.startsWith("http")) {
-        const filenameWithEncodedChars = solutionToDelete
-          .split("/")
-          .pop()
-          .split("?")[0];
-        const filename = decodeURIComponent(filenameWithEncodedChars);
-        await deleteImage(filename, "questions_Images");
-        console.log(`Deleted image: ${filename}`);
-      }
-      const updatedSolutions = newQuestion.solutions.filter(
-        (_, i) => i !== index
-      );
-      setNewQuestion((prev) => ({
-        ...prev,
-        solutions: updatedSolutions,
-      }));
-      if (editingQuestionId) {
-        const questionRef = doc(db, "questions", editingQuestionId);
-        await updateDoc(questionRef, {
-          solutions: updatedSolutions,
-        });
+  // const deleteSolution = async (index) => {
+  //   try {
+  //     const solutionToDelete = newQuestion.solutions[index];
+  //     if (solutionToDelete.startsWith("http")) {
+  //       const filenameWithEncodedChars = solutionToDelete
+  //         .split("/")
+  //         .pop()
+  //         .split("?")[0];
+  //       const filename = decodeURIComponent(filenameWithEncodedChars);
+  //       await deleteImage(filename, "questions_Images");
+  //       console.log(`Deleted image: ${filename}`);
+  //     }
+  //     const updatedSolutions = newQuestion.solutions.filter(
+  //       (_, i) => i !== index
+  //     );
+  //     setNewQuestion((prev) => ({
+  //       ...prev,
+  //       solutions: updatedSolutions,
+  //     }));
+  //     if (editingQuestionId) {
+  //       const questionRef = doc(db, "questions", editingQuestionId);
+  //       await updateDoc(questionRef, {
+  //         solutions: updatedSolutions,
+  //       });
 
-        const testRef = doc(db, "tests", testId);
-        const updatedTestQuestions = newQuestion.solutions.filter(
-          (_, i) => i !== index
-        );
-        await updateDoc(testRef, {
-          questions: updatedTestQuestions,
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting solution:", error);
-      showError(error.message);
-    }
-  };
+  //       const testRef = doc(db, "tests", testId);
+  //       const updatedTestQuestions = newQuestion.solutions.filter(
+  //         (_, i) => i !== index
+  //       );
+  //       await updateDoc(testRef, {
+  //         questions: updatedTestQuestions,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting solution:", error);
+  //     showError(error.message);
+  //   }
+  // };
 
   const renderQuestionForm = () => {
     return (
@@ -571,13 +571,13 @@ const AddQuestionsPage = () => {
                             alt="Uploaded"
                             className="w-40 h-auto"
                           />
-                          <button
+                          {/* <button
                             type="button"
                             onClick={() => handleDeleteImage(null)}
                             className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
                           >
                             &times;
-                          </button>
+                          </button> */}
                         </div>
                       )
                     )}
@@ -616,13 +616,13 @@ const AddQuestionsPage = () => {
                                 alt={`Answer ${option} preview`}
                                 className="w-20 h-auto"
                               />
-                              <button
+                              {/* <button
                                 type="button"
                                 onClick={() => handleDeleteImage(option)}
                                 className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
                               >
                                 &times;
-                              </button>
+                              </button> */}
                             </div>
                           )}
                         </div>
