@@ -241,21 +241,20 @@ const TestPackagesList = () => {
                       Starting Date:
                     </label>
                     <input
-  type="date"
-  name="startingDate"
-  value={editFormData.startingDate || ""} // Directly use the stored string
-  onChange={(e) =>
-    setEditFormData({
-      ...editFormData,
-      startingDate: e.target.value, // Store as a normal string in 'YYYY-MM-DD' format
-    })
-  }
-  className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-/>
-
+                      type="date"
+                      name="startingDate"
+                      value={editFormData.startingDate || ""}
+                      onChange={(e) =>
+                        setEditFormData({
+                          ...editFormData,
+                          startingDate: e.target.value,
+                        })
+                      }
+                      className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+                    />
                   </div>
                 </div>
-                {/* {editFormData.packageImage && (
+                {editFormData.packageImage && (
                   <div className="mb-4">
                     <label className="block text-black font-medium">
                       Current Package Image:
@@ -266,10 +265,10 @@ const TestPackagesList = () => {
                       className="w-32 h-32 object-cover rounded"
                     />
                   </div>
-                )} */}
+                )}
               </div>
 
-              {/* <div className="mb-4">
+              <div className="mb-4">
                 <label className="block text-black font-medium">
                   Upload New Package Image:
                 </label>
@@ -279,7 +278,7 @@ const TestPackagesList = () => {
                   onChange={handleImageUpload}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded"
                 />
-              </div> */}
+              </div>
 
               <div className="">
                 <label className="block text-black font-medium">
