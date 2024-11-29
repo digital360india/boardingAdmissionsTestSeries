@@ -21,7 +21,6 @@ export default function AddUser({ userData, onClose }) {
     name: "",
     email: "",
     dob: "",
-    instituteEnrollmentNo: "",
     photoURL: null,
     phoneNumber: "",
     lastLoginDate: "",
@@ -106,7 +105,6 @@ export default function AddUser({ userData, onClose }) {
         email,
         name,
         dob,
-        instituteEnrollmentNo,
         phoneNumber,
         lastLoginDate,
       } = formData;
@@ -131,7 +129,6 @@ export default function AddUser({ userData, onClose }) {
           name,
           email,
           dob,
-          instituteEnrollmentNo,
           phoneNumber,
           createdAt: new Date().toISOString(),
           createdBy: user?.id,
@@ -171,7 +168,6 @@ export default function AddUser({ userData, onClose }) {
           ...userData,
           name,
           dob,
-          instituteEnrollmentNo,
           phoneNumber,
           lastLoginDate,
           photoURL: formData.photoURL
@@ -220,7 +216,6 @@ export default function AddUser({ userData, onClose }) {
       name: "",
       email: "",
       dob: "",
-      instituteEnrollmentNo: "",
       photoURL: null,
       phoneNumber: "",
       lastLoginDate: "",
@@ -303,20 +298,8 @@ export default function AddUser({ userData, onClose }) {
             />
           </div>
 
-          <div className="flex flex-col space-y-2 w-[30%]">
-            <label className="text-gray-600 font-semibold">
-              Institute Enrollment No.
-            </label>
-            <input
-              type="text"
-              name="instituteEnrollmentNo"
-              value={formData.instituteEnrollmentNo}
-              onChange={handleInputChange}
-              className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
-              required
-            />
-          </div>
-
+          
+<div className="w-3"></div>
           <div className="flex flex-col space-y-2 w-[30%]">
             <label className="text-gray-600 font-semibold">Phone Number</label>
             <input

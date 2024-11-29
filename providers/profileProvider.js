@@ -53,7 +53,7 @@ export const ProfileProvider = ({ children }) => {
       }
       let usersQuery = query(
         collection(db, "users"),
-        orderBy("name"),
+        orderBy("displayName"),
         limit(usersPerPage)
       );
       if (page > 1 && lastVisibleDocs[page - 1]) {

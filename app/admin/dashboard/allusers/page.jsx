@@ -10,6 +10,7 @@ import { FaEdit } from "react-icons/fa";
 import DeletePopup from "@/components/admin/DeletePopup";
 import { ProfileContext } from "@/providers/profileProvider";
 import showError from "@/utils/functions/showError";
+import { UserCheck } from "lucide-react";
 
 const UserTable = ({
   users,
@@ -39,7 +40,7 @@ const UserTable = ({
               className="border border-gray-300 px-1"
               onClick={() => handleUserClick(user)}
             >
-              {user.name || "No Name"}
+              {user.displayName || "No Name"}
             </td>
             <td className="border border-gray-300 px-1">
               {user.email || "No Email"}
@@ -106,6 +107,38 @@ const UserTable = ({
   );
 };
 
+
+const UserDetailDialog = ({ user, onClose }) => {
+  if (!user) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-auto overflow-auto">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[900px] overflow-y-scroll max-h-[80vh]">
+        <div className="flex justify-end items-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-red-500 text-white p-2 rounded hover:bg-gray-600 mt-4"
+          >
+            <IoMdClose />
+          </button>
+        </div>
+        <h2 className="text-xl font-bold mb-4">User Details</h2>
+        <img
+          src={user.photoURL}
+          alt="User Photo"
+          className="w-24 h-24 rounded-full mb-4"
+        />
+        <UserTable user={user} />
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
 const UsersPage = () => {
   const dropdownRef = useRef(null);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -128,6 +161,7 @@ const UsersPage = () => {
     handlePageChange,
     handleDelete,
     handleSearch,
+    fetchUsers,
   } = useContext(ProfileContext);
 
   const handleSearchClick = async () => {
@@ -139,7 +173,7 @@ const UsersPage = () => {
       console.error("Search error:", error);
     }
   };
-
+console.log(usersCache);
   const handleUserClick = (user) => {
     setSelectedUser(user);
   };
