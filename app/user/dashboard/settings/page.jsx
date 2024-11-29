@@ -6,7 +6,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import 'react-toastify/dist/ReactToastify.css';
 
-const page = () => {
+const Page = () => {
   const { user } = useContext(UserContext);
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -85,4 +85,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
