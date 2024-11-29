@@ -69,7 +69,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               !isSidebarOpen && "scale-0"
             }`}
           >
-            <Link href={"/dashboard"}>
+            <Link href={"/user/dashboard"}>
               <img
                 src="/navbar.svg"
                 className="w-20 h-20 bg-[#fff] rounded-full"

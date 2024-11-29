@@ -18,18 +18,12 @@ export default function AddUser({ userData, onClose }) {
   const { addUser, editUser } = useContext(ProfileContext);
 
   const [formData, setFormData] = useState({
-    name: "",
+    displayName: "",
     email: "",
     dob: "",
     photoURL: null,
     phoneNumber: "",
-    lastLoginDate: "",
     mytestpackages: [],
-    testStreak: {
-      totalTestAttempted: 0,
-      badges: "",
-    },
-    
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -79,12 +73,12 @@ export default function AddUser({ userData, onClose }) {
 
   const handleConfirmDates = (dateOfExpiration, dateOfPurchase) => {
     if (selectedPackage) {
-      const { id, packagePrice, packageName } = selectedPackage;
+      const { id, price, packageName } = selectedPackage;
       const packageWithDates = {
         dateOfExpiration,
         dateOfPurchase,
         packageId: id,
-        price: packagePrice,
+        price: price,
         packageName,
       };
 
@@ -101,13 +95,7 @@ export default function AddUser({ userData, onClose }) {
     let userCredential;
 
     try {
-      const {
-        email,
-        name,
-        dob,
-        phoneNumber,
-        lastLoginDate,
-      } = formData;
+      const { email, displayName, dob, phoneNumber } = formData;
 
       if (!userData) {
         console.log("Creating a new user");
@@ -126,22 +114,21 @@ export default function AddUser({ userData, onClose }) {
         const verificationCode = generateVerificationCode();
         const newUser = {
           id: profile.uid,
-          name,
+          displayName,
           email,
           dob,
           phoneNumber,
           createdAt: new Date().toISOString(),
           createdBy: user?.id,
           role: "user",
-          lastLoginDate,
           photoURL: photoURLURL,
           mytestpackages: formData.mytestpackages,
-          testStreak: formData.testStreak,
+
           maxScores: [],
           myResults: [],
           myScores: [],
           verificationCode,
-          
+
           isVerified: false,
         };
 
@@ -166,15 +153,14 @@ export default function AddUser({ userData, onClose }) {
         console.log("Editing an existing user");
         const updatedUserData = {
           ...userData,
-          name,
+          displayName,
           dob,
           phoneNumber,
-          lastLoginDate,
           photoURL: formData.photoURL
             ? await getUpdatedPhotoURL()
             : userData.photoURL,
           mytestpackages: formData.mytestpackages,
-          testStreak: formData.testStreak,
+
           updatedAt: new Date().toISOString(),
           updatedBy: user?.id,
         };
@@ -218,13 +204,7 @@ export default function AddUser({ userData, onClose }) {
       dob: "",
       photoURL: null,
       phoneNumber: "",
-      lastLoginDate: "",
       mytestpackages: [],
-      testStreak: {
-        totalTestAttempted: 0,
-        badges: "",
-      },
-      
     });
     setSelectedPackage(null);
     fileInputRef.current.value = "";
@@ -241,8 +221,8 @@ export default function AddUser({ userData, onClose }) {
             <label className="text-gray-600 font-semibold">Name</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="displayName"
+              value={formData.displayName}
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none "
               required
@@ -298,8 +278,7 @@ export default function AddUser({ userData, onClose }) {
             />
           </div>
 
-          
-<div className="w-3"></div>
+          <div className="w-3"></div>
           <div className="flex flex-col space-y-2 w-[30%]">
             <label className="text-gray-600 font-semibold">Phone Number</label>
             <input
@@ -327,7 +306,7 @@ export default function AddUser({ userData, onClose }) {
                 <option value="">Select a package</option>
                 {availableTestPackages.map((pkg) => (
                   <option key={pkg.id} value={pkg.id}>
-                    {pkg.packageId} {pkg.packageName} = ₹{pkg.packagePrice}
+                    {pkg.packageId} {pkg.packageName} = ₹{pkg.price}
                   </option>
                 ))}
               </select>

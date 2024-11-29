@@ -116,9 +116,9 @@ const Page = () => {
         ...formData,
         price: parseFloat(formData.price),
         discountedPrice: parseFloat(formData.discountedPrice),
-        startingDate: new Date(formData.startingDate).toISOString(),
+        startingDate: formData.startingDate,
         createdAt: new Date().toISOString(),
-        createdBy: user.id, // Ensure user.id is valid here
+        createdBy: user.id,
         tests: selectedtests,
         packageImage: imageUrl || "",
       };

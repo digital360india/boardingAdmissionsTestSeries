@@ -5,6 +5,8 @@ import { UserContext } from "@/providers/userProvider";
 import { TestContext } from "@/providers/testProvider";
 import Image from 'next/image'; 
 import Loading from "@/app/loading";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const MyTestScreen = () => {
   const { user } = useContext(UserContext);
@@ -30,6 +32,7 @@ const MyTestScreen = () => {
 
   return (
     <>
+    <ToastContainer />
       {user ? (
         <div className="container mx-auto p-4 pb-28 mb:pb-10">
           <h1 className="text-3xl font-bold mb-6 ">My Packages</h1>

@@ -56,17 +56,17 @@ const TestPackagesList = () => {
   const handleEdit = async (e, packageId) => {
     try {
       // Check if startingDate is valid before using it
-      const startingDate = new Date(editFormData.startingDate);
-      if (isNaN(startingDate.getTime())) {
-        throw new Error("Invalid starting date provided.");
-      }
+      const startingDate = editFormData.startingDate;
+      // if (isNaN(startingDate.getTime())) {
+      //   throw new Error("Invalid starting date provided.");
+      // }
 
       const packageRef = doc(db, "testPackages", packageId);
       const updatedData = {
         ...editFormData,
         price: parseFloat(editFormData.price),
         discountedPrice: parseFloat(editFormData.discountedPrice),
-        dateOfCreation: startingDate.toISOString(), // Convert to ISO string
+        // dateOfCreation: startingDate.toISOString(), // Convert to ISO string
         updatedAt: new Date().toISOString(),
         ...(user && { updatedBy: user.id }),
       };
@@ -217,7 +217,7 @@ const TestPackagesList = () => {
                     <input
                       type="number"
                       step="0.01"
-                      name="packagePrice"
+                      name="price"
                       value={editFormData.price}
                       onChange={handleEditChange}
                       className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
@@ -230,7 +230,7 @@ const TestPackagesList = () => {
                     <input
                       type="number"
                       step="0.01"
-                      name="packageDiscountedPrice"
+                      name="discountedPrice"
                       value={editFormData.discountedPrice}
                       onChange={handleEditChange}
                       className=" block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
@@ -241,18 +241,18 @@ const TestPackagesList = () => {
                       Starting Date:
                     </label>
                     <input
-                      type="date"
-                      name="startingDate"
-                      value={
-                        editFormData.startingDate
-                          ? new Date(editFormData.startingDate)
-                              .toISOString()
-                              .split("T")[0] // Convert to 'YYYY-MM-DD'
-                          : ""
-                      }
-                      onChange={handleEditChange}
-                      className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-                    />
+  type="date"
+  name="startingDate"
+  value={editFormData.startingDate || ""} // Directly use the stored string
+  onChange={(e) =>
+    setEditFormData({
+      ...editFormData,
+      startingDate: e.target.value, // Store as a normal string in 'YYYY-MM-DD' format
+    })
+  }
+  className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+/>
+
                   </div>
                 </div>
                 {/* {editFormData.packageImage && (
@@ -410,16 +410,14 @@ const TestPackagesList = () => {
                       {selectedPackage?.studentsEnrolled}
                     </td>
                   </tr>
-                  <tr className="even:bg-gray-100 hover:bg-gray-300">
+                  {/* <tr className="even:bg-gray-100 hover:bg-gray-300">
                     <td className="py-2 px-4 border-b border-r border-gray-300">
-                      <strong>Starting Date:</strong>
+                      <strong>Package Description:</strong>
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
-                      {new Date(
-                        selectedPackage?.startingDate
-                      ).toLocaleDateString()}
+                   { selectedPackage?.packageDescription}
                     </td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
             )}

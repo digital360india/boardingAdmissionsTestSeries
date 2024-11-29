@@ -15,7 +15,7 @@ export default function AddAdmin({ userData, onClose }) {
   const { user } = useContext(UserContext);
   const { addUser, editUser } = useContext(ProfileContext);
   const initialData = {
-    name: "",
+    displayName: "",
     email: "",
     dob: "",
     photoURL: null,
@@ -30,7 +30,7 @@ export default function AddAdmin({ userData, onClose }) {
   useEffect(() => {
     if (userData) {
       setFormData({
-        name: userData.name,
+        displayName: userData.displayName,
         email: userData.email,
         dob: userData.dob,
         photoURL: null,
@@ -66,10 +66,9 @@ export default function AddAdmin({ userData, onClose }) {
       return;
     }
 
-    const { email, name, dob, phoneNumber, photoURL, designation, address } =
+    const { email, displayName, dob, phoneNumber, photoURL, designation, address } =
       formData;
-    const verificationCode = generateVerificationCode();
-
+   
     try {
       let documentId;
 
@@ -83,7 +82,7 @@ export default function AddAdmin({ userData, onClose }) {
         console.log("Updated photo URL:", photoURLURL);
 
         const userDataToUpdate = {
-          name,
+          displayName,
           email,
           dob,
           phoneNumber,
@@ -130,7 +129,7 @@ export default function AddAdmin({ userData, onClose }) {
 
           const newUserData = {
             id: documentId,
-            name,
+            displayName,
             email,
             dob,
             phoneNumber,
@@ -174,7 +173,6 @@ export default function AddAdmin({ userData, onClose }) {
       toast.error("An error occurred. Please try again.");
     } finally {
       setFormData(initialData);
-      setSelectedPackage(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
       setLoading(false);
       onClose();
@@ -192,8 +190,8 @@ export default function AddAdmin({ userData, onClose }) {
             <label className="text-gray-600 font-semibold">Name</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="displayName"
+              value={formData.displayName}
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none "
               required
