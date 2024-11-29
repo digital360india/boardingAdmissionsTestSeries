@@ -106,8 +106,8 @@ const AddTestDialog = ({
             <label className="block text-gray-700">Test Upload Date:</label>
             <input
               type="date"
-              name="testLiveDate"
-              value={newTest.testLiveDate}
+              name="testUploadDate"
+              value={newTest.testUploadDate}
               onChange={handleInputChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded"
             />
@@ -118,8 +118,8 @@ const AddTestDialog = ({
             <label className="block text-gray-700">Total Marks:</label>
             <input
               type="text"
-              name="totalMarks"
-              value={newTest.totalMarks}
+              name="Totalmarks"
+              value={newTest.Totalmarks}
               onChange={handleInputChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded"
             />

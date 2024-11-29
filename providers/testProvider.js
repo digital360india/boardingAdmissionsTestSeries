@@ -1,7 +1,6 @@
 "use client";
 
-import React, { createContext, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { createContext, useState, useEffect } from "react";
 import {
   collection,
   getDocs,
@@ -13,34 +12,38 @@ import {
 import { db } from "@/firebase/firebase";
 import Loading from "@/app/loading";
 
-
 export const TestContext = createContext();
 
 export const TestProvider = ({ children }) => {
-  const queryClient = useQueryClient();
+  const [testPackages, setTestPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch test packages from Firestore
   const fetchTestPackages = async () => {
-    const querySnapshot = await getDocs(collection(db, "testPackages"));
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    setLoading(true);
+    setError(null);
+    try {
+      const querySnapshot = await getDocs(collection(db, "testPackages"));
+      const packages = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTestPackages(packages);
+    } catch (err) {
+      console.error("Error fetching test packages:", err);
+      setError("Failed to fetch test packages. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const {
-    data: testPackages = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["testPackages"],
-    queryFn: fetchTestPackages,
-    staleTime: 1000 * 60 * 10,
-  });
-
+  // Add a new test package
   const addPackage = async (packageData) => {
     try {
       const docRef = await addDoc(collection(db, "testPackages"), packageData);
-      queryClient.invalidateQueries(["testPackages"]);
+      const newPackage = { id: docRef.id, ...packageData };
+      setTestPackages((prevPackages) => [...prevPackages, newPackage]);
       return docRef;
     } catch (error) {
       console.error("Error adding package:", error);
@@ -48,24 +51,50 @@ export const TestProvider = ({ children }) => {
     }
   };
 
+  // Delete a test package
   const handleDelete = async (packageIdToDelete) => {
-    if (packageIdToDelete) {
+    try {
       await deleteDoc(doc(db, "testPackages", packageIdToDelete));
-      queryClient.invalidateQueries(["testPackages"]);
+      setTestPackages((prevPackages) =>
+        prevPackages.filter((pkg) => pkg.id !== packageIdToDelete)
+      );
+    } catch (error) {
+      console.error("Error deleting package:", error);
+      throw error;
     }
   };
 
+  // Update a test package
   const updateTestPackage = async (packageId, updatedData) => {
-    const packageRef = doc(db, "testPackages", packageId);
-    await updateDoc(packageRef, updatedData);
-    queryClient.invalidateQueries(["testPackages"]);
+    try {
+      const packageRef = doc(db, "testPackages", packageId);
+      await updateDoc(packageRef, updatedData);
+      setTestPackages((prevPackages) =>
+        prevPackages.map((pkg) =>
+          pkg.id === packageId ? { ...pkg, ...updatedData } : pkg
+        )
+      );
+    } catch (error) {
+      console.error("Error updating package:", error);
+      throw error;
+    }
   };
 
-  if (isLoading) return <Loading />;
+  useEffect(() => {
+    fetchTestPackages();
+  }, []);
+
+  if (loading) return <Loading />;
 
   return (
     <TestContext.Provider
-      value={{ testPackages, handleDelete, updateTestPackage, addPackage }}
+      value={{
+        testPackages,
+        addPackage,
+        handleDelete,
+        updateTestPackage,
+        error,
+      }}
     >
       {children}
     </TestContext.Provider>

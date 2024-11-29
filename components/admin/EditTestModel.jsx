@@ -109,8 +109,8 @@ const EditTestModal = ({
           <div>
             <p>Selected subjects:</p>
             <div className="grid grid-cols-2 gap-4 mt-2 max-h-40 overflow-y-scroll">
-              {editTest.subjects.length ? (
-                editTest.subjects.map((subject) => (
+              {editTest.subjects?.length ? (
+                editTest.subjects?.map((subject) => (
                   <div
                     key={subject}
                     className="flex justify-between items-center"

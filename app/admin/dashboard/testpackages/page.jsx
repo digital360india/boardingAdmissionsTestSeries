@@ -97,40 +97,44 @@ const Page = () => {
   const handlePackageCreation = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     if (!user || !user.id) {
-      console.error("User is not defined or does not have an ID.");
+      console.error("User is not defined or does not have an ID:", user);
       toast.error("User is not authenticated. Please log in.");
+      setIsLoading(false);
       return;
     }
-
+  
     try {
       let imageUrl = "";
-
+  
       if (imageFile) {
         imageUrl = await uploadImage(formData.photoURL, "packages");
       }
-
+  
       const packageData = {
         ...formData,
         price: parseFloat(formData.price),
         discountedPrice: parseFloat(formData.discountedPrice),
         startingDate: new Date(formData.startingDate).toISOString(),
         createdAt: new Date().toISOString(),
-        createdBy: user?.id,
+        createdBy: user.id, // Ensure user.id is valid here
         tests: selectedtests,
         packageImage: imageUrl || "",
       };
+  
       const docRef = await addPackage(packageData);
       const userRef = doc(db, "users", user.id);
+  
       await updateDoc(userRef, {
         packageIDs: arrayUnion(docRef.id),
       });
-
+  
       await updateDoc(docRef, {
         id: docRef.id,
       });
-
+  
+      // Reset form fields
       setFormData({
         packageName: "",
         price: "",
@@ -152,6 +156,7 @@ const Page = () => {
       setIsLoading(false);
     }
   };
+  
 
   const handleModalToggle = () => {
     setIsModalOpen(true);

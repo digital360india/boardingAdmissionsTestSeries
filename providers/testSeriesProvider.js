@@ -1,7 +1,6 @@
 "use client";
 
-import React, { createContext, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { createContext, useState, useEffect } from "react";
 import {
   collection,
   getDocs,
@@ -16,59 +15,84 @@ import Loading from "@/app/loading";
 export const TestSeriesContext = createContext();
 
 export const TestSeriesProvider = ({ children }) => {
-  const queryClient = useQueryClient();
+  const [allTests, setAllTests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Fetch all tests from Firestore
   const fetchTests = async () => {
-    const querySnapshot = await getDocs(collection(db, "tests"));
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    setIsLoading(true);
+    setError(null);
+    try {
+      const querySnapshot = await getDocs(collection(db, "tests"));
+      const tests = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAllTests(tests);
+    } catch (err) {
+      console.error("Error fetching tests:", err);
+      setError("Failed to fetch tests. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const {
-    data: allTests = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["allTests"],
-    queryFn: fetchTests,
-    staleTime: 1000 * 60 * 10,
-  });
-
+  // Add a new test
   const addTest = async (userData) => {
+    setIsAdding(true);
+    setError(null);
     try {
       const docRef = await addDoc(collection(db, "tests"), userData);
-
-      queryClient.invalidateQueries(["allTests"]);
+      const newTest = { id: docRef.id, ...userData };
+      setAllTests((prevTests) => [...prevTests, newTest]);
       return docRef;
     } catch (err) {
       console.error("Error adding test:", err);
+      setError("Failed to add test. Please try again.");
+    } finally {
+      setIsAdding(false);
     }
   };
 
+  // Edit an existing test
   const handleEdit = async (testId, updatedData) => {
+    setError(null);
     try {
       const testDocRef = doc(db, "tests", testId);
       await updateDoc(testDocRef, updatedData);
-      queryClient.invalidateQueries(["allTests"]);
-      return testDocRef;
+      setAllTests((prevTests) =>
+        prevTests.map((test) =>
+          test.id === testId ? { ...test, ...updatedData } : test
+        )
+      );
     } catch (err) {
       console.error("Error editing test:", err);
-      throw err;
+      setError("Failed to edit test. Please try again.");
     }
   };
 
-  const handleDelete = async (packageIdToDelete) => {
-    if (packageIdToDelete) {
-      await deleteDoc(doc(db, "tests", packageIdToDelete));
-      queryClient.invalidateQueries(["allTests"]);
+  // Delete a test
+  const handleDelete = async (testIdToDelete) => {
+    setError(null);
+    try {
+      await deleteDoc(doc(db, "tests", testIdToDelete));
+      setAllTests((prevTests) =>
+        prevTests.filter((test) => test.id !== testIdToDelete)
+      );
+    } catch (err) {
+      console.error("Error deleting test:", err);
+      setError("Failed to delete test. Please try again.");
     }
   };
+
+  useEffect(() => {
+    fetchTests();
+  }, []);
 
   if (isLoading || isAdding) return <Loading />;
-  if (error) return <div>Error loading tests: {error.message}</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <TestSeriesContext.Provider

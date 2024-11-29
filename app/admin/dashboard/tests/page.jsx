@@ -36,9 +36,9 @@ const TestPage = () => {
   const [newTest, setNewTest] = useState({
     testTitle: "",
     testDescription: "",
-    testLiveDate: "", 
+    testUploadDate: "",
     duration: "",
-    totalMarks: "",
+    Totalmarks: "",
     subjects: [],
     updatedAt: "",
     updatedBy: "",
@@ -50,7 +50,7 @@ const TestPage = () => {
     testTitle: "",
     testDescription: "",
     duration: "",
-    totalMarks: "",
+    Totalmarks: "",
     teachersAssigned: [],
   });
   const [teachers, setTeachers] = useState([]);
@@ -103,10 +103,9 @@ const TestPage = () => {
         updatedAt: new Date().toISOString(),
       };
 
-      if (user && user.uid) {
-        updatedTest.updatedBy = user.uid;
+      if (user && user.id) {
+        updatedTest.updatedBy = user.id;
       }
-
       await handleEdit(editTestId, updatedTest);
       toast.success("Test updated successfully!");
       handleCloseEditDialog();
@@ -171,7 +170,7 @@ const TestPage = () => {
   };
   const handleAddQuestions = (testId) => {
     router.push(`/admin/dashboard/tests/${testId}`);
-  }
+  };
   const handleCloseDialog = () => setIsDialogOpen(false);
   const handleOpenEditDialog = (test) => {
     setEditTestId(test.id);
@@ -180,8 +179,8 @@ const TestPage = () => {
       duration: test.duration,
       subjects: test.subjects,
       testDescription: test.testDescription,
-      testLiveDate: test.testLiveDate,
-      totalMarks: test.totalMarks,
+      testUploadDate: test.testUploadDate,
+      Totalmarks: test.Totalmarks,
       teachersAssigned: test.teachersAssigned || [],
     });
     fetchTeachers();
