@@ -126,7 +126,7 @@ export default function AddAdmin({ userData, onClose }) {
               return;
             }
           }
-
+          const verificationCode = generateVerificationCode();
           const newUserData = {
             id: documentId,
             displayName,
@@ -140,7 +140,6 @@ export default function AddAdmin({ userData, onClose }) {
             role: "admin",
             photoURL: photoURLURL,
             verificationCode,
-            
             isVerified: false,
           };
           try {

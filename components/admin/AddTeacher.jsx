@@ -10,12 +10,13 @@ import showError from "@/utils/functions/showError";
 import { sendOtp } from "@/utils/functions/sendOtp";
 import { isAdult } from "@/utils/functions/isAdult";
 import { generateVerificationCode} from "@/utils/functions/generateVerificationCode";
+import { displayName } from "react-quill";
 
 export default function AddTeacher({ userData, onClose }) {
   const { user } = useContext(UserContext);
   const { addUser, editUser } = useContext(ProfileContext);
   const initialData = {
-    name: "",
+    displayName: "",
     email: "",
     dob: "",
     designation: "",
@@ -35,7 +36,7 @@ export default function AddTeacher({ userData, onClose }) {
     if (userData) {
       setFormData({
         ...initialData,
-        name: userData.name,
+        displayName: userData.displayName,
         email: userData.email,
         dob: userData.dob,
         designation: userData.designation,
@@ -55,6 +56,12 @@ export default function AddTeacher({ userData, onClose }) {
       [name]: value,
     }));
   };
+
+  const resetForm = () => {
+    setFormData(initialData);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
 
   const handleFileChange = (e) => {
     setFormData((prevState) => ({
@@ -77,7 +84,7 @@ export default function AddTeacher({ userData, onClose }) {
     try {
       const {
         email,
-        name,
+        displayName,
         dob,
         phoneNumber,
         designation,
@@ -97,7 +104,7 @@ export default function AddTeacher({ userData, onClose }) {
       if (userData) {
         const updatedTeacherData = {
           ...userData,
-          name,
+          displayName,
           email,
           dob,
           phoneNumber,
@@ -134,7 +141,7 @@ export default function AddTeacher({ userData, onClose }) {
         const documentId = profile.uid;
         const userDataToSave = {
           id: documentId,
-          name,
+          displayName,
           email,
           dob,
           phoneNumber,
@@ -154,7 +161,7 @@ export default function AddTeacher({ userData, onClose }) {
         };
         await addUser(profile, userDataToSave);
         await updateProfile(profile, {
-          displayName: name,
+          displayName: displayName,
           photoURL: photoURLURL,
         });
 
@@ -181,11 +188,6 @@ export default function AddTeacher({ userData, onClose }) {
     }
   };
 
-  const resetForm = () => {
-    setFormData(initialData);
-    setSelectedPackage(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
 
   return (
     <div className="w-full mx-auto max-h-[80vh] overflow-y-scroll">
@@ -198,8 +200,8 @@ export default function AddTeacher({ userData, onClose }) {
             <label className="text-gray-600 font-semibold">Name</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="displayName"
+              value={formData.displayName}
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1   focus:ring-gray-500"
               required

@@ -205,6 +205,7 @@ console.log(usersCache);
   };
 
   const confirmDelete = async () => {
+    console.log(selectedUserId)
     if (!selectedUserId) {
       toast.error("No user selected for deletion.");
       return;
@@ -269,8 +270,8 @@ console.log(usersCache);
       </div>
 
       <DeletePopup
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={selectedUserId}
+        onClose={() => setSelectedUserId(null)}
         onConfirm={confirmDelete}
       />
 
