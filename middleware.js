@@ -52,7 +52,7 @@ export function middleware(request) {
       pathname.startsWith("/teacher") ||
       pathname.startsWith("/admin"))
   ) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
