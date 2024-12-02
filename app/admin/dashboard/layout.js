@@ -1,6 +1,7 @@
 import "../../globals.css";
 
 import LayoutFile from "@/components/admin/LayoutFile";
+import { ProfileContext, ProfileProvider } from "@/providers/profileProvider";
 import { UserProvider } from "@/providers/userProvider";
 
 export const metadata = {
@@ -15,7 +16,7 @@ export default function RootLayout({ children }) {
       {" "}
       <UserProvider>
         <LayoutFile>
-          {children}
+          <ProfileProvider> {children}</ProfileProvider>
         </LayoutFile>
       </UserProvider>
     </div>
