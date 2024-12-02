@@ -1,16 +1,13 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
 import { FaEdit, FaHome, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { UserContext } from "@/providers/userProvider";
-import { GrMoney } from "react-icons/gr";
 import { LucidePackageOpen } from "lucide-react";
 import { AiFillContacts } from "react-icons/ai";
 
 export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-  const router = useRouter();
   const { handleLogout } = useContext(UserContext);
   const Menus = [
     { title: "Dashboard", src: "/admin/dashboard", icon: <FaHome /> },

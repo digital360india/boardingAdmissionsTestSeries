@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { IoIosSearch, IoMdClose } from "react-icons/io";
 import AddProfile from "@/components/admin/AddProfile";
 import { toast, ToastContainer } from "react-toastify";
@@ -7,10 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { MdBlock, MdDeleteSweep } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import DeletePopup from "@/components/admin/DeletePopup";
-import { ProfileContext } from "@/providers/profileProvider";
 import showError from "@/utils/functions/showError";
-import { UserCheck } from "lucide-react";
+import { ProfileContext } from "@/providers/profileProvider";
+import DeletePopup from "@/components/admin/DeletePopup";
 
 const UserTable = ({
   users,
@@ -109,6 +108,7 @@ const UserTable = ({
 
 
 const UserDetailDialog = ({ user, onClose }) => {
+  
   if (!user) return null;
 
   return (
@@ -140,28 +140,24 @@ const UserDetailDialog = ({ user, onClose }) => {
 
 
 const UsersPage = () => {
-  const dropdownRef = useRef(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [profilePage, setProfilePage] = useState(false);
   const [editProfilePage, setEditProfilePage] = useState(false);
   const [userType, setUserType] = useState(null);
   const [userID, setUserID] = useState("");
   const [openDropdownId, setOpenDropdownId] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedUsers, setSearchedUsers] = useState(null);
 
   const {
-    loading,
     currentPage,
     totalPages,
     usersCache,
     handlePageChange,
     handleDelete,
     handleSearch,
-    fetchUsers,
   } = useContext(ProfileContext);
 
   const handleSearchClick = async () => {
@@ -178,9 +174,6 @@ console.log(usersCache);
     setSelectedUser(user);
   };
 
-  const handleCloseDialog = () => {
-    setSelectedUser(null);
-  };
 
   const handleProfilePage = () => {
     setProfilePage(true);
@@ -212,7 +205,6 @@ console.log(usersCache);
     }
     try {
       await handleDelete(selectedUserId);
-      setIsModalOpen(false);
       setSelectedUserId(null);
       toast.success("User deleted successfully!");
     } catch (error) {
