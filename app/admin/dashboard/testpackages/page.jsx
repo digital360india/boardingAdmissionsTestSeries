@@ -12,6 +12,7 @@ import Loading from "@/app/loading";
 import { TestContext } from "@/providers/testProvider";
 import { uploadImage } from "@/utils/functions/imageControls";
 import showError from "@/utils/functions/showError";
+import { RxCross2 } from "react-icons/rx";
 
 const Page = () => {
   const { user } = useContext(UserContext);
@@ -51,7 +52,6 @@ const Page = () => {
       setError("No tests available");
     }
   }, [allTests]);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -97,21 +97,21 @@ const Page = () => {
   const handlePackageCreation = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-  
+
     if (!user || !user.id) {
       console.error("User is not defined or does not have an ID:", user);
       toast.error("User is not authenticated. Please log in.");
       setIsLoading(false);
       return;
     }
-  
+
     try {
       let imageUrl = "";
-  
+
       if (imageFile) {
         imageUrl = await uploadImage(formData.packageImage, "packages");
       }
-  
+
       const packageData = {
         ...formData,
         price: parseFloat(formData.price),
@@ -122,18 +122,18 @@ const Page = () => {
         tests: selectedtests,
         packageImage: imageUrl || "",
       };
-  
+
       const docRef = await addPackage(packageData);
       const userRef = doc(db, "users", user.id);
-  
+
       await updateDoc(userRef, {
         packageIDs: arrayUnion(docRef.id),
       });
-  
+
       await updateDoc(docRef, {
         id: docRef.id,
       });
-  
+
       // Reset form fields
       setFormData({
         packageName: "",
@@ -156,7 +156,6 @@ const Page = () => {
       setIsLoading(false);
     }
   };
-  
 
   const handleModalToggle = () => {
     setIsModalOpen(true);
@@ -186,12 +185,12 @@ const Page = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[60vw] relative">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[60vw] relative max-h-[90vh] overflow-y-scroll">
             <button
               onClick={handleOnClose}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
             >
-              &times;
+              <RxCross2 className="text-red-600 w-8 h-8" />
             </button>
             <h2 className="text-xl font-bold mb-4">Create Test Package</h2>
             <form onSubmit={handlePackageCreation}>

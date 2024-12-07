@@ -396,9 +396,7 @@ const TestPackagesList = () => {
                       <strong>Date of Creation:</strong>
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
-                      {new Date(
-                        selectedPackage?.dateOfCreation
-                      ).toLocaleString()}
+                      {new Date(selectedPackage?.startingDate).toLocaleString()}
                     </td>
                   </tr>
                   <tr className="even:bg-gray-100 hover:bg-gray-300">
@@ -406,7 +404,7 @@ const TestPackagesList = () => {
                       <strong>Students Enrolled:</strong>
                     </td>
                     <td className="py-2 px-4 border-b border-gray-300">
-                      {selectedPackage?.studentsEnrolled}
+                      {selectedPackage?.studentsEnrolled?.length || "0"}
                     </td>
                   </tr>
                   {/* <tr className="even:bg-gray-100 hover:bg-gray-300">

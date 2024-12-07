@@ -15,11 +15,8 @@ const EditTestModal = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      style={{ margin: "0px" }}
-      className="fixed inset-0 z-40 flex items-center overflow-y-scroll h-screen justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
-    >
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-xl transform transition-all duration-300 ease-in-out">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-[60vw] relative max-h-[90vh] overflow-y-scroll">
         <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Edit Test Details
         </h3>
@@ -36,7 +33,7 @@ const EditTestModal = ({
               className="mt-2 block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 ease-in-out"
             />
           </div>
-          <div>
+          {/* <div>
             <label className="block text-lg font-medium text-gray-700">
               Assign Teacher:
             </label>
@@ -55,7 +52,7 @@ const EditTestModal = ({
                 </label>
               ))}
             </div>
-          </div>
+          </div> */}
           <div className="flex space-x-4">
             <div>
               <label className="block text-lg font-medium text-gray-700">
@@ -162,7 +159,7 @@ const EditTestModal = ({
             <button
               type="button"
               onClick={handleClose}
-              className="bg-gray-400 text-white px-5 py-2 rounded-lg hover:bg-gray-500 transition duration-200 ease-in-out"
+              className="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-red-600 transition duration-200 ease-in-out"
             >
               Cancel
             </button>

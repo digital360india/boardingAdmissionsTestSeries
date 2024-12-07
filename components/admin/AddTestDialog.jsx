@@ -13,8 +13,8 @@ const AddTestDialog = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-lg">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-[60vw] relative max-h-[90vh] overflow-y-scroll">
         <h2 className="text-xl font-bold mb-4">Add New Test</h2>
         <form onSubmit={handleAddTest} className="space-y-4">
           {/* Test Title */}
@@ -31,7 +31,7 @@ const AddTestDialog = ({
           </div>
 
           {/* Assign Teachers */}
-          <div>
+          {/* <div>
             <label className="block text-gray-700">Assign Teachers to Test:</label>
             <div className="flex flex-col mt-2">
               {teachers.map((teacher) => (
@@ -48,7 +48,7 @@ const AddTestDialog = ({
                 </label>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Duration */}
           <div>
