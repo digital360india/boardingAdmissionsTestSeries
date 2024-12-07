@@ -5,7 +5,7 @@ import { updateDoc, doc, arrayUnion } from "firebase/firestore";
 import TestPackagesList from "@/components/admin/AllTestPackages";
 import { UserContext } from "@/providers/userProvider";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import Loading from "@/app/loading";
@@ -97,21 +97,21 @@ const Page = () => {
   const handlePackageCreation = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     if (!user || !user.id) {
       console.error("User is not defined or does not have an ID:", user);
       toast.error("User is not authenticated. Please log in.");
       setIsLoading(false);
       return;
     }
-
+  
     try {
       let imageUrl = "";
-
+  
       if (imageFile) {
         imageUrl = await uploadImage(formData.packageImage, "packages");
       }
-
+  
       const packageData = {
         ...formData,
         price: parseFloat(formData.price),
@@ -122,18 +122,18 @@ const Page = () => {
         tests: selectedtests,
         packageImage: imageUrl || "",
       };
-
+  
       const docRef = await addPackage(packageData);
       const userRef = doc(db, "users", user.id);
-
+  
       await updateDoc(userRef, {
         packageIDs: arrayUnion(docRef.id),
       });
-
+  
       await updateDoc(docRef, {
         id: docRef.id,
       });
-
+  
       // Reset form fields
       setFormData({
         packageName: "",
@@ -146,11 +146,16 @@ const Page = () => {
       setImagePreview(null);
       setSelectedtests([]);
       setImageFile(null);
+  
+      // Show success toast
       toast.success("Test package created successfully!");
+  
+      // Close the modal
       setIsModalOpen(false);
     } catch (err) {
       console.error("Error creating Test package:", err);
-      showError(err.message);
+  
+      // Show error toast
       toast.error("Failed to create Test package. Please try again.");
     } finally {
       setIsLoading(false);
@@ -176,6 +181,7 @@ const Page = () => {
   };
   return (
     <div className="p-4">
+      <ToastContainer />
       <button
         onClick={handleModalToggle}
         className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
@@ -311,7 +317,7 @@ const Page = () => {
                     }`}
                   disabled={isLoading}
                 >
-                  {isLoading ? <Loading /> : "Create Package"}
+                  {isLoading ? "loading..." : "Create Package"}
                 </button>
               </div>
             </form>

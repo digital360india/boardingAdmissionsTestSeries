@@ -16,7 +16,8 @@ import { UserContext } from "@/providers/userProvider";
 import TestTable from "@/components/admin/TestTableComponent";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import Loading from "@/app/loading";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import showError from "@/utils/functions/showError";
 import EditTestModal from "@/components/admin/EditTestModel";
 import AddTestDialog from "@/components/admin/AddTestDialog";
@@ -318,6 +319,7 @@ const TestPage = () => {
   }
   return (
     <div className="space-y-4">
+      <ToastContainer />
       <div className="flex items-center w-full   gap-10 h-[70px]">
         <button
           onClick={handleOpenDialog}

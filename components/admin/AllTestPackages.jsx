@@ -55,43 +55,47 @@ const TestPackagesList = () => {
 
   const handleEdit = async (e, packageId) => {
     try {
-      // Check if startingDate is valid before using it
+      // Validate starting date if necessary
       const startingDate = editFormData.startingDate;
-      // if (isNaN(startingDate.getTime())) {
-      //   throw new Error("Invalid starting date provided.");
-      // }
-
+  
       const packageRef = doc(db, "testPackages", packageId);
       const updatedData = {
         ...editFormData,
         price: parseFloat(editFormData.price),
         discountedPrice: parseFloat(editFormData.discountedPrice),
-        // dateOfCreation: startingDate.toISOString(), // Convert to ISO string
         updatedAt: new Date().toISOString(),
         ...(user && { updatedBy: user.id }),
       };
-
+  
+      // Handle image upload if a new image is provided
       if (imageFile) {
         if (imageFile.size <= 100 * 1024) {
           const imageUrl = await uploadImage(imageFile, "packages");
           updatedData.packageImage = imageUrl;
         } else {
-          alert("File Size should be <= 100KB");
+          toast.error("File size should be 100KB or smaller.");
           setImageFile(null);
           return;
         }
       }
-
+  
+      // Update the test package in the database
       await updateTestPackage(packageId, updatedData);
+  
+      // Reset the form and states
       setEditingPackage(null);
       setImageFile(null);
+  
+      // Success toast
       toast.success("Test package updated successfully!");
     } catch (err) {
-      toast.error("Failed to update course package.");
-      showError(err.message);
+      // Error toast and error logging
+      toast.error("Failed to update course package. Please try again.");
       console.error("Error updating course package:", err);
+      showError(err.message);
     }
   };
+  
 
   const handleTestSelection = (e, testId) => {
     const { checked } = e.target;
