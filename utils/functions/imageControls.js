@@ -1,32 +1,44 @@
 import CryptoJS from "crypto-js";
 
 export const uploadImage = async (file, folderName) => {
+  if (!file) {
+    console.error("File is undefined or invalid.");
+    throw new Error("File input is required.");
+  }
+  
+  console.log("Uploading file:", file);
+  
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "abc_abchehe"); // Unsigned upload preset
+  formData.append("upload_preset", "p2pvclwt"); // Unsigned upload preset
   if (folderName) {
-    formData.append("folder", folderName);
+    formData.append("folder", "profile");
   }
 
   try {
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+  
+    console.log(`Uploading to: ${uploadUrl}`);
+  
+    const response = await fetch(uploadUrl, {
+      method: "POST",
+      body: formData,
+    });
+  
     if (!response.ok) {
-      throw new Error("Failed to upload image");
+      const errorResponse = await response.text(); // Fetch the detailed error response
+      console.error("Response Error:", errorResponse);
+      throw new Error(`Failed to upload image: ${response.statusText}`);
     }
-
+  
     const data = await response.json();
-    return data.secure_url; // Return the uploaded image's URL
+    return data.secure_url;
   } catch (error) {
-    console.error("Error uploading image to Cloudinary:", error.message);
+    console.error("Upload Error:", error);
     throw error;
   }
+  
 };
 
 // export const deleteImage = async (publicId) => {

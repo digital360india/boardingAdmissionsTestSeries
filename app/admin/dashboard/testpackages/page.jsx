@@ -109,7 +109,7 @@ const Page = () => {
       let imageUrl = "";
   
       if (imageFile) {
-        imageUrl = await uploadImage(formData.photoURL, "packages");
+        imageUrl = await uploadImage(formData.packageImage, "packages");
       }
   
       const packageData = {
