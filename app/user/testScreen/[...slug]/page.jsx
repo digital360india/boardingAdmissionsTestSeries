@@ -78,31 +78,41 @@ const TestPage = () => {
 
   useEffect(() => {
     const fetchTestQuestions = async () => {
-      const testDocRef = doc(db, "tests", docId);
-      const testDoc = await getDoc(testDocRef);
-
-      if (testDoc.exists()) {
-        const testData = testDoc.data();
-        setTestDetails(testData);
-        setTime(testData.duration ? testData.duration * 60 : 0);
-
-        const questions = testData.questions;
-        setTestQuestions(questions); // Set question IDs directly
-        const questionIds = questions.map((question) => question.id);
-
-        setStatusCounts((prevCounts) => ({
-          ...prevCounts,
-          notVisited: questionIds, // Store IDs in notVisited
-          notAnswered: questionIds, // Store IDs in notAnswered
-        }));
-      } else {
-        console.error("No such document!");
+      try {
+        const testDocRef = doc(db, "tests", docId);
+        const testDoc = await getDoc(testDocRef);
+  
+        if (testDoc.exists()) {
+          const testData = testDoc.data();
+          console.log(testData);
+  
+          setTestDetails(testData);
+          setTime(testData.duration ? testData.duration * 60 : 0);
+  
+          const questionIds = testData.test; // Array of question IDs
+  console.log(questionIds);
+          // Fetch question data for each ID
+          const questionDataPromises = questionIds.map(async (id) => {
+            const questionDocRef = doc(db, "questions", id);
+            const questionDoc = await getDoc(questionDocRef);
+            return questionDoc.exists() ? { id, ...questionDoc.data() } : null;
+          });
+  
+          const questionData = await Promise.all(questionDataPromises);
+          const validQuestions = questionData.filter((q) => q !== null);
+  console.log(validQuestions);
+          setTestQuestions(validQuestions); // Store the fetched question data
+        } else {
+          console.error("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching test questions:", error);
       }
     };
-
+  
     fetchTestQuestions();
   }, [docId]);
-
+  
   const [tabChange, setTabChange] = useState(false);
 
   useEffect(() => {
@@ -314,7 +324,7 @@ const TestPage = () => {
         totalMarks: Number(question.totalmarks),
         neg_marks: Number(question.neg_marks),
       }));
-
+console.log(result);
       const totalScore = result.reduce((score, question) => {
         if (question.selectedAnswer === question.correctAnswer) {
           return score + question.totalMarks;
@@ -327,6 +337,8 @@ const TestPage = () => {
 
       const totalTime = testDetails.duration * 60;
       const timeTaken = totalTime - time;
+      console.log(totalTime);
+      console.log(timeTaken);
       if (hasResult == "true") {
         setPopupData({ totalScore, timeTaken });
         setShowPopup(true);
@@ -345,12 +357,12 @@ const TestPage = () => {
       console.log("Submission cancelled by user.");
     }
   };
-
+console.log(testDetails.Totalmarks)
   const handleFormSubmit = async (result, totalScore, timeTaken) => {
     try {
       const submissionTime = new Date();
       const docData = {
-        name: user?.name || "",
+        displayName: user?.displayName || "",
         resultData: result || [],
         score: totalScore ?? 0,
         timeTaken: timeTaken ?? 0,
@@ -359,7 +371,7 @@ const TestPage = () => {
         userId: user?.id || "",
       };
       const docDataUser = {
-        name: user?.name || "",
+        displayName: user?.displayName || "",
         score: totalScore ?? 0,
         timeTaken: timeTaken ?? 0,
         id: docId || "",
@@ -377,7 +389,7 @@ const TestPage = () => {
         await setDoc(docRef, {
           id: docId,
           subjects: testDetails.subjects,
-          totalMarks: testDetails.totalMarks,
+          Totalmarks: testDetails.Totalmarks,
 
           result: [docData],
         });
@@ -555,7 +567,7 @@ const TestPage = () => {
       "0"
     )}`;
   };
-
+console.log(testQuestions);
   return (
     <div className="">
       {isLoading && (

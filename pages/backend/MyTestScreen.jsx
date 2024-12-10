@@ -49,8 +49,8 @@ const MyTestScreen = () => {
                   />
                   <div className="p-4">
                     <h2 className="text-xl font-semibold">{pkg.packageName}</h2>
-                    <p className="text-gray-700 mt-2">{`Starting Date: ${new Date(pkg.packageLiveDate).toLocaleDateString()}`}</p>
-                    <p className="text-gray-700 mt-1">{`Date of Creation: ${new Date(pkg.createdAt).toLocaleDateString()}`}</p>
+                    <p className="text-gray-700 mt-2">{`Starting Date: ${pkg.startingDate}`}</p>
+                    <p className="text-gray-700 mt-1">{`Date of Creation: ${new Date(pkg.dateOfCreation).toLocaleDateString()}`}</p>
                     <div className="mt-4 flex w-full justify-between items-center">
                       <Link className="flex w-full" href={`/user/dashboard/mytests/[mytests]`} as={`/user/dashboard/mytests/${pkg.id}`}>
                         <button className="bg-background04 text-white px-4 py-2 rounded-lg w-full">Take a Test</button>

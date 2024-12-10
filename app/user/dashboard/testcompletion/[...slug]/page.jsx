@@ -56,14 +56,39 @@ const TestComplete = () => {
       }
     };
 
-    const fetchCategoryData = (testId) => {
+    const fetchCategoryData = async (testId) => {
       const categoryData = allTests.find((test) => test.id === testId);
       if (categoryData) {
         setTestCategory(categoryData);
-        setQuestions(categoryData.questions);
-      } else {
-        console.error("No matching category data found in allTests.");
+        const questionIds = categoryData.test;
+      
+        if (Array.isArray(questionIds) && questionIds.length > 0) {
+          try {
+            const questionDataPromises = questionIds.map(async (id) => {
+              try {
+                const questionDocRef = doc(db, "questions", id);
+                const questionDoc = await getDoc(questionDocRef);
+                return questionDoc.exists() ? { id, ...questionDoc.data() } : null;
+              } catch (error) {
+                console.error(`Error fetching question with ID ${id}:`, error);
+                return null;
+              }
+            });
+      
+            const questionData = await Promise.all(questionDataPromises);
+            const validQuestions = questionData.filter((q) => q !== null);
+      
+            console.log(validQuestions);
+            setQuestions(validQuestions);
+          } catch (error) {
+            console.error("Error fetching questions:", error);
+          }
+        } else {
+          console.warn("No question IDs found in categoryData.test");
+          setQuestions([]); // Set empty state if no IDs
+        }
       }
+      
     };
 
     if (allTests.length > 0) {
@@ -120,7 +145,7 @@ const TestComplete = () => {
           <div className="font-semibold">
             {testCategory.testTitle || "N/A"}
           </div>
-          <div>Total Marks : {testCategory.totalMarks || "N/A"}</div>
+          <div>Total Marks : {testCategory.Totalmarks || "N/A"}</div>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between gap-2 md:gap-0">
@@ -152,50 +177,54 @@ const TestComplete = () => {
               ></span>
             </p>
             {currentQuestion.answers && (
-              <ul>
-                {Object.entries(currentQuestion.answers)
-                  .sort(([key1], [key2]) => key1.localeCompare(key2))
-                  .map(([key, option]) => {
-                    const isSelected =
-                      userResponse?.selectedAnswer === key;
-                    const isCorrectOption =
-                      key === currentQuestion.correctAnswer;
-
-                    return (
-                      <li
-                        key={key}
-                        className={`rounded-md px-2 py-2 ml-2 md:ml-4 my-2 border border-gray-500 bg-gray-100 flex items-center ${
-                          isCorrectOption
-                            ? "bg-green-100 text-green-700"
-                            : isSelected && !isCorrectOption
-                            ? "bg-red-100 text-red-700"
-                            : ""
-                        }`}
-                      >
-                        {typeof option === "string" &&
-                        option.startsWith("http") ? (
-                          <>
-                            {key}.
-                            <img
-                              src={option}
-                              alt="Answer"
-                              className="inline w-20 h-auto md:w-40"
-                            />
-                          </>
-                        ) : (
-                          <span className="mr-2">{`${key}. ${option}`}</span>
-                        )}
-
-                        {isSelected && (
-                          <span className="ml-2">
-                            {isCorrectOption ? "✓" : "✗"}
-                          </span>
-                        )}
-                      </li>
-                    );
-                  })}
-              </ul>
-            )}
+                  <ul>
+                    {Object.entries(currentQuestion.answers)
+                      .sort(([key1], [key2]) => key1.localeCompare(key2))
+                      .map(([key, option]) => {
+                        const isSelected = userResponse?.selectedAnswer === key;
+                        const isCorrectOption =
+                          key === currentQuestion.correctAnswer;
+                        return (
+                          <li
+                            key={key}
+                            className={`rounded-md px-2 py-2 ml-2 md:ml-4 my-2 border border-gray-500 bg-gray-100 flex items-center ${
+                              isCorrectOption
+                                ? "bg-green-100 text-green-700"
+                                : isSelected && !isCorrectOption
+                                ? "bg-red-100 text-red-700"
+                                : ""
+                            }`}
+                          >
+                            {typeof option === "string" &&
+                            option.startsWith("http") ? (
+                              <>
+                                {key}.
+                                <img
+                                  src={option}
+                                  alt="Answer"
+                                  className="inline w-20 h-auto md:w-40"
+                                />
+                              </>
+                            ) : (
+                              <div
+                                className="mr-2 flex gap-2"
+                                dangerouslySetInnerHTML={{
+                                  __html: `${key}. ${decodeURIComponent(
+                                    option
+                                  )}`,
+                                }}
+                              ></div>
+                            )}
+                            {isSelected && (
+                              <span className="ml-2">
+                                {isCorrectOption ? "✓" : "✗"}
+                              </span>
+                            )}
+                          </li>
+                        );
+                      })}
+                  </ul>
+                )}
 
             <div className="space-y-2 pt-6 ml-2 md:ml-4">
               <p>
@@ -209,19 +238,24 @@ const TestComplete = () => {
               )}
             </div>
             <div className="ml-2 md:ml-4">
-              {typeof currentQuestion.solution === "string" &&
-              currentQuestion.solution.startsWith("http") ? (
-                <img
-                  src={currentQuestion.solution}
-                  alt="Solution"
-                  className="inline w-20 md:w-40 h-auto"
-                />
-              ) : (
-                <p>
-                  <strong>Solution: </strong> {currentQuestion.solution}
-                </p>
-              )}
-            </div>
+                  {typeof currentQuestion.solution === "string" &&
+                  currentQuestion.solution.startsWith("http") ? (
+                    <img
+                      src={currentQuestion.solution}
+                      alt="Solution"
+                      className="inline w-20 md:w-40 h-auto"
+                    />
+                  ) : (
+                    <div>
+                      <strong>Solution: </strong>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: currentQuestion.solution,
+                        }}
+                      ></div>
+                    </div>
+                  )}
+                </div>
           </div>
         )}
 

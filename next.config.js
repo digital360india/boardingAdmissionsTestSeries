@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-    domains: ['firebasestorage.googleapis.com',"images.unsplash.com" ],
+    domains: ['firebasestorage.googleapis.com',"res.cloudinary.com","images.unsplash.com" ],
     },
     webpack: (config) => {
 

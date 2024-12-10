@@ -321,7 +321,7 @@ export default function AddUser({ userData, onClose }) {
                   Selected Test Packages:
                 </h4>
                 <ul className="list-disc pl-6">
-                  {formData.mytestpackages.map((pkg, index) => (
+                  {formData?.mytestpackages.map((pkg, index) => (
                     <li key={index} className="text-gray-700">
                       <span className="font-bold">{pkg.packageName}</span> = ₹
                       {pkg.price}

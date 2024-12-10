@@ -45,7 +45,8 @@ const Leaderboard = ({ resultValue, testId }) => {
   if (loading) {
     return <div>Loading leaderboard...</div>;
   }
-
+console.log(leaderboardData);
+console.log(resultValue)
   return (
     <div className="border border-background04 rounded-md p-4 h-fit max-w-4xl mx-auto">
     <h1 className="text-2xl font-semibold text-background04 text-center">Leaderboard</h1>
@@ -68,7 +69,7 @@ const Leaderboard = ({ resultValue, testId }) => {
             >
               <td className="px-4 py-2 text-sm md:text-base">{index + 1}</td>
               <td className="px-4 py-2 text-sm md:text-base capitalize">
-                {entry.name || "Anonymous"}
+                {entry.displayName || "Anonymous"}
               </td>
               <td className="px-4 py-2 text-sm md:text-base">{entry.score}</td>
               <td className="px-4 py-2 text-sm md:text-base">

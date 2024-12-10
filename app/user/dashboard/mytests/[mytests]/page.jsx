@@ -1,11 +1,9 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { UserContext } from "@/providers/userProvider";
-import { TestContext } from "@/providers/testProvider"; 
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/firebase"; 
+import { TestContext } from "@/providers/testProvider";  
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import Loading from "@/app/loading";
 
@@ -13,7 +11,6 @@ const Page = () => {
   const { user } = useContext(UserContext);
   const { testPackages } = useContext(TestContext);
   const { allTests } = useContext(TestSeriesContext);
-  const router = useRouter();
   const pathname = usePathname();
   const pathParts = pathname.split("/");
   const packageID = pathParts[4];
@@ -31,7 +28,7 @@ const Page = () => {
           return;
         }
         const testsFromPackage = allTests.filter((test) =>
-          selectedPackage.testIds.includes(test.id)
+          selectedPackage.tests.includes(test.id)
         );
 
         setTests(testsFromPackage);
@@ -68,7 +65,7 @@ const Page = () => {
       {tests.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tests.map((test) => {
-            const testLiveDate = new Date(test.testLiveDate);
+            const testLiveDate = new Date(test.testUploadDate);
             const isLive = currentDate >= testLiveDate;
             const hasResult = user?.myResults?.some(
               (result) => result.id === test.id
@@ -86,7 +83,7 @@ const Page = () => {
                   <p className="text-gray-600 mb-2">{test.testDescription}</p>
                   <div className="text-gray-500 text-sm mb-4">
                     <p>Duration: {test.duration} minutes</p>
-                    <p>Start Date: {testLiveDate.toLocaleDateString()}</p>
+                    <p>Start Date: {test.testUploadDate}</p>
                   </div>
                 </div>
 
