@@ -1,6 +1,8 @@
 "use client";
 import { db } from "@/firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { auth } from "@/firebase/firebase"; // Ensure auth is imported correctly
+import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -12,27 +14,37 @@ export const TopNavBar = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-          const userDocRef = doc(db, "users", currentUser.uid); 
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          const userDocRef = doc(db, "users", currentUser.uid);
           const userDoc = await getDoc(userDocRef);
 
           if (userDoc.exists()) {
-            setUser(userDoc.data());
-          } else {
-            console.error("No such user!");
-          }
-        } else {
-          console.warn("No user is logged in");
-        }
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      }
-    };
+            const userData = userDoc.data();
+            
+            let displayName = "";
+            if (userData.role === "admin") {
+              displayName = userData.adminName || "Admin";
+            } else if (userData.role === "teacher") {
+              displayName = userData.teacherName || "Teacher";
+            } else if (userData.role === "user") {
+              displayName = userData.name || "User";
+            }
 
-    fetchUserData();
+            setUser({ ...userData, displayName });
+          } else {
+            console.error("No such user document in Firestore!");
+          }
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      } else {
+        console.warn("No user is logged in.");
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -60,13 +72,14 @@ export const TopNavBar = () => {
             {/* User Profile */}
             <div className="flex gap-4 items-center">
               <IoPerson className="text-[40px] md:text-[55px] p-2 border rounded-xl" />
-              <div className="text-center md:text-left">
+              <div className="text-center">
                 <span className="text-black font-semibold">
-                  {user ? user.name : "Loading..."}
+                  {/* {user ? user.displayName : "Loading..."} */}
+                Name
                 </span>
                 <br />
                 <span className="text-sm md:text-base">
-                  {user ? user.role || "User" : ""}
+                  {user ? user.role : ""}
                 </span>
               </div>
             </div>
