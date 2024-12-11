@@ -29,7 +29,6 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       src: "/user/dashboard/myresults",
       icon: <FaBook />,
     },
-   
   ];
   const path = usePathname();
 
@@ -79,59 +78,60 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </div>
 
         <ul className="pt-6 flex-1">
-  <div className="flex items-center gap-6 bg-[#075D70] text-white font-bold text-[18px] rounded-lg px-6 py-2 w-full cursor-pointer">
-    <img src="/Graph1.svg" className="h-10 w-10" alt="" /> Dashboard
-  </div>
-  {Menus.map((Menu, index) => (
-    <li
-      key={index}
-      className={`text-[#000000B2] text-sm items-center ${
-        Menu.gap ? "mt-9" : "mt-[1rem]"
-      } ${index === 0 && "bg-light-[#fff]"}`}
-    >
-      <Link
-        href={Menu.src}
-        className={`${
-          path === Menu.src ||
-          (index !== 0 && path.startsWith(Menu.src))
-            ? "flex items-center gap-6 border-l-4 border-[#075D70] bg-[#297383E5] text-white font-bold rounded-r-lg p-2 w-full cursor-pointer"
-            : "flex items-center gap-6 hover:border-[#075D70] rounded-md p-2 w-full cursor-pointer"
-        }`}
-      >
-        <span className={`text-xl ${!isSidebarOpen && "text-center"}`}>
-          {Menu.icon}
-        </span>
-        <span
-          className={`${
-            !isSidebarOpen && "hidden"
-          } origin-left tracking-wide duration-200 text-base`}
-        >
-          {Menu.title}
-        </span>
-      </Link>
-    </li>
-  ))}
-  <button
-    onClick={handleLogout}
-    className={`${
-      isSidebarOpen
-        ? "flex items-center gap-6 text-[#000000B2] mt-2 ml-2 font-bold rounded-r-lg p-2 w-full cursor-pointer"
-        : "flex items-center gap-6 hover:border-[#075D70] border-l-4 border-[#075D70] bg-[#297383E5] rounded-md p-2 w-full cursor-pointer"
-    }`}
-  >
-    <FaSignOutAlt className={`text-xl ${!isSidebarOpen && "text-center"}`} />
-    <span
-      className={`${
-        !isSidebarOpen && "hidden"
-      } origin-left tracking-wide duration-200 text-base`}
-    >
-      Log Out
-    </span>
-  </button>
-</ul>
+          <div className="flex items-center gap-6 bg-[#075D70] text-white font-bold text-[18px] rounded-lg px-6 py-2 w-full cursor-pointer">
+            <img src="/Graph1.svg" className="h-10 w-10" alt="" /> Dashboard
+          </div>
+          {Menus.map((Menu, index) => (
+            <li
+              key={index}
+              className={`text-[#000000B2] text-sm items-center ${
+                Menu.gap ? "mt-9" : "mt-[1rem]"
+              } ${index === 0 && "bg-light-[#fff]"}`}
+            >
+              <Link
+                href={Menu.src}
+                className={`${
+                  path === Menu.src ||
+                  (index !== 0 && path.startsWith(Menu.src))
+                    ? "flex items-center gap-6 border-l-4 border-[#075D70] bg-[#297383E5] text-white font-bold rounded-r-lg p-2 w-full cursor-pointer"
+                    : "flex items-center gap-6 hover:border-[#075D70] rounded-md p-2 w-full cursor-pointer"
+                }`}
+              >
+                <span className={`text-xl ${!isSidebarOpen && "text-center"}`}>
+                  {Menu.icon}
+                </span>
+                <span
+                  className={`${
+                    !isSidebarOpen && "hidden"
+                  } origin-left tracking-wide duration-200 text-base`}
+                >
+                  {Menu.title}
+                </span>
+              </Link>
+            </li>
+          ))}
+          <button
+            onClick={handleLogout}
+            className={`${
+              isSidebarOpen
+                ? "flex items-center gap-6 text-[#000000B2] mt-2 font-bold rounded-r-lg w-full cursor-pointer"
+                : "flex items-center gap-6 hover:border-[#075D70] border-l-4 border-[#075D70] bg-[#297383E5] rounded-md p-2 w-full cursor-pointer"
+            }`}
+          >
+            <FaSignOutAlt
+              className={`text-xl ${!isSidebarOpen && "text-center"}`}
+            />
+            <span
+              className={`${
+                !isSidebarOpen && "hidden"
+              } origin-left tracking-wide duration-200 text-base`}
+            >
+              Log Out
+            </span>
+          </button>
+        </ul>
 
-
-        <div className="mt-auto flex items-center gap-6 border border-[#FFFFFF40] hover:border-[#FFFFFF] rounded-md p-2 w-full cursor-pointer">
+        {/* <div className="mt-auto flex items-center gap-6 border border-[#FFFFFF40] hover:border-[#FFFFFF] rounded-md w-full cursor-pointer">
           <button
             onClick={handleLogout}
             className="text-[#fff] flex items-center gap-2"
@@ -147,7 +147,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               Log Out
             </span>
           </button>
-        </div>
+        </div> */}
       </div>
     </>
   );

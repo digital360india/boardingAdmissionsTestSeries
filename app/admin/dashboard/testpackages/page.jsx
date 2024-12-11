@@ -182,16 +182,23 @@ const Page = () => {
   return (
     <div className="p-4">
       <ToastContainer />
+      <div className="flex justify-between mb-6">
+      <div className="text-[28px] font-medium ">Test Packages</div>
+      <div className="flex bg-[#5D5FEF] items-center text-white rounded-lg pl-1 pr-3">
+      <div className="text-[26px] px-2">+</div>
       <button
         onClick={handleModalToggle}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
+        className="my-auto"
       >
+      
         Create Test Package
       </button>
+      </div>
+      </div>
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[60vw] relative max-h-[90vh] overflow-y-scroll">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[36vw] relative max-h-[90vh] overflow-y-scroll">
             <button
               onClick={handleOnClose}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -200,6 +207,7 @@ const Page = () => {
             </button>
             <h2 className="text-xl font-bold mb-4">Create Test Package</h2>
             <form onSubmit={handlePackageCreation}>
+              <div className="flex gap-4">
               <div className="mb-4">
                 <label className="block text-gray-700">Package Name:</label>
                 <input
@@ -207,9 +215,22 @@ const Page = () => {
                   name="packageName"
                   value={formData.packageName}
                   onChange={handleInputChange}
-                  className="mt-1 block  p-2 border border-gray-300 rounded w-[67%]"
+                  placeholder="Enter Name"
+                  className="mt-1 block  p-2 border border-gray-300 rounded w-[270px]"
                   required
                 />
+              </div>
+              <div className="mb-4">
+                  <label className="block text-gray-700">Starting Date:</label>
+                  <input
+                    type="date"
+                    name="startingDate"
+                    value={formData.startingDate}
+                    onChange={handleInputChange}
+                    className="mt-1 block p-2 border border-gray-300 w-[270px] rounded"
+                    required
+                  />
+                </div>
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700">
@@ -219,7 +240,8 @@ const Page = () => {
                   name="packageDescription"
                   value={formData.packageDescription}
                   onChange={handleInputChange}
-                  className="mt-1 block p-2 border border-gray-300 rounded h-32 w-[67%]"
+                  placeholder="value"
+                  className="mt-1 block p-2 border border-gray-300 rounded h-20 w-full"
                   required
                 />
               </div>
@@ -250,17 +272,7 @@ const Page = () => {
                     required
                   />
                 </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">Starting Date:</label>
-                  <input
-                    type="date"
-                    name="startingDate"
-                    value={formData.startingDate}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    required
-                  />
-                </div>
+              
               </div>
 
               <div className="mb-4">

@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { UserContext } from "@/providers/userProvider";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import Loading from "@/app/loading";
+import { MdOutlineTimelapse } from "react-icons/md";
+import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
 
 export default function Page() {
   const [data, setData] = useState([]);
@@ -16,12 +18,14 @@ export default function Page() {
       if (user?.myResults) {
         const updatedResults = user.myResults.map((result) => {
           const test = allTests.find((test) => test.id === result.id);
-
+          console.log(test);
           if (test) {
             return {
               ...result,
               testTitle: test.testTitle,
-              totalMarks: test.totalMarks,
+              totalMarks: test.Totalmarks,
+              questionsCount: test.test.length,
+              duration: test.duration,
             };
           }
           return result;
@@ -68,41 +72,101 @@ export default function Page() {
             return (
               <div
                 key={test.id}
-                className="border flex bg-gray-50 px-4 pt-2 pb-8 rounded-md mb-6 flex-col md:flex-row justify-between items-center hover:bg-gray-100 transition-colors duration-200"
+                className="border w-[340px] bg-gray-50 px-4 pt-2 pb-8 rounded-md mb-6 flex-col md:flex-row justify-between items-center hover:bg-gray-100 transition-colors duration-200"
               >
                 <div className="flex-1">
                   <h2 className="text-lg font-semibold text-gray-800">
-                    {test.testTitle || "Test Title Unavailable"}
+                    {test.testTitle || "Test Title Unavailable"} Result
                   </h2>
-                  <p className="text-gray-600">{test.testDescription}</p>
-                  <p className="text-gray-500 text-sm">
-                    Time Taken: {test.timeTaken || "N/A"} minutes
-                  </p>
-                  <p className="text-gray-500 text-sm">
-                    Test Submission Date:{" "}
+                  <p className="text-gray-500 text-[16px] my-2">
+                    Exam Date:
                     {test.testSubmissionTime?.seconds
                       ? new Date(
                           test.testSubmissionTime.seconds * 1000
                         ).toLocaleDateString()
                       : "N/A"}
                   </p>
+                  {/* <p className="text-gray-600">{test.testDescription}</p> */}
                 </div>
-                <div className="w-full md:w-1/3 mt-4 md:mt-0">
-                  <p className="text-gray-600">
-                    Score: {score} / {maxScore}
+                <div className="w-full mt-4 md:mt-0">
+                  <div className="flex gap-2">
+                    <img src="/readiness_score.svg" alt="" />
+                    <p className="text-gray-600">
+                      Score: {score} / {maxScore}
+                    </p>
+                  </div>
+                  <p className="text-sm mt-1">
+                    {progressPercentage >= 75 ? (
+                      <span className="text-green-600 font-semibold">
+                        Excellent Performance
+                      </span>
+                    ) : progressPercentage >= 45 ? (
+                      <span className="text-yellow-600 font-semibold">
+                        Average Performance
+                      </span>
+                    ) : (
+                      <span className="text-red-600 font-semibold">
+                        Low Performance
+                      </span>
+                    )}
                   </p>
-                  <div className="w-full bg-gray-200 rounded-full h-4 mt-1">
+                  <div className="w-full bg-gray-200 rounded-full h-3 mt-1">
                     <div
-                      className={`h-4 rounded-full ${progressColor}`}
+                      className={`h-3 rounded-full ${progressColor}`}
                       style={{
                         width: `${progressPercentage}%`,
                       }}
                     ></div>
                   </div>
+
+                  <div className="flex justify-between text-18px mt-4 ">
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <p>
+                          <MdOutlineTimelapse className="text-[22px]" />
+                        </p>
+                        <p>Duration</p>
+                      </div>
+                    </div>
+                    <div>{test.duration} min</div>
+                  </div>
+
+                  <div className="flex justify-between text-18px ">
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <p>
+                          <MdOutlineTimelapse className="text-[22px]" />
+                        </p>
+                        <p>Time Taken:</p>
+                      </div>
+                    </div>
+                    <div>
+                      {test.timeTaken !== undefined ? (
+                        <>
+                          {Math.floor(test.timeTaken / 60)} min{" "}
+                          {test.timeTaken % 60} sec
+                        </>
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between text-18px ">
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <p>
+                          <HiOutlineQuestionMarkCircle className="text-[22px]" />
+                        </p>
+                        <p>Total Questions:</p>
+                      </div>
+                    </div>
+                    <div>{test?.questionsCount}</div>
+                  </div>
                 </div>
-                <div className="mt-4 md:mt-0 md:ml-4">
+                <div className="mt-8">
                   <a href={`/user/dashboard/testcompletion/${test.id}`}>
-                    <button className="bg-background04 text-white px-4 py-2 rounded-lg w-full md:w-auto">
+                    <button className="bg-[#075D70] text-white px-4 py-2 rounded-lg w-full ">
                       Show Result
                     </button>
                   </a>

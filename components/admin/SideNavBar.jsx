@@ -42,8 +42,8 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   return (
     <>
-      <div
-        className={`fixed top-0 left-0 h-screen bg-background04 p-5 pt-8 duration-300 flex flex-col ${
+       <div
+        className={`fixed top-0 left-0 h-screen bg-white p-5 pt-8 duration-300 flex flex-col ${
           isSidebarOpen ? "w-72" : "w-[85px]"
         }`}
       >
@@ -86,10 +86,13 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </div>
 
         <ul className="pt-6 flex-1">
+          <div className="flex items-center gap-6 bg-[#075D70] text-white font-bold text-[18px] rounded-lg px-6 py-2 w-full cursor-pointer">
+            <img src="/Graph1.svg" className="h-10 w-10" alt="" /> Dashboard
+          </div>
           {Menus.map((Menu, index) => (
             <li
               key={index}
-              className={`text-[#fff] text-sm items-center ${
+              className={`text-[#000000B2] text-sm items-center ${
                 Menu.gap ? "mt-9" : "mt-[1rem]"
               } ${index === 0 && "bg-light-[#fff]"}`}
             >
@@ -98,8 +101,8 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 className={`${
                   path === Menu.src ||
                   (index !== 0 && path.startsWith(Menu.src))
-                    ? "flex items-center gap-6 border border-[#FFFFFF] bg-white text-background04 font-bold  rounded-md p-2 w-full cursor-pointer"
-                    : "flex items-center gap-6 border border-[#FFFFFF40] hover:border-[#FFFFFF] rounded-md p-2 w-full cursor-pointer"
+                    ? "flex items-center gap-6 border-l-4 border-[#075D70] bg-[#297383E5] text-white font-bold rounded-r-lg p-2 w-full cursor-pointer"
+                    : "flex items-center gap-6 hover:border-[#075D70] rounded-md p-2 w-full cursor-pointer"
                 }`}
               >
                 <span className={`text-xl ${!isSidebarOpen && "text-center"}`}>
@@ -115,9 +118,28 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               </Link>
             </li>
           ))}
+          <button
+            onClick={handleLogout}
+            className={`${
+              isSidebarOpen
+                ? "flex items-center gap-6 text-[#000000B2] mt-2 ml-2 font-bold rounded-r-lg p-2 w-full cursor-pointer"
+                : "flex items-center gap-6 hover:border-[#075D70] border-l-4 border-[#075D70] bg-[#297383E5] rounded-md p-2 w-full cursor-pointer"
+            }`}
+          >
+            <FaSignOutAlt
+              className={`text-xl ${!isSidebarOpen && "text-center"}`}
+            />
+            <span
+              className={`${
+                !isSidebarOpen && "hidden"
+              } origin-left tracking-wide duration-200 text-base`}
+            >
+              Log Out
+            </span>
+          </button>
         </ul>
 
-        <div className="mt-auto flex items-center gap-6 border border-[#FFFFFF40] hover:border-[#FFFFFF] rounded-md p-2 w-full cursor-pointer">
+        {/* <div className="mt-auto flex items-center gap-6 border border-[#FFFFFF40] hover:border-[#FFFFFF] rounded-md p-2 w-full cursor-pointer">
           <button
             onClick={handleLogout}
             className="text-[#fff] flex items-center gap-2"
@@ -133,7 +155,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               Log Out
             </span>
           </button>
-        </div>
+        </div> */}
       </div>
     </>
   );

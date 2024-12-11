@@ -3,10 +3,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { UserContext } from "@/providers/userProvider";
-import { TestContext } from "@/providers/testProvider";  
+import { TestContext } from "@/providers/testProvider";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import Loading from "@/app/loading";
-
+import { SlCalender } from "react-icons/sl";
+import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
+import { MdOutlineTimelapse } from "react-icons/md";
 const Page = () => {
   const { user } = useContext(UserContext);
   const { testPackages } = useContext(TestContext);
@@ -21,7 +23,9 @@ const Page = () => {
   useEffect(() => {
     const loadPackageData = () => {
       if (packageID) {
-        const selectedPackage = testPackages.find((pkg) => pkg.id === packageID);
+        const selectedPackage = testPackages.find(
+          (pkg) => pkg.id === packageID
+        );
         if (!selectedPackage) {
           setError("Package not found.");
           setLoading(false);
@@ -42,7 +46,9 @@ const Page = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-blue-600"><Loading /></div>
+        <div className="text-blue-600">
+          <Loading />
+        </div>
       </div>
     );
   }
@@ -74,16 +80,59 @@ const Page = () => {
             return (
               <div
                 key={test.id}
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between h-full"
+                className="bg-white rounded-lg border border-[#E5E0E0] w-[360px] p-6 flex flex-col justify-between h-full"
               >
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  <h2 className="text-2xl font-medium mb-2">
                     {test.testTitle}
                   </h2>
-                  <p className="text-gray-600 mb-2">{test.testDescription}</p>
-                  <div className="text-gray-500 text-sm mb-4">
-                    <p>Duration: {test.duration} minutes</p>
-                    <p>Start Date: {test.testUploadDate}</p>
+
+                  <p className="text-18px mb-2">{test.testDescription}</p>
+                  <div className=" text-sm my-5 flex-col space-y-4 ">
+                    <div className="flex justify-between text-18px ">
+                      <div>
+                        <div className="flex gap-2 items-center">
+                          <p>
+                            <SlCalender />
+                          </p>
+                          <p className="">Creation Date</p>
+                        </div>
+                      </div>
+                      <div>{test.createdAt}</div>
+                    </div>
+                    <div className="flex justify-between text-18px ">
+                      <div>
+                        <div className="flex gap-2 items-center">
+                          <p>
+                          <MdOutlineTimelapse className="text-[22px]" />
+                          </p>
+                          <p>Duration</p>
+                        </div>
+                      </div>
+                      <div>{test.duration}</div>
+                    </div>
+                    <div className="flex justify-between text-18px ">
+                      <div>
+                        <div className="flex gap-2 items-center">
+                          <div>
+                           <img src="/readiness_score.svg" alt="" />
+                          </div>
+                          <p className="">Total Marks</p>
+                        </div>
+                      </div>
+                      <div>{test.Totalmarks}</div>
+                    </div>
+                    <div className="flex justify-between text-18px ">
+                      <div>
+                        <div className="flex gap-2 items-center">
+                          <p>
+                          <HiOutlineQuestionMarkCircle className="text-[22px]" />
+                          </p>
+                          <p>Questions</p>
+                        </div>
+                      </div>
+                      <div>{Array.isArray(test.test) ? test.test.length : 0}</div>
+                    </div>
                   </div>
                 </div>
 
@@ -92,12 +141,12 @@ const Page = () => {
                     href={`/user/testScreen?category=${test.id}&reattempt=${hasResult}`}
                   >
                     <button
-                      className={`px-4 py-2 rounded-lg w-full ${
+                      className={`px-4 py-2 rounded-md w-full ${
                         isLive
                           ? hasResult
-                            ? "bg-blue-500 text-white"
-                            : "bg-blue-800 text-white"
-                          : "bg-gray-400 text-gray-700"
+                            ? "bg-[#075D70] text-white"
+                            : "bg-[#075D70] text-white"
+                          : "bg-[#075D7080] text-gray-700"
                       }`}
                       disabled={!isLive}
                     >

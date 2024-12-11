@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <div lang="en">
+    <div lang="en" className="bg-[#f5f5f5]">
       {" "}
       <UserProvider>
       <ProfileProvider>

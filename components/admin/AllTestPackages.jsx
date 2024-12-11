@@ -148,7 +148,7 @@ const TestPackagesList = () => {
   };
   return (
     <div className="w-full mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold text-gray-800 mb-4">Test Packages</h2>
+      {/* <h2 className="text-3xl font-bold text-gray-800 mb-4">Test Packages</h2> */}
 
       <PackageTable
         isModalOpen={isModalOpen}

@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <div lang="en">
+    <div lang="en" className="bg-[#F5F5F5]">
       {" "}
       <ToastContainer/>
       <UserProvider>

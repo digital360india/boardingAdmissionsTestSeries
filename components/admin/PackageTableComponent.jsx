@@ -17,7 +17,7 @@ const PackageTable = ({
   const [packageIdToDelete, setPackageIdToDelete] = useState(null);
 
   const handleEditClick = (pkg) => {
-    console.log(pkg)
+    console.log(pkg);
     setEditingPackage(pkg.id);
     setEditFormData({
       packageName: pkg.packageName,
@@ -25,9 +25,7 @@ const PackageTable = ({
       price: pkg.price,
       tests: pkg.tests,
       discountedPrice: pkg.discountedPrice,
-      startingDate:   new Date(
-        pkg.startingDate
-      ).toLocaleDateString()
+      startingDate: new Date(pkg.startingDate).toLocaleDateString(),
     });
   };
 
@@ -76,28 +74,58 @@ const PackageTable = ({
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-300">
+      <table className="min-w-full bg-white ">
         <thead>
-          <tr className="bg-gray-100 text-black font-medium">
-            <th className="py-3 px-4 border-b border-r">S No</th>
-            <th className="py-3 px-4 border-b border-r">Package Name</th>
-            <th className="py-3 px-4 border-b border-r">Price</th>
-            <th className="py-3 px-4 border-b border-r">Discounted Price</th>
-            <th className="py-3 px-4 border-b">Actions</th>
+          <tr className=" text-black font-medium">
+            <th className="py-3 px-4  text-left font-normal text-[20px]">
+              Sr.no
+            </th>
+            <th className="py-3 px-4  text-left font-normal text-[20px]">
+              Package Name
+            </th>
+            <th className="py-3 px-4  text-left font-normal text-[20px]">
+              Price
+            </th>
+            <th className="py-3 px-4  text-left font-normal text-[20px]">
+              Student Enrolled
+            </th>
+            <th className="py-3 px-4  text-left font-normal text-[20px]">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {testPackages.map((pkg, index) => (
-            <tr key={pkg.id} className="hover:bg-gray-300 text-center">
-              <td className="py-2 px-4 border-b border-r">{index + 1}</td>
-              <td className="py-2 px-4 border-b border-r">{pkg.packageName}</td>
-              <td className="py-2 px-4 border-b border-r">
-                ₹{pkg.price}
+            <tr key={pkg.id} className="hover:bg-gray-300">
+              <td className="py-2 px-4  text-left font-normal text-[20px]">
+                {index + 1}
               </td>
-              <td className="py-2 px-4 border-b border-r">
-                ₹{pkg.discountedPrice}
+              <td className="py-2 px-4  text-left font-normal text-[20px]">
+                {pkg.packageName}
               </td>
-              <td className="py-2 px-4 border-b">{renderActions(pkg)}</td>
+              <td className="py-2 px-4  text-left font-normal text-[20px]">
+                {pkg.discountedPrice ? (
+                  <>
+                    <span className="text-black">₹{pkg.discountedPrice} </span>
+                    <span className="line-through text-[#4E4E4EB2]">
+                      {" "}
+                      ₹{pkg.price}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-black">₹{pkg.price}</span>
+                )}
+              </td>
+              <td className="py-2 px-4  text-center font-normal text-[20px]">
+                {Array.isArray(pkg.studentEnrolled) &&
+                pkg.studentEnrolled.length > 0
+                  ? pkg.studentEnrolled.length
+                  : 0}
+              </td>
+
+              <td className="py-2 px-4  text-left font-normal text-[20px]">
+                {renderActions(pkg)}
+              </td>
             </tr>
           ))}
         </tbody>
