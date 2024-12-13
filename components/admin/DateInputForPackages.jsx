@@ -25,15 +25,6 @@ const DateInputDialog = ({ isOpen, onClose, onConfirm }) => {
       <div className="bg-white p-6 rounded-lg w-96 space-y-4">
         <h3 className="text-lg font-semibold">Enter Dates</h3>
         <label>
-          Date of Expiration:
-          <input
-            type="date"
-            value={expirationDate}
-            onChange={(e) => setExpirationDate(e.target.value)}
-            className="border p-2 rounded w-full"
-          />
-        </label>
-        <label>
           Date of Purchase:
           <input
             type="date"
@@ -42,6 +33,16 @@ const DateInputDialog = ({ isOpen, onClose, onConfirm }) => {
             className="border p-2 rounded w-full"
           />
         </label>
+        <label>
+          Date of Expiration:
+          <input
+            type="date"
+            value={expirationDate}
+            onChange={(e) => setExpirationDate(e.target.value)}
+            className="border p-2 rounded w-full"
+          />
+        </label>
+      
         <div className="flex justify-end space-x-2">
           <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
             Cancel

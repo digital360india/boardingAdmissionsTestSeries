@@ -7,9 +7,10 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
+import { RiArrowDropUpFill } from "react-icons/ri";
 import React, { useEffect, useState } from "react";
 import { PiDotsThreeBold } from "react-icons/pi";
-import { FaReply, FaEdit } from "react-icons/fa";
+import { FaReply, FaEdit, FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { MdDeleteSweep } from "react-icons/md";
 import Loading from "@/app/loading";
 import showError from "@/utils/functions/showError";
@@ -103,6 +104,20 @@ const Page = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const leadsPerPage = 10;
+
+  const indexOfLastLead = currentPage * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+
+  const totalPages = Math.ceil(leads.length / leadsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   if (loading)
     return (
       <div>
@@ -111,84 +126,177 @@ const Page = () => {
     );
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Leads</h1>
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-gray-100 p-4 rounded shadow-md">
-          <h3 className="text-lg font-semibold">NA Leads</h3>
-          <p className="text-xl font-bold">{naCount}</p>
+      <div className="bg-white p-4 rounded-lg shadow-md mb-5">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-blue-900">Today's Leads</h2>
+          <button className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg shadow-sm">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 12h14M12 5l7 7-7 7"
+              />
+            </svg>
+            Export
+          </button>
         </div>
-        <div className="bg-gray-100 p-4 rounded shadow-md">
-          <h3 className="text-lg font-semibold">Hot Leads</h3>
-          <p className="text-xl font-bold">{hotCount}</p>
-        </div>
-        <div className="bg-gray-100 p-4 rounded shadow-md">
-          <h3 className="text-lg font-semibold">Cold Leads</h3>
-          <p className="text-xl font-bold">{coldCount}</p>
+        <p className="text-gray-500 text-sm mb-6">Summary</p>
+        <div className="flex gap-4">
+          <div className="bg-[#206E7F] w-[240px] h-[130px] text-white p-4 rounded-lg shadow-lg">
+            <p className="text-2xl font-semibold my-1">{naCount}</p>
+            <h3 className="text-sm font-semibold">NA Leads</h3>
+            <div className="flex items-center text-sm mt-2">
+              <RiArrowDropUpFill className="text-[#3EFF18] text-5xl -ml-4" />
+              <span className="-ml-2">0% from yesterday</span>
+            </div>
+          </div>
+          <div className="bg-[#206E7F] w-[240px] h-[130px] text-white p-4 rounded-lg shadow-lg">
+            <p className="text-2xl font-semibold my-1">{hotCount}</p>
+            <h3 className="text-sm font-semibold">Hot Leads</h3>
+            <div className="flex items-center text-sm mt-2">
+              <RiArrowDropUpFill className="text-[#3EFF18] text-5xl -ml-4" />
+
+              <span>0.5% from yesterday</span>
+            </div>
+          </div>
+          <div className="bg-[#206E7F] w-[240px] h-[130px] text-white p-4 rounded-lg shadow-lg">
+            <p className="text-2xl font-semibold my-1">{coldCount}</p>
+            <h3 className="text-sm font-semibold">Cold Leads</h3>
+            <div className="flex items-center text-sm mt-2">
+              <RiArrowDropUpFill className="text-[#3EFF18] text-5xl -ml-4" />
+
+              <span>0.5% from yesterday</span>
+            </div>
+          </div>
         </div>
       </div>
+
       {loading ? (
         <p>Loading leads...</p>
       ) : leads.length > 0 ? (
-        <table className="min-w-full bg-white border">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b">Name</th>
-              <th className="py-2 px-4 border-b">Email</th>
-              <th className="py-2 px-4 border-b">Phone</th>
-              <th className="py-2 px-4 border-b">Disposition</th>
-              <th className="py-2 px-4 border-b">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leads.map((lead) => (
-              <tr key={lead.id}>
-                <td className="py-2 px-4 border-b ">{lead.name}</td>
-                <td className="py-2 px-4 border-b">{lead.email}</td>
-                <td className="py-2 px-4 border-b">{lead.phonenumber}</td>
-                <td className="py-2 px-4 border-b">
-                  <button
-                    className="text-black px-2 py-1 rounded"
-                    onClick={() =>
-                      handleDispositionChange(
-                        lead.id,
-                        lead.disposition === "Hot" ? "Cold" : "Hot"
-                      )
-                    }
-                  >
-                    {lead.disposition || "NA"}
-                  </button>
-                </td>
-                <td className="py-2 px-4 border-b">
-                  <div className="relative">
+        <div>
+          <table className="min-w-full bg-white border">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 text-left">Name</th>
+                <th className="py-2 px-4 text-left">Email</th>
+                <th className="py-2 px-4 text-left">Phone</th>
+                <th className="py-2 px-4 text-left">Disposition</th>
+                <th className="py-2 px-4 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentLeads.map((lead) => (
+                <tr key={lead.id}>
+                  <td className="py-2 px-4">{lead.name}</td>
+                  <td className="py-2 px-4">{lead.email}</td>
+                  <td className="py-2 px-4">{lead.phonenumber}</td>
+                  <td className="py-2 px-4">
                     <button
                       className="text-black px-2 py-1 rounded"
-                      onClick={() => toggleDropdown(lead.id)}
+                      onClick={() =>
+                        handleDispositionChange(
+                          lead.id,
+                          lead.disposition === "Hot" ? "Cold" : "Hot"
+                        )
+                      }
                     >
-                      <PiDotsThreeBold className="text-[35px]" />
+                      {lead.disposition || "NA"}
                     </button>
-                    {dropdownOpen === lead.id && (
-                      <div className="absolute right-0 mt-2 bg-white border rounded shadow-lg z-50">
-                        <button
-                          className="flex items-center gap-1 w-28 text-left px-4 py-2 text-blue-500 hover:bg-gray-100"
-                          onClick={() => handleEditLead(lead)}
-                        >
-                          <FaEdit /> Edit
-                        </button>
-                        <hr />
-                        <button
-                          className="flex items-center gap-1 w-28 text-left px-4 py-2 text-red-500 hover:bg-gray-100"
-                          onClick={() => handleDeleteConfirm(lead.id)}
-                        >
-                          <MdDeleteSweep /> Delete
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                  <td className="py-2 px-4">
+                    <div className="relative">
+                      <button
+                        className="text-black px-2 py-1 rounded"
+                        onClick={() => toggleDropdown(lead.id)}
+                      >
+                        <PiDotsThreeBold className="text-[35px]" />
+                      </button>
+                      {dropdownOpen === lead.id && (
+                        <div className="absolute right-0 mt-2 bg-white border rounded shadow-lg z-50">
+                          <button
+                            className="flex items-center gap-1 w-28 text-left px-4 py-2 text-blue-500 hover:bg-gray-100"
+                            onClick={() => handleEditLead(lead)}
+                          >
+                            <FaEdit /> Edit
+                          </button>
+                          <hr />
+                          <button
+                            className="flex items-center gap-1 w-28 text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+                            onClick={() => handleDeleteConfirm(lead.id)}
+                          >
+                            <MdDeleteSweep /> Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="flex justify-center gap-4 items-center mt-4">
+            <button
+              className="px-4 py-2 flex gap-3 items-center"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              <FaArrowLeft />
+              Previous
+            </button>
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }, (_, index) => {
+                const page = index + 1;
+                if (
+                  page <= 3 || 
+                  page > totalPages - 2 || 
+                  (page >= currentPage - 1 && page <= currentPage + 1) 
+                ) {
+                  return (
+                    <button
+                      key={page}
+                      className={`px-4 py-2 rounded ${
+                        currentPage === page ? "bg-[#2C2C2C] text-white" : ""
+                      }`}
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </button>
+                  );
+                }
+
+                if (
+                  (page === 4 && currentPage > 4) || 
+                  (page === totalPages - 2 && currentPage < totalPages - 3) 
+                ) {
+                  return (
+                    <span key={page} className="px-4 py-2">
+                      ...
+                    </span>
+                  );
+                }
+
+                return null;
+              })}
+            </div>
+
+            <button
+              className="px-4 py-2 flex items-center gap-3"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next <FaArrowRight />
+            </button>
+          </div>
+        </div>
       ) : (
         <p>No leads found.</p>
       )}

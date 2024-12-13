@@ -9,8 +9,8 @@ const BottomNavbar = () => {
 
   const getLinkClass = (path) => {
     return pathname === path
-      ? "flex flex-col items-center text-blue-600 transition duration-200"
-      : "flex flex-col items-center text-gray-600 hover:text-blue-600 transition duration-200";
+      ? "flex flex-col items-center text-[#075D70] transition duration-200"
+      : "flex flex-col items-center text-gray-600 hover:text-[#075D70] transition duration-200";
   };
 
   return (

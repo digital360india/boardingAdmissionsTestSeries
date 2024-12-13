@@ -320,13 +320,8 @@ const TestPage = () => {
   return (
     <div className="space-y-4">
       <ToastContainer />
-      <div className="flex items-center w-full   gap-10 h-[70px]">
-        <button
-          onClick={handleOpenDialog}
-          className="bg-green-500 h-[40px] w-fit p-2 mb-2 text-white rounded-md mt-4 hover:bg-green-600"
-        >
-          Add New Test
-        </button>
+      <div className="flex items-center justify-between px-4 gap-10 h-[70px]">
+      <div className="text-24px font-medium">Test</div>
         <div className="flex items-center gap-2 h-[60px]  w-[500px] ">
           <input
             type="text"
@@ -339,6 +334,9 @@ const TestPage = () => {
               searchActive ? `w-[450px] opacity-100` : `w-[0px] opacity-0`
             } text-base font-light bg-slate-100 placeholder:text-black h-[45px] px-2 outline-none rounded-l-lg `}
           />
+          <div className="flex bg-[#5D5FEF] pr-3 pl-2 text-white py-1 rounded-r-lg gap-2 ">
+           
+          <div>
           <img
             onClick={() => {
               setSearchActive(!searchActive);
@@ -347,6 +345,25 @@ const TestPage = () => {
             src="/search.svg"
             alt=""
           />
+          </div>
+          <div className="mt-[2px]">
+            Serach
+          </div>
+          </div>
+        </div>
+        
+        <div className="flex items-center bg-[#5D5FEF] rounded-lg">
+          <div className="text-3xl text-white pl-2 font-light pb-[2px]">
++
+          </div>
+          <div>
+        <button
+          onClick={handleOpenDialog}
+          className=" h-[40px] w-fit p-2  text-white rounded-md "
+        >
+          Create Test
+        </button>
+          </div>
         </div>
       </div>
 

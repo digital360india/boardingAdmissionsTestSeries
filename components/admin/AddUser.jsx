@@ -11,6 +11,7 @@ import { uploadImage } from "@/utils/functions/imageControls";
 import showError from "@/utils/functions/showError";
 import { sendOtp } from "@/utils/functions/sendOtp";
 import { generateVerificationCode } from "@/utils/functions/generateVerificationCode";
+import { MdDelete } from "react-icons/md";
 
 export default function AddUser({ userData, onClose }) {
   const { user } = useContext(UserContext);
@@ -210,63 +211,59 @@ export default function AddUser({ userData, onClose }) {
     fileInputRef.current.value = "";
   };
 
+  const handleDeletePackage = (index) => {
+    const updatedPackages = formData.mytestpackages.filter(
+      (pkg, i) => i !== index
+    );
+    setFormData({ ...formData, mytestpackages: updatedPackages });
+  };
+
   return (
-    <div className="w-full mx-auto max-h-[80vh] overflow-y-scroll">
+    <div className="w-full mx-auto max-h-[80vh]">
       <h2 className="text-3xl font-bold py-4 text-center text-gray-800">
         {userData ? "Edit User Details" : "Add User"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4 p-1">
-        <div className="flex justify-between ">
-          <div className="flex flex-col space-y-2 w-[30%]">
+        <div className="flex gap-10 justify-evenly">
+          <div className="flex flex-col space-y-2 w-[50%]">
             <label className="text-gray-600 font-semibold">Name</label>
             <input
               type="text"
               name="displayName"
               value={formData.displayName}
               onChange={handleInputChange}
-              className="p-2 border border-gray-300 rounded-lg focus:outline-none "
+              className="p-2 border border-gray-300  rounded-lg focus:outline-none "
               required
             />
           </div>
 
           {userData ? (
-            <div className="flex flex-col space-y-2 w-[30%]">
+            <div className="flex flex-col space-y-2 w-[50%]">
               <label className="text-gray-600 font-semibold">Email</label>
               <input
                 value={formData.email}
-                className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
+                className="p-2 border border-gray-300  rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
                 readOnly
                 disabled
               />
             </div>
           ) : (
-            <div className="flex flex-col space-y-2 w-[30%]">
+            <div className="flex flex-col space-y-2 w-[50%]">
               <label className="text-gray-600 font-semibold">Email</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
+                className="p-2 border border-gray-300  rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
                 required
               />
             </div>
           )}
-
-          <div className="flex flex-col space-y-2 w-[30%]">
-            <label className="text-gray-600 font-semibold">Profile Photo</label>
-            <input
-              type="file"
-              placeholder="File Size <= 100kb"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              className="px-2 py-1 border border-gray-300 rounded-lg"
-            />
-          </div>
         </div>
 
         <div className="flex justify-between">
-          <div className="flex flex-col space-y-2 w-[30%]">
+          <div className="flex flex-col space-y-2 w-[47%]">
             <label className="text-gray-600 font-semibold">Date of Birth</label>
             <input
               type="date"
@@ -277,9 +274,7 @@ export default function AddUser({ userData, onClose }) {
               required
             />
           </div>
-
-          <div className="w-3"></div>
-          <div className="flex flex-col space-y-2 w-[30%]">
+          <div className="flex flex-col space-y-2 w-[46%]">
             <label className="text-gray-600 font-semibold">Phone Number</label>
             <input
               type="text"
@@ -291,9 +286,19 @@ export default function AddUser({ userData, onClose }) {
             />
           </div>
         </div>
+        <div className="flex flex-col space-y-2 w-[100%]">
+          <label className="text-gray-600 font-semibold">Profile Photo</label>
+          <input
+            type="file"
+            placeholder="File Size <= 100kb"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="px-2 py-1 border border-gray-300 rounded-lg"
+          />
+        </div>
 
         <div className="flex justify-between ">
-          <div className="flex flex-col space-y-2 w-[45%]">
+          <div className="flex flex-col space-y-2 w-[100%]">
             <label className="text-gray-600 font-semibold">
               Select Test Package
             </label>
@@ -301,7 +306,7 @@ export default function AddUser({ userData, onClose }) {
               <select
                 name="mytestpackages"
                 onChange={handleSelectTestPackage}
-                className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
+                className="p-2 border border-gray-300 w-[100%] rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-500"
               >
                 <option value="">Select a package</option>
                 {availableTestPackages.map((pkg) => (
@@ -316,15 +321,28 @@ export default function AddUser({ userData, onClose }) {
                 onClose={() => setIsDialogOpen(false)}
                 onConfirm={handleConfirmDates}
               />
-              <div className="bg-gray-100 mt-4 p-4 rounded-lg space-y-2 w-[45%]">
+              <div className="border mt-4 p-4 rounded-lg space-y-4 w-[100%]">
                 <h4 className="font-semibold text-lg">
                   Selected Test Packages:
                 </h4>
-                <ul className="list-disc pl-6">
+                <ul className="list-disc pl-6 space-y-2">
                   {formData?.mytestpackages.map((pkg, index) => (
-                    <li key={index} className="text-gray-700">
-                      <span className="font-bold">{pkg.packageName}</span> = ₹
-                      {pkg.price}
+                    <li
+                      key={index}
+                      className="text-gray-700 flex justify-between items-center"
+                    >
+                      {/* Package Details */}
+                      <div>
+                        <span className="font-bold">{pkg.packageName}</span> = ₹
+                        {pkg.price}
+                      </div>
+                      {/* Delete Icon */}
+                      <button
+                        className="text-red-500 hover:text-red-700 p-1"
+                        onClick={() => handleDeletePackage(index)}
+                      >
+                        <MdDelete size={20} />
+                      </button>
                     </li>
                   ))}
                 </ul>

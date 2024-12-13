@@ -19,47 +19,44 @@ const UserTable = ({
   handleDeleteClick,
 }) => {
   return (
-    <table className="min-w-full border border-gray-300">
+    <table className="min-w-full bg-white">
       <thead>
-        <tr>
-          <th className="border border-gray-300 p-2">S.No</th>
-          <th className="border border-gray-300 p-2">Name</th>
-          <th className="border border-gray-300 p-2">Email</th>
-          <th className="border border-gray-300 p-2">Role</th>
-          <th className="border border-gray-300 p-2">Verification</th>
-          <th className="border border-gray-300 p-2">Actions</th>
+        <tr className="text-18px text-[#000000CC]">
+          <th className="text-left p-2">S.No</th>
+          <th className="text-left p-2">Name</th>
+          <th className="text-left p-2">Email</th>
+          <th className="text-left p-2">Role</th>
+          <th className="text-left p-2">Verification</th>
+          <th className="text-left p-2">Actions</th>
         </tr>
       </thead>
       <tbody>
         {users.map((user, index) => (
           <tr key={user.id} className="hover:bg-gray-100 cursor-pointer">
-            <td className="border border-gray-300 px-1">{index + 1}</td>
-            <td
-              className="border border-gray-300 px-1"
-              onClick={() => handleUserClick(user)}
-            >
+            <td className=" px-1">{index + 1}</td>
+            <td className=" px-1" onClick={() => handleUserClick(user)}>
               {user.displayName || "No Name"}
             </td>
-            <td className="border border-gray-300 px-1">
-              {user.email || "No Email"}
-            </td>
-            <td className="border border-gray-300 px-1">
-              {user.role || "No Role"}
-            </td>
-            <td className="border border-gray-300 px-1">
+            <td className=" px-1">{user.email || "No Email"}</td>
+            <td className=" px-1">{user.role || "No Role"}</td>
+            <td className=" px-1">
               {user.isVerified ? (
                 <span className="text-green-500">Verified</span>
               ) : (
                 <span className="text-red-500">Not Verified</span>
               )}
             </td>
-            <td className="border justify-center flex space-x-2">
+            <td className=" flex space-x-2">
               <div className="relative inline-block">
                 <button
                   onClick={() => toggleDropdown(user.id)}
-                  className="text-black px-4 py-2 rounded hover:bg-gray-200"
+                  className={`${
+                    openDropdownId === user.id
+                      ? "rounded-full border p-1 w-[39px] h-[39px]"
+                      : "text-black w-10 h-10 flex items-center justify-center"
+                  }`}
                 >
-                  <PiDotsThreeBold className="text-[35px]" />
+                  <PiDotsThreeBold className="text-[30px] sm:text-[25px] border-gray-200 md:text-[30px]" />
                 </button>
 
                 {openDropdownId === user.id && (
@@ -72,7 +69,6 @@ const UserTable = ({
                       className="w-full flex gap-2 items-center text-left text-blue-500 px-4 py-2 rounded-t hover:text-blue-600"
                     >
                       <FaEdit className="text-[30px]" />
-                     
                       Edit
                     </button>
                     <hr />
@@ -105,9 +101,7 @@ const UserTable = ({
   );
 };
 
-
 const UserDetailDialog = ({ user, onClose }) => {
-  
   if (!user) return null;
 
   return (
@@ -133,10 +127,6 @@ const UserDetailDialog = ({ user, onClose }) => {
     </div>
   );
 };
-
-
-
-
 
 const UsersPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -168,11 +158,10 @@ const UsersPage = () => {
       console.error("Search error:", error);
     }
   };
-console.log(usersCache);
+  console.log(usersCache);
   const handleUserClick = (user) => {
     setSelectedUser(user);
   };
-
 
   const handleProfilePage = () => {
     setProfilePage(true);
@@ -197,7 +186,7 @@ console.log(usersCache);
   };
 
   const confirmDelete = async () => {
-    console.log(selectedUserId)
+    console.log(selectedUserId);
     if (!selectedUserId) {
       toast.error("No user selected for deletion.");
       return;
@@ -213,89 +202,91 @@ console.log(usersCache);
     }
   };
 
-  const selectedUserForEdit = (searchedUsers?.length > 0
-    ? searchedUsers
-    : usersCache[currentPage]
+  const selectedUserForEdit = (
+    searchedUsers?.length > 0 ? searchedUsers : usersCache[currentPage]
   )?.find((user) => user.id === userID);
-  
 
   return (
     <>
-    <div className="users-list px-4 py-3">
-      <div className="flex justify-between">
-        <div className="text-xl font-bold mb-2">Users</div>
-        <button
-          onClick={handleProfilePage}
-          className="bg-blue-500 text-white px-8 py-2 rounded-md mb-2"
-        >
-          Add Profile
-        </button>
-      </div>
+      <div className="users-list px-4 py-3">
+        <div className="flex justify-between mb-6">
+          <div className="text-xl font-bold mb-2">Users</div>
+          <div className="flex mb-1 px-4 py-1 rounded-md">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search users... "
+              className="outline-none pl-4 rounded-l-lg w-[430px]"
+            />
+            <div className="flex bg-[#5D5FEF] text-white px-3 rounded-r-lg items-center">
+              <button onClick={handleSearchClick} className="">
+                <IoIosSearch size={28} />
+              </button>
+              <button className=" px-3 py-2 ">Search</button>
+            </div>
+          </div>
+          <div className="flex bg-[#5D5FEF] items-center px-3 h-10   text-white rounded-lg gap-3">
+            <div className="text-2xl">+</div>
+            <div>
+              <button
+                onClick={handleProfilePage}
+                className=" text-white rounded-md"
+              >
+                Add Profile
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <div className="flex gap-2 mb-1 border border-gray-300 px-4 py-2 rounded-md">
-        <button
-          onClick={handleSearchClick}
-          className=""
-        >
-          <IoIosSearch size={32} />
-        </button>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search users..."
-          className="w-full outline-none"
+        <div>
+          <UserTable
+            users={searchedUsers || usersCache[currentPage] || []}
+            handleUserClick={handleUserClick}
+            toggleDropdown={toggleDropdown}
+            openDropdownId={openDropdownId}
+            handleEditForm={handleEditForm}
+            handleDeleteClick={setSelectedUserId}
+          />
+        </div>
+
+        <DeletePopup
+          isOpen={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+          onConfirm={confirmDelete}
         />
+
+        {selectedUser && (
+          <UserDetailDialog user={selectedUser} onClose={handleCloseDialog} />
+        )}
+        {profilePage && <AddProfile onClose={handleCloseProfile} />}
+        {editProfilePage && (
+          <AddProfile
+            onClose={handleCloseEditForm}
+            Type={userType}
+            user={selectedUserForEdit}
+          />
+        )}
+
+        <div className="pagination mt-4">
+          {[...Array(totalPages)].map((_, index) => {
+            if (index >= totalPages) return null;
+            return (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                className={`mx-1 px-3 py-1 rounded ${
+                  currentPage === index + 1
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300"
+                }`}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+        </div>
       </div>
-
-      <div>
-        <UserTable
-          users={searchedUsers || usersCache[currentPage] || []}
-          handleUserClick={handleUserClick}
-          toggleDropdown={toggleDropdown}
-          openDropdownId={openDropdownId}
-          handleEditForm={handleEditForm}
-          handleDeleteClick={setSelectedUserId}
-        />
-      </div>
-
-      <DeletePopup
-        isOpen={selectedUserId}
-        onClose={() => setSelectedUserId(null)}
-        onConfirm={confirmDelete}
-      />
-
-      {selectedUser && (
-        <UserDetailDialog user={selectedUser} onClose={handleCloseDialog} />
-      )}
-      {profilePage && <AddProfile onClose={handleCloseProfile} />}
-      {editProfilePage && (
-        <AddProfile
-          onClose={handleCloseEditForm}
-          Type={userType}
-          user={selectedUserForEdit}
-        />
-      )}
-
-      <div className="pagination mt-4">
-        {[...Array(totalPages)].map((_, index) => {
-          if (index >= totalPages) return null; // Prevent extra button rendering
-          return (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`mx-1 px-3 py-1 rounded ${
-                currentPage === index + 1
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300"
-              }`}
-            >
-              {index + 1}
-            </button>
-          );
-        })}
-      </div>
-    </div>
     </>
   );
 };

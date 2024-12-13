@@ -51,40 +51,46 @@ export const TopNavBar = () => {
 
   return (
     <div>
-      {path !== "/login" && (
-        <div className="bg-white text-[#151D48] p-4 m-4 mt-7 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-center gap-4">
-          {/* Title */}
-          <div className="text-center md:text-left">
-            <h2 className="text-2xl md:text-3xl font-semibold capitalize">
-              <Link href={`/${pathArray[1] === "" ? "Home" : pathArray[1]}`}>
-                {pathArray[1] === "" ? "Home" : pathArray[1]}
-              </Link>
-             <span> Dashboard</span> 
-            </h2>
-          </div>
-
-          <div className="flex gap-4 items-center">
-            <div className="hidden md:block">
-              <Link href="#">
-                <img src="/notifications.svg" alt="Notifications" />
-              </Link>
-            </div>
-            <div className="flex gap-4 items-center">
-              <IoPerson className="text-[40px] md:text-[55px] p-2 border rounded-xl" />
-              <div className="text-center">
-                <span className="text-black font-semibold">
-                Name
-                </span>
-                <br />
-                <span className="text-sm md:text-base">
-                  {/* {user ? user.role : ""} */}
-                  {user?.displayName}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+   {path !== "/login" && (
+  <div className="bg-white text-[#151D48] p-4 m-4 mt-7 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-center">
+    {/* Title Section */}
+    <div className="flex items-center gap-4 flex-1">
+    <IoPerson className="text-[40px] md:text-[55px] p-2 border rounded-xl md:hidden block" />
+      <div className="text-2xl md:text-3xl font-semibold capitalize">
+        <Link href={`/${pathArray[1] === "" ? "Home" : pathArray[1]}`}>
+          {pathArray[1] === "" ? "Home" : pathArray[1]}
+        </Link>
+        <span> Dashboard</span>
+      </div>
+      
     </div>
+
+    {/* User Section */}
+    <div className="md:flex hidden items-center gap-4">
+      {/* Notifications */}
+      <div className="hidden md:block">
+        <Link href="#">
+          <img src="/notifications.svg" alt="Notifications" className="w-6 h-6 md:w-10 md:h-10" />
+        </Link>
+      </div>
+
+      {/* User Info */}
+      <div className="flex items-center gap-4">
+        <IoPerson className="text-[40px] md:text-[55px] p-2 border rounded-xl" />
+        <div className="text-left">
+          <span className="text-black font-semibold block">
+            {user?.displayName || "Name"}
+          </span>
+          <span className="text-sm md:text-base">
+            {user?.role || "Role"}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+  </div>
+  
   );
 };

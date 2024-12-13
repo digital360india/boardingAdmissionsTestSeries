@@ -51,21 +51,22 @@ const PackageTable = ({
 
   const renderActions = (pkg) => (
     <div className="flex space-x-2">
-      <button
-        onClick={() => handleEditClick(pkg)}
-        className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
-      >
-        Edit
-      </button>
-      <button
+       <button
         onClick={() => openDeleteModal(pkg.id)}
-        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+        className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
       >
         Delete
       </button>
       <button
+        onClick={() => handleEditClick(pkg)}
+        className="bg-[#1DA913] text-white px-3 py-1 rounded-md"
+      >
+        Edit
+      </button>
+     
+      <button
         onClick={() => openModal2(pkg)}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600"
       >
         View Details
       </button>
@@ -76,20 +77,20 @@ const PackageTable = ({
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white ">
         <thead>
-          <tr className=" text-black font-medium">
-            <th className="py-3 px-4  text-left font-normal text-[20px]">
+          <tr className=" text-black font-medium text-18px">
+            <th className="py-3 px-4  text-left font-normal ">
               Sr.no
             </th>
-            <th className="py-3 px-4  text-left font-normal text-[20px]">
+            <th className="py-3 px-4  text-left font-normal ">
               Package Name
             </th>
-            <th className="py-3 px-4  text-left font-normal text-[20px]">
+            <th className="py-3 px-4  text-left font-normal ">
               Price
             </th>
-            <th className="py-3 px-4  text-left font-normal text-[20px]">
+            <th className="py-3 px-4  text-left font-normal ">
               Student Enrolled
             </th>
-            <th className="py-3 px-4  text-left font-normal text-[20px]">
+            <th className="py-3 px-4  text-left font-normal ">
               Actions
             </th>
           </tr>
@@ -97,13 +98,13 @@ const PackageTable = ({
         <tbody>
           {testPackages.map((pkg, index) => (
             <tr key={pkg.id} className="hover:bg-gray-300">
-              <td className="py-2 px-4  text-left font-normal text-[20px]">
+              <td className="py-2 px-4  text-left font-normal ">
                 {index + 1}
               </td>
-              <td className="py-2 px-4  text-left font-normal text-[20px]">
+              <td className="py-2 px-4  text-left font-normal ">
                 {pkg.packageName}
               </td>
-              <td className="py-2 px-4  text-left font-normal text-[20px]">
+              <td className="py-2 px-4  text-left font-normal ">
                 {pkg.discountedPrice ? (
                   <>
                     <span className="text-black">₹{pkg.discountedPrice} </span>
@@ -116,14 +117,14 @@ const PackageTable = ({
                   <span className="text-black">₹{pkg.price}</span>
                 )}
               </td>
-              <td className="py-2 px-4  text-center font-normal text-[20px]">
+              <td className="py-2 px-4  text-center font-normal ">
                 {Array.isArray(pkg.studentEnrolled) &&
                 pkg.studentEnrolled.length > 0
                   ? pkg.studentEnrolled.length
                   : 0}
               </td>
 
-              <td className="py-2 px-4  text-left font-normal text-[20px]">
+              <td className="py-2 px-4  text-left font-normal ">
                 {renderActions(pkg)}
               </td>
             </tr>

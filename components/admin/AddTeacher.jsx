@@ -190,12 +190,12 @@ export default function AddTeacher({ userData, onClose }) {
 
 
   return (
-    <div className="w-full mx-auto max-h-[80vh] overflow-y-scroll">
+    <div className="w-full mx-auto max-h-[80vh]">
       <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
         {userData ? "Edit Teacher" : "Add Teacher"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col space-y-2">
             <label className="text-gray-600 font-semibold">Name</label>
             <input
@@ -230,19 +230,10 @@ export default function AddTeacher({ userData, onClose }) {
               />
             </div>
           )}
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-600 font-semibold">Profile Photo</label>
-            <input
-              type="file"
-              placeholder="File Size <= 100kb"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              className="px-2 py-1 border border-gray-300 rounded-lg"
-            />
-          </div>
+       
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col space-y-2">
             <label className="text-gray-600 font-semibold">Designation</label>
             <input
@@ -265,7 +256,9 @@ export default function AddTeacher({ userData, onClose }) {
               required
             />
           </div>
-          <div className="flex flex-col space-y-2">
+         
+        </div>
+        <div className="flex flex-col space-y-2">
             <label className="text-gray-600 font-semibold">Date of Birth</label>
             <input
               type="date"
@@ -276,8 +269,16 @@ export default function AddTeacher({ userData, onClose }) {
               required
             />
           </div>
-        </div>
-
+        <div className="flex flex-col space-y-2">
+            <label className="text-gray-600 font-semibold">Profile Photo</label>
+            <input
+              type="file"
+              placeholder="File Size <= 100kb"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="px-2 py-1 border border-gray-300 rounded-lg"
+            />
+          </div>
         {/* Row 3: Experience, Subject, Year of Joining */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col space-y-2">

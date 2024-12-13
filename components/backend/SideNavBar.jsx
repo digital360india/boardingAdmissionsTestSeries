@@ -114,7 +114,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             onClick={handleLogout}
             className={`${
               isSidebarOpen
-                ? "flex items-center gap-6 text-[#000000B2] mt-2 font-bold rounded-r-lg w-full cursor-pointer"
+                ? "flex items-center ml-[10px] gap-6 text-[#000000B2] mt-2 font-bold rounded-r-lg w-full cursor-pointer"
                 : "flex items-center gap-6 hover:border-[#075D70] border-l-4 border-[#075D70] bg-[#297383E5] rounded-md p-2 w-full cursor-pointer"
             }`}
           >

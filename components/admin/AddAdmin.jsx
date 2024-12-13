@@ -179,12 +179,12 @@ export default function AddAdmin({ userData, onClose }) {
   };
 
   return (
-    <div className="w-full mx-auto max-h-[80vh] overflow-y-scroll">
+    <div className="w-full mx-auto max-h-[80vh]">
       <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
         {userData ? "Edit Admin" : "Add Admin"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col space-y-2">
             <label className="text-gray-600 font-semibold">Name</label>
             <input
@@ -219,18 +219,10 @@ export default function AddAdmin({ userData, onClose }) {
               />
             </div>
           )}
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-600 font-semibold">Profile Photo</label>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              className="px-2 py-1 border border-gray-300 rounded-lg"
-            />
-          </div>
+         
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col space-y-2">
             <label className="text-gray-600 font-semibold">Designation</label>
             <input
@@ -252,7 +244,9 @@ export default function AddAdmin({ userData, onClose }) {
               className="p-2 border border-gray-300 rounded-lg focus:outline-none "
               required
             />
-          </div>
+     
+        </div>
+        </div>
           <div className="flex flex-col space-y-2">
             <label className="text-gray-600 font-semibold">Date of Birth</label>
             <input
@@ -264,8 +258,15 @@ export default function AddAdmin({ userData, onClose }) {
               required
             />
           </div>
-        </div>
-
+        <div className="flex flex-col space-y-2">
+            <label className="text-gray-600 font-semibold">Profile Photo</label>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="px-2 py-1 border border-gray-300 rounded-lg"
+            />
+          </div>
         {/* Row 3: Address */}
         <div className="flex flex-col space-y-2">
           <label className="text-gray-600 font-semibold">Address</label>

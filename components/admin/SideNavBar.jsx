@@ -70,7 +70,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </div>
 
         {/* Sidebar Logo */}
-        <div className="flex items-center justify-center px-2">
+        <div className="flex items-center ">
           <div
             className={`font-medium text-xl duration-200 ${
               !isSidebarOpen && "scale-0"
@@ -79,7 +79,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <Link href={"/admin/dashboard"}>
               <img
                 src="/navbar.svg"
-                className="w-20 h-20 bg-[#fff] rounded-full"
+                className="w-60 -ml-4 h-20 bg-[#fff] rounded-full"
               />
             </Link>
           </div>
@@ -122,7 +122,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             onClick={handleLogout}
             className={`${
               isSidebarOpen
-                ? "flex items-center gap-6 text-[#000000B2] mt-2 ml-2 font-bold rounded-r-lg p-2 w-full cursor-pointer"
+                ? "flex items-center gap-6 text-[#000000B2] mt-2 font-bold rounded-r-lg p-2 w-full cursor-pointer"
                 : "flex items-center gap-6 hover:border-[#075D70] border-l-4 border-[#075D70] bg-[#297383E5] rounded-md p-2 w-full cursor-pointer"
             }`}
           >

@@ -27,13 +27,13 @@ export default function LayoutFile({ children }) {
         }`}
       >
         <TopNavBar />
-        <main className="flex-grow p-4 overflow-y-auto h-screen">{children}</main>
+        <main className="flex-grow p-4 h-screen">{children}</main>
       </div>
       <div
         className={`lg:hidden flex flex-col w-full transition-all duration-300 `}
       >
         <TopNavBar />
-        <main className="flex-grow p-4 overflow-y-auto h-screen">{children}</main>
+        <main className="flex-grow p-4 h-screen">{children}</main>
       </div>
     </div>
   );

@@ -97,21 +97,21 @@ const Page = () => {
   const handlePackageCreation = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-  
+
     if (!user || !user.id) {
       console.error("User is not defined or does not have an ID:", user);
       toast.error("User is not authenticated. Please log in.");
       setIsLoading(false);
       return;
     }
-  
+
     try {
       let imageUrl = "";
-  
+
       if (imageFile) {
         imageUrl = await uploadImage(formData.packageImage, "packages");
       }
-  
+
       const packageData = {
         ...formData,
         price: parseFloat(formData.price),
@@ -122,18 +122,18 @@ const Page = () => {
         tests: selectedtests,
         packageImage: imageUrl || "",
       };
-  
+
       const docRef = await addPackage(packageData);
       const userRef = doc(db, "users", user.id);
-  
+
       await updateDoc(userRef, {
         packageIDs: arrayUnion(docRef.id),
       });
-  
+
       await updateDoc(docRef, {
         id: docRef.id,
       });
-  
+
       // Reset form fields
       setFormData({
         packageName: "",
@@ -146,15 +146,15 @@ const Page = () => {
       setImagePreview(null);
       setSelectedtests([]);
       setImageFile(null);
-  
+
       // Show success toast
       toast.success("Test package created successfully!");
-  
+
       // Close the modal
       setIsModalOpen(false);
     } catch (err) {
       console.error("Error creating Test package:", err);
-  
+
       // Show error toast
       toast.error("Failed to create Test package. Please try again.");
     } finally {
@@ -183,17 +183,13 @@ const Page = () => {
     <div className="p-4">
       <ToastContainer />
       <div className="flex justify-between mb-6">
-      <div className="text-[28px] font-medium ">Test Packages</div>
-      <div className="flex bg-[#5D5FEF] items-center text-white rounded-lg pl-1 pr-3">
-      <div className="text-[26px] px-2">+</div>
-      <button
-        onClick={handleModalToggle}
-        className="my-auto"
-      >
-      
-        Create Test Package
-      </button>
-      </div>
+        <div className="text-[28px] font-medium ">Test Packages</div>
+        <div className="flex bg-[#5D5FEF] items-center text-white rounded-lg pl-1 pr-3">
+          <div className="text-[26px] px-2">+</div>
+          <button onClick={handleModalToggle} className="my-auto">
+            Create Test Package
+          </button>
+        </div>
       </div>
 
       {isModalOpen && (
@@ -208,19 +204,19 @@ const Page = () => {
             <h2 className="text-xl font-bold mb-4">Create Test Package</h2>
             <form onSubmit={handlePackageCreation}>
               <div className="flex gap-4">
-              <div className="mb-4">
-                <label className="block text-gray-700">Package Name:</label>
-                <input
-                  type="text"
-                  name="packageName"
-                  value={formData.packageName}
-                  onChange={handleInputChange}
-                  placeholder="Enter Name"
-                  className="mt-1 block  p-2 border border-gray-300 rounded w-[270px]"
-                  required
-                />
-              </div>
-              <div className="mb-4">
+                <div className="mb-4">
+                  <label className="block text-gray-700">Package Name:</label>
+                  <input
+                    type="text"
+                    name="packageName"
+                    value={formData.packageName}
+                    onChange={handleInputChange}
+                    placeholder="Enter Name"
+                    className="mt-1 block  p-2 border border-gray-300 rounded w-[270px]"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
                   <label className="block text-gray-700">Starting Date:</label>
                   <input
                     type="date"
@@ -245,6 +241,24 @@ const Page = () => {
                   required
                 />
               </div>
+              <div className="mb-4">
+                <label className="block text-18px">Upload Package Image:</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  placeholder="File Size <= 100kb"
+                  onChange={handleImageUpload}
+                  className="mt-1 block p-2 border w-[100%] border-gray-300 rounded "
+                />
+
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    alt="Selected Package"
+                    className="mt-2 h-32 w-32 object-cover border border-gray-300 rounded"
+                  />
+                )}
+              </div>
               <div className="flex gap-4">
                 <div className="mb-4">
                   <label className="block text-gray-700">Price:</label>
@@ -253,8 +267,9 @@ const Page = () => {
                     step="0.01"
                     name="price"
                     value={formData.price}
+                    placeholder="Price"
                     onChange={handleInputChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                    className="mt-1 block w-[15.4vw] p-2 border border-gray-300 rounded"
                     required
                   />
                 </div>
@@ -268,36 +283,16 @@ const Page = () => {
                     name="discountedPrice"
                     value={formData.discountedPrice}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                    placeholder="Discounted Price"
+                    className="mt-1 block w-[15.4vw] p-2 border border-gray-300 rounded"
                     required
                   />
                 </div>
-              
               </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700">
-                  Upload Package Image:
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  placeholder="File Size <= 100kb"
-                  onChange={handleImageUpload}
-                  className="mt-1 block p-2 border border-gray-300 rounded w-[40%]"
-                />
-
-                {imagePreview && (
-                  <img
-                    src={imagePreview}
-                    alt="Selected Package"
-                    className="mt-2 h-32 w-32 object-cover border border-gray-300 rounded"
-                  />
-                )}
-              </div>
-              <div className="mb-4 h-32 overflow-y-scroll">
+              <div className="mb-4 h-32">
                 <h3 className="text-lg font-semibold mb-2">Select tests:</h3>
-                <div className="space-y-2">
+                <div className="h-[calc(100%-32px)] overflow-y-scroll border p-2">
                   {tests.map((course) => (
                     <label key={course.id} className="flex items-center">
                       <input
@@ -311,6 +306,7 @@ const Page = () => {
                   ))}
                 </div>
               </div>
+
               <div className="flex justify-end">
                 <button
                   type="button"
