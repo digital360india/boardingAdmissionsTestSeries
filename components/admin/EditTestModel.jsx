@@ -138,6 +138,7 @@ const EditTestModal = ({
                 "Science",
                 "English",
                 "History",
+                "Hindi",
                 "Geography",
                 "Physics",
               ].map((subject) => (

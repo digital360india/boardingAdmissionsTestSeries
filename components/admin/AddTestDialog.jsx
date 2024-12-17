@@ -85,6 +85,7 @@ const AddTestDialog = ({
       "Science",
       "English",
       "History",
+      "Hindi",
       "Geography",
       "Physics",
     ].map((subject) => (
