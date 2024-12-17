@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { mcqQuestionModel } from "@/models/QuestionModel";
 import { RxCrossCircled } from "react-icons/rx";
 import { deleteDoc } from "firebase/firestore";
-import QuillEditor from "@/components/admin/QuillEditor";
+
 import "./global.css";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { getQuestionModel } from "@/utils/functions/getQuestionsModel";
@@ -20,6 +20,7 @@ import loadingAnimation1 from "@/public/lottie/lottiehello.json";
 import loadingAnimation2 from "@/public/lottie/lottieman.json";
 import showError from "@/utils/functions/showError";
 import { toast } from "react-toastify";
+import { QuillEditor } from "@/components/admin/QuillEditor";
 const AddQuestionsPage = () => {
   const [test, setTest] = useState(null);
   const [newQuestion, setNewQuestion] = useState({

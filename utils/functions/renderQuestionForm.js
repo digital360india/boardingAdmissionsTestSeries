@@ -1,3 +1,5 @@
+import { QuillEditor } from "@/components/admin/QuillEditor";
+
 export const renderQuestionForm = ({
   handleInputChange,
   handleImageUpload,
