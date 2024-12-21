@@ -133,7 +133,7 @@ const TestComplete = () => {
   );
 
   return (
-    <div className="w-[90vw] lg:w-[60vw] my-4 scrollbar-hide">
+    <div className="w-[90vw] lg:w-[60vw] my-4 scrollbar-hide md:pb-0 pb-20">
       <FaArrowLeft onClick={handleOnClick} />
       <p className="text-[20px] lg:text-[24px] text-background04 font-semibold flex-grow py-4">
         Thank You {testData?.name || "N/A"} !!

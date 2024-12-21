@@ -18,7 +18,6 @@ export default function Page() {
       if (user?.myResults) {
         const updatedResults = user.myResults.map((result) => {
           const test = allTests.find((test) => test.id === result.id);
-          console.log(test);
           if (test) {
             return {
               ...result,
@@ -60,7 +59,7 @@ export default function Page() {
         My Test Results
       </h1>
       {data.length > 0 ? (
-        <div className="h-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {data.map((test) => {
             const maxScore = test.totalMarks || 100;
             const score = test.score || 0;
@@ -72,73 +71,74 @@ export default function Page() {
             return (
               <div
                 key={test.id}
-                className="border w-[340px] bg-gray-50 px-4 pt-2 pb-8 rounded-md mb-6 flex-col md:flex-row justify-between items-center hover:bg-gray-100 transition-colors duration-200"
+                className="border w-full bg-gray-50 px-4 pt-2 pb-6 rounded-md hover:bg-gray-100 transition-colors duration-200 shadow-md"
               >
-                <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-gray-800">
-                    {test.testTitle || "Test Title Unavailable"} Result
-                  </h2>
-                  <p className="text-gray-500 text-[16px] my-2">
-                    Exam Date:
-                    {test.testSubmissionTime?.seconds
-                      ? new Date(
-                          test.testSubmissionTime.seconds * 1000
-                        ).toLocaleDateString()
-                      : "N/A"}
-                  </p>
-                  {/* <p className="text-gray-600">{test.testDescription}</p> */}
-                </div>
-                <div className="w-full mt-4 md:mt-0">
-                  <div className="flex gap-2">
-                    <img src="/readiness_score.svg" alt="" />
+                <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-800">
+                      {test.testTitle || "Test Title Unavailable"} Result
+                    </h2>
+                    <p className="text-gray-500 text-[14px]">
+                      Exam Date:{" "}
+                      {test.testSubmissionTime?.seconds
+                        ? new Date(
+                            test.testSubmissionTime.seconds * 1000
+                          ).toLocaleDateString()
+                        : "N/A"}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <img
+                      src="/readiness_score.svg"
+                      alt=""
+                      className="w-6 h-6 sm:w-8 sm:h-8"
+                    />
                     <p className="text-gray-600">
                       Score: {score} / {maxScore}
                     </p>
                   </div>
-                  <p className="text-sm mt-1">
-                    {progressPercentage >= 75 ? (
-                      <span className="text-green-600 font-semibold">
-                        Excellent Performance
-                      </span>
-                    ) : progressPercentage >= 45 ? (
-                      <span className="text-yellow-600 font-semibold">
-                        Average Performance
-                      </span>
-                    ) : (
-                      <span className="text-red-600 font-semibold">
-                        Low Performance
-                      </span>
-                    )}
-                  </p>
-                  <div className="w-full bg-gray-200 rounded-full h-3 mt-1">
-                    <div
-                      className={`h-3 rounded-full ${progressColor}`}
-                      style={{
-                        width: `${progressPercentage}%`,
-                      }}
-                    ></div>
-                  </div>
+                </div>
 
-                  <div className="flex justify-between text-18px mt-4 ">
-                    <div>
-                      <div className="flex gap-2 items-center">
-                        <p>
-                          <MdOutlineTimelapse className="text-[22px]" />
-                        </p>
-                        <p>Duration</p>
-                      </div>
+                <p className="text-sm mt-2">
+                  {progressPercentage >= 75 ? (
+                    <span className="text-green-600 font-semibold">
+                      Excellent Performance
+                    </span>
+                  ) : progressPercentage >= 45 ? (
+                    <span className="text-yellow-600 font-semibold">
+                      Average Performance
+                    </span>
+                  ) : (
+                    <span className="text-red-600 font-semibold">
+                      Low Performance
+                    </span>
+                  )}
+                </p>
+
+                {/* Progress Bar */}
+                <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
+                  <div
+                    className={`h-3 rounded-full ${progressColor}`}
+                    style={{
+                      width: `${progressPercentage}%`,
+                    }}
+                  ></div>
+                </div>
+
+                {/* Test Details */}
+                <div className="mt-4 flex flex-col gap-2 text-sm">
+                  <div className="flex justify-between">
+                    <div className="flex gap-2 items-center">
+                      <MdOutlineTimelapse className="text-[20px]" />
+                      <p>Duration:</p>
                     </div>
                     <div>{test.duration} min</div>
                   </div>
 
-                  <div className="flex justify-between text-18px ">
-                    <div>
-                      <div className="flex gap-2 items-center">
-                        <p>
-                          <MdOutlineTimelapse className="text-[22px]" />
-                        </p>
-                        <p>Time Taken:</p>
-                      </div>
+                  <div className="flex justify-between">
+                    <div className="flex gap-2 items-center">
+                      <MdOutlineTimelapse className="text-[20px]" />
+                      <p>Time Taken:</p>
                     </div>
                     <div>
                       {test.timeTaken !== undefined ? (
@@ -152,21 +152,19 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between text-18px ">
-                    <div>
-                      <div className="flex gap-2 items-center">
-                        <p>
-                          <HiOutlineQuestionMarkCircle className="text-[22px]" />
-                        </p>
-                        <p>Total Questions:</p>
-                      </div>
+                  <div className="flex justify-between">
+                    <div className="flex gap-2 items-center">
+                      <HiOutlineQuestionMarkCircle className="text-[20px]" />
+                      <p>Total Questions:</p>
                     </div>
                     <div>{test?.questionsCount}</div>
                   </div>
                 </div>
-                <div className="mt-8">
+
+                {/* Result Button */}
+                <div className="mt-6 text-center">
                   <a href={`/user/dashboard/testcompletion/${test.id}`}>
-                    <button className="bg-[#075D70] text-white px-4 py-2 rounded-lg w-full ">
+                    <button className="bg-[#075D70] text-white px-4 py-2 rounded-lg w-full sm:w-auto">
                       Show Result
                     </button>
                   </a>

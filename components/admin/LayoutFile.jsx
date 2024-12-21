@@ -10,7 +10,7 @@ export default function LayoutFile({ children }) {
   return (
     <div className="flex">
       <SideNavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className={`flex flex-col w-full transition-all duration-300 ${isSidebarOpen ? 'ml-72' : 'ml-[85px]'}`}>
+      <div className={`flex flex-col w-full transition-all duration-300 ${isSidebarOpen ? 'md:ml-72' : 'ml-[85px]'}`}>
         <TopNavBar />
         <main className="flex-grow p-4 ">{children}</main>
       </div>

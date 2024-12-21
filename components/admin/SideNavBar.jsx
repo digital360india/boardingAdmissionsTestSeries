@@ -41,7 +41,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const path = usePathname();
 
   return (
-    <>
+    <div className="md:block hidden">
        <div
         className={`fixed top-0 left-0 h-screen bg-white p-5 pt-8 duration-300 flex flex-col ${
           isSidebarOpen ? "w-72" : "w-[85px]"
@@ -157,6 +157,6 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           </button>
         </div> */}
       </div>
-    </>
+    </div>
   );
 };
