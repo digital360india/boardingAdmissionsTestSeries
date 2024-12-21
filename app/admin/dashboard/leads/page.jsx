@@ -128,7 +128,7 @@ const Page = () => {
     <div className="p-6">
       <div className="bg-white p-4 rounded-lg shadow-md mb-5">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-blue-900">Today's Leads</h2>
+          <h2 className="text-xl font-bold text-blue-900">Today&apos;s Leads</h2>
           <button className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg shadow-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"
