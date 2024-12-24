@@ -39,7 +39,7 @@ const TestPage = () => {
     testDescription: "",
     testUploadDate: "",
     duration: "",
-    Totalmarks: "",
+    totalMarks: "",
     subjects: [],
     updatedAt: "",
     updatedBy: "",
@@ -51,7 +51,7 @@ const TestPage = () => {
     testTitle: "",
     testDescription: "",
     duration: "",
-    Totalmarks: "",
+    totalMarks: "",
     teachersAssigned: [],
   });
   const [teachers, setTeachers] = useState([]);
@@ -155,7 +155,7 @@ const TestPage = () => {
         testDescription: "",
         testUploadDate: "",
         duration: "",
-        Totalmarks: "",
+        totalMarks: "",
         subjects: [],
         updatedAt: "",
         updatedBy: "",
@@ -181,7 +181,7 @@ const TestPage = () => {
       subjects: test.subjects,
       testDescription: test.testDescription,
       testUploadDate: test.testUploadDate,
-      Totalmarks: test.Totalmarks,
+      totalMarks: test.totalMarks,
       teachersAssigned: test.teachersAssigned || [],
     });
     fetchTeachers();

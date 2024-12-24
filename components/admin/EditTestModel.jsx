@@ -16,7 +16,7 @@ const EditTestModal = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-[60vw] relative max-h-[90vh] overflow-y-scroll">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[60vw] relative max-h-[90vh] overflow-y-scroll">
         <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Edit Test Details
         </h3>
@@ -83,10 +83,19 @@ const EditTestModal = ({
                 Total Marks
               </label>
               <input
-                type="number"
+                type="text"
                 name="totalMarks"
                 value={editTest.totalMarks}
-                onChange={handleEditInputChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const numericValue = value ? parseInt(value, 10) : ""; 
+                  handleEditInputChange({
+                    target: {
+                      name: e.target.name,
+                      value: numericValue, 
+                    },
+                  });
+                }}
                 className="mt-2 block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 ease-in-out"
               />
             </div>

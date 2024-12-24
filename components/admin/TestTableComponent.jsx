@@ -115,7 +115,7 @@ const TestTable = ({
               {test.testUploadDate || "N/A"}
             </td>
             <td className="p-2 w-1/6 sm:w-1/4 md:w-1/6 lg:w-1/6 ">
-              {test.Totalmarks || "N/A"}
+              {test.totalMarks || "N/A"}
             </td>
             <td className="p-2 w-1/6 sm:w-1/4 md:w-1/6 lg:w-1/6 ">
               <div className="relative inline-block">
