@@ -140,7 +140,7 @@ const TestTable = ({
                         handleAddQuestions(test.id);
                         setOpenDropdownId(null);
                       }}
-                      title="Add Questions"
+                      title="View Test PDF"
                       Icon={IoIosAddCircle}
                       color="text-yellow-500"
                     />

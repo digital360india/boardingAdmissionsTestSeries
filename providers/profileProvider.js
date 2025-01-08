@@ -89,7 +89,6 @@ export const ProfileProvider = ({ children }) => {
     }
   };
 
-  console.log(usersCache);
 
   const handlePageChange = async (page) => {
     setCurrentPage(page);

@@ -1,4 +1,4 @@
-import CryptoJS from "crypto-js";
+
 
 export const uploadImage = async (file, folderName) => {
   if (!file) {

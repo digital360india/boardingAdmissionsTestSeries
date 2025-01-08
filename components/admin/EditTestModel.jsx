@@ -1,4 +1,6 @@
-import React from "react";
+'use client';
+import { uploadImage } from "@/utils/functions/imageControls";
+import React, { useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 const EditTestModal = ({
@@ -12,7 +14,36 @@ const EditTestModal = ({
   handleDeleteSubject,
   handleEditSubjectChange,
 }) => {
+  const [pdfFile, setPdfFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
   if (!isOpen) return null;
+
+  // Handle PDF File Selection
+  const handlePdfChange = (e) => {
+    setPdfFile(e.target.files[0]);
+  };
+
+  // Handle Form Submission
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (pdfFile) {
+        setUploading(true);
+        const pdfUrl = await uploadImage(pdfFile, "pdfTest");
+        setUploading(false);
+        editTest.testpdf = pdfUrl; // Update testpdf link if a new file is uploaded
+      }
+
+      // Call the original edit test handler
+      handleEditTest();
+    } catch (error) {
+      console.error("Error uploading PDF:", error);
+      setUploading(false);
+    }
+  };
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -20,7 +51,7 @@ const EditTestModal = ({
         <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Edit Test Details
         </h3>
-        <form onSubmit={handleEditTest} className="space-y-6">
+        <form onSubmit={handleFormSubmit} className="space-y-6">
           <div>
             <label className="block text-lg font-medium text-gray-700">
               Test Title
@@ -33,26 +64,33 @@ const EditTestModal = ({
               className="mt-2 block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 ease-in-out"
             />
           </div>
-          {/* <div>
+
+          <div>
             <label className="block text-lg font-medium text-gray-700">
-              Assign Teacher:
+              Upload Test PDF:
             </label>
-            <div className="flex flex-col mt-2">
-              {teachers.map((teacher) => (
-                <label key={teacher.id} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="teacherAssigned"
-                    value={teacher.id}
-                    checked={editTest.teachersAssigned.includes(teacher.id)}
-                    onChange={() => handleTeacherSelect(teacher.id)}
-                    className="mr-2"
-                  />
-                  {teacher.name}
-                </label>
-              ))}
-            </div>
-          </div> */}
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={handlePdfChange}
+              className="mt-2 block w-full"
+            />
+            {uploading && <p>Uploading PDF...</p>}
+            {!pdfFile && editTest.testpdf && (
+              <p className="text-gray-600 mt-2">
+                Current PDF:{" "}
+                <a
+                  href={editTest.testpdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline"
+                >
+                  View PDF
+                </a>
+              </p>
+            )}
+          </div>
+          
           <div className="flex space-x-4">
             <div>
               <label className="block text-lg font-medium text-gray-700">
@@ -72,18 +110,19 @@ const EditTestModal = ({
               </label>
               <input
                 type="date"
-                name="testLiveDate"
-                value={editTest.testLiveDate}
+                name="testUploadDate"
+                value={editTest.testUploadDate}
                 onChange={handleEditInputChange}
                 className="mt-2 block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 ease-in-out"
               />
             </div>
+
             <div>
               <label className="block text-lg font-medium text-gray-700">
                 Total Marks
               </label>
               <input
-                type="text"
+                type="number"
                 name="totalMarks"
                 value={editTest.totalMarks}
                 onChange={(e) => {

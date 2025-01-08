@@ -39,19 +39,22 @@ const TestPage = () => {
     testDescription: "",
     testUploadDate: "",
     duration: "",
-    totalMarks: "",
+    totalMarks: 0,
     subjects: [],
     updatedAt: "",
     updatedBy: "",
     analytics: [],
     test: [],
     teachersAssigned: [],
+    testpdf: "",
   });
   const [editTest, setEditTest] = useState({
     testTitle: "",
     testDescription: "",
+    testUploadDate: "",
     duration: "",
     totalMarks: "",
+    testpdf: "",
     teachersAssigned: [],
   });
   const [teachers, setTeachers] = useState([]);
@@ -97,7 +100,7 @@ const TestPage = () => {
     });
   };
   const handleEditTest = async (e) => {
-    e.preventDefault();
+
     try {
       const updatedTest = {
         ...editTest,
@@ -117,7 +120,7 @@ const TestPage = () => {
     }
   };
   const handleAddTest = async (e) => {
-    e.preventDefault();
+
     try {
       const userData = {
         ...newTest,
@@ -140,7 +143,6 @@ const TestPage = () => {
       toast.success("Test added successfully!");
       handleCloseDialog();
 
-      // Refresh test list
       const querySnapshot = await getDocs(collection(db, "tests"));
       const testList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -149,18 +151,18 @@ const TestPage = () => {
 
       setTests(testList);
 
-      // Reset the form fields
       setNewTest({
         testTitle: "",
         testDescription: "",
         testUploadDate: "",
         duration: "",
-        totalMarks: "",
+        totalMarks: 0,
         subjects: [],
         updatedAt: "",
         updatedBy: "",
         analytics: [],
         test: [],
+        testpdf: "",
         teachersAssigned: [],
       });
       setSelectedTeacher("");
@@ -182,6 +184,7 @@ const TestPage = () => {
       testDescription: test.testDescription,
       testUploadDate: test.testUploadDate,
       totalMarks: test.totalMarks,
+      testpdf: test.testpdf,
       teachersAssigned: test.teachersAssigned || [],
     });
     fetchTeachers();
@@ -317,6 +320,7 @@ const TestPage = () => {
   if (!Array.isArray(tests) || tests.length === 0) {
     return <p>No tests available.</p>;
   }
+  console.log(tests);
   return (
     <div className="space-y-4">
       <ToastContainer />
