@@ -6,7 +6,7 @@ import Providers from "@/providers/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  icons: [{ rel: "icon", url: "./Ace.svg" }],
+  icons: [{ rel: "icon", url: "/navbar.svg" }],
   title: "BoardingAdmissions",
 };
 
