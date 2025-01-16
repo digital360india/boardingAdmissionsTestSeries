@@ -1,6 +1,6 @@
+"use client";
 import React, { useState } from "react";
 import GoBackButton from "../backend/Gobackbutton";
-import MakeLiveTest from "./MarkTestAsLiveTest";
 
 const HeaderSection = ({
   questions,

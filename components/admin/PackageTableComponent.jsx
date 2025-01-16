@@ -1,3 +1,4 @@
+"use client";
 import React, { useContext, useState } from "react";
 import DeletePopup from "./DeletePopup";
 import { TestContext } from "@/providers/testProvider";
