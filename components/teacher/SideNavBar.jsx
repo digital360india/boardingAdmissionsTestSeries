@@ -58,6 +58,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           <Link href={"/teacher/dashboard"}>
             <img
               src="/fullstar.svg"
+              alt="fullstar"
               className="w-20 h-20 bg-[#fff] rounded-full"
             />
           </Link>

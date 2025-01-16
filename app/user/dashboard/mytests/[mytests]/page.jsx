@@ -112,9 +112,9 @@ const Page = () => {
                       <div>
                         <div className="flex gap-2 items-center">
                           <div>
-                            <img src="/readiness_score.svg" alt="" />
+                            < src="/readiness_score.svg" alt="" />  
                           </div>
-                          <p className="">Total Marks</p>
+                          <p className="">Total Marks</p> 
                         </div>
                       </div>
                       <div>{test.totalMarks}</div>

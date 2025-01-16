@@ -79,6 +79,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <Link href={"/admin/dashboard"}>
               <img
                 src="/navbar.svg"
+                alt="logo"
                 className="w-60 -ml-4 h-20 bg-[#fff] rounded-full"
               />
             </Link>
@@ -87,7 +88,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
         <ul className="pt-6 flex-1">
           <div className="flex items-center gap-6 bg-[#075D70] text-white font-bold text-[18px] rounded-lg px-6 py-2 w-full cursor-pointer">
-            <img src="/Graph1.svg" className="h-10 w-10" alt="" /> Dashboard
+            <img src="/Graph1.svg" className="h-10 w-10" alt="graph1" /> Dashboard
           </div>
           {Menus.map((Menu, index) => (
             <li

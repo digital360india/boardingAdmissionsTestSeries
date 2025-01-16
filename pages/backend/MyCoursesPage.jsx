@@ -77,7 +77,7 @@ const MyCoursesPage = () => {
                   <div className=" py-[18px] px-[25px] ">
                     <img
                       src={pkg.image}
-                      alt={pkg.packageName}
+                      alt={pkg?.packageName}
                       className="w-[235px] h-[108px]  rounded-[10px]  "
                     />
                   </div>

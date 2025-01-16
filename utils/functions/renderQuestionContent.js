@@ -32,7 +32,7 @@ export const renderQuestionContent = (question) => {
       <div className="flex justify-center items-center ">
         {" "}
         {question.imageUrl ? (
-          <img src={question.imageUrl} className="h-40  " />
+          <img src={question.imageUrl} className="h-40  " alt="Question" />
         ) : (
           <></>
         )}

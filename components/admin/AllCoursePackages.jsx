@@ -143,7 +143,7 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
                 <p><strong>Starting Date:</strong> {new Date(pkg.startingDate).toLocaleDateString()}</p>
                 <p><strong>Targeted Boards:</strong> {(pkg.targetedBoards || []).map(getBoardName).join(', ')}</p>
                 <p><strong>Targeted Schools:</strong> {(pkg.targetedSchools || []).map(getSchoolName).join(', ')}</p>
-                {pkg.image && <img src={pkg.image} alt={pkg.packageName} className="mt-2 w-full h-auto max-w-xs rounded-md" />}
+                {pkg.image && <img src={pkg.image} alt={pkg?.packageName} className="mt-2 w-full h-auto max-w-xs rounded-md" />}
               </div>
               {editingPackage === pkg.id && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">

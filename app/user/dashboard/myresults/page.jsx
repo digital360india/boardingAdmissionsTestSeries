@@ -90,7 +90,7 @@ export default function Page() {
                   <div className="flex items-center gap-2 mt-2">
                     <img
                       src="/readiness_score.svg"
-                      alt=""
+                      alt=" Readiness Score"  
                       className="w-6 h-6 sm:w-8 sm:h-8"
                     />
                     <p className="text-gray-600">

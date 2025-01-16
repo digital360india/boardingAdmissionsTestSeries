@@ -81,7 +81,7 @@ const Page = () => {
       </button>
 
       <div className="w-full   ">
-        <img src={courseData.heroImage} className="w-full h-[259px] rounded-[10px]  object-cover" />
+        <img src={courseData.heroImage} className="w-full h-[259px] rounded-[10px]  object-cover"  alt={courseData.courseName} />
         
       </div>
 

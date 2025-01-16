@@ -63,8 +63,8 @@ const CourseList = () => {
           <div key={course.id} className="course-card border rounded-lg p-4 shadow-lg relative">
             <Link href={`/admin/dashboard/courses/${course.id}`} className="block min-h-96">
               <img
-                src={course.heroImage}
-                alt={course.courseName}
+                src={course?.heroImage}
+                alt={course?.courseName}
                 className="w-full h-40 object-cover rounded"
               />
               <h3 className="text-lg font-semibold mt-2">{course.courseName}</h3>

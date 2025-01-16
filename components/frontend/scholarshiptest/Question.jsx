@@ -46,6 +46,7 @@ export default function Question({
           <div className="flex items-center justify-center">
             <img
               src={currentQuestion.imageUrl}
+              alt="Question"
               className="w-58 max-h-[184px] overflow-y-scroll hidden-scrollbar"
             />
           </div>

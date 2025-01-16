@@ -61,7 +61,7 @@ export default function AddQuestionsSlugPage() {
             <div>
               <div className="flex gap-2 items-center">
                 <div>
-                  <img src="/readiness_score.svg" alt="" />
+                  <img src="/readiness_score.svg" alt="readiness" />
                 </div>
                 <p className="font-bold">Total Marks</p>
               </div>

@@ -346,7 +346,7 @@ const TestPage = () => {
             }}
             className="duration-100 h-[30px] hover:scale-125 "
             src="/search.svg"
-            alt=""
+            alt="search"
           />
           </div>
           <div className="mt-[2px]">

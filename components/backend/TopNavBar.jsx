@@ -25,9 +25,9 @@ export const TopNavBar = () => {
             </div>
           </div>
 
-          {/* User Section */}
+
           <div className="md:flex hidden items-center gap-4">
-            {/* Notifications */}
+
             <div className="hidden md:block">
               <Link href="#">
                 <img
@@ -38,7 +38,6 @@ export const TopNavBar = () => {
               </Link>
             </div>
 
-            {/* User Info */}
             <div className="flex items-center gap-4">
               <IoPerson className="text-[40px] md:text-[55px] p-2 border rounded-xl" />
               <div className="text-left">
