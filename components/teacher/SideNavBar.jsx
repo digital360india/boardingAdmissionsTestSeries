@@ -10,26 +10,12 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { handleLogout } = useContext(UserContext);
   const Menus = [
     { title: "Home", src: "/teacher/dashboard", icon: <FaHome /> }, // Add icons
-    // {
-    //   title: "My Courses",
-    //   src: "/user/dashboard/mypackages",
-    //   icon: <FaBook />,
-    // },
+
     {
       title: "Tests Maker",
       src: "/teacher/dashboard/tests",
       icon: <FaPen />,
     },
-    // {
-    //   title: "My Results",
-    //   src: "/user/dashboard/myresults",
-    //   icon: <FaBook />,
-    // },
-    // {
-    //   title: "Live Classes",
-    //   src: "/user/dashboard/livelectures",
-    //   icon: <FaVideo />,
-    // },
   ];
 
   const path = usePathname();

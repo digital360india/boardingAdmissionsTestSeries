@@ -2,15 +2,13 @@
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { db } from "@/firebase/firebase"; 
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
 import { IoMdArrowBack } from "react-icons/io";
 import Loading from "@/app/loading";
 
 const Page = () => {
-  const currentPage = usePathname();
-  const pathArray = currentPage.split("/");
-  const packageId = pathArray[pathArray.length - 1];
+  const packageId = usePathname().split("/").pop();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

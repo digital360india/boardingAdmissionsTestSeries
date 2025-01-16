@@ -13,9 +13,7 @@ const Page = () => {
   const { user } = useContext(UserContext);
   const { testPackages } = useContext(TestContext);
   const { allTests } = useContext(TestSeriesContext);
-  const pathname = usePathname();
-  const pathParts = pathname.split("/");
-  const packageID = pathParts[4];
+  const packageID = usePathname().split("/")[4];
   const [error, setError] = useState("");
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -10,9 +10,7 @@ import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
 
 export default function AddQuestionsSlugPage() {
   const [test, setTest] = useState({});
-  const currentPage = usePathname();
-  const pathArray = currentPage.split("/");
-  const testId = pathArray[pathArray.length - 1];
+  const testId = usePathname().split("/").pop();
 
   useEffect(() => {
     fetchTest();

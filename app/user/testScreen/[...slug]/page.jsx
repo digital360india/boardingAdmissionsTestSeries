@@ -10,10 +10,8 @@ import { uploadImage } from "@/utils/functions/imageControls";
 const TestPage = () => {
   const { user } = useContext(UserContext);
   const [time, setTime] = useState(20 * 60);
-  const pathname = usePathname();
-  const pathParts = pathname.split("/");
-  const docId = pathParts[3];
-  const hasResult = pathParts[4];
+  const docId = usePathname().split("/")[3];
+  const hasResult = usePathname().split("/")[4];
   const [testDetails, setTestDetails] = useState([]);
   const [pdfLink, setPdfLink] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,10 +103,10 @@ const TestPage = () => {
           testSubmissionTime: submissionTime,
           userId: user?.id || "",
         };
-  
+
         const docRef = doc(db, "results", docId);
         const docSnapshot = await getDoc(docRef);
-  
+
         if (docSnapshot.exists()) {
           await updateDoc(docRef, {
             result: arrayUnion(docData),
@@ -121,14 +119,14 @@ const TestPage = () => {
             result: [docData],
           });
         }
-  
+
         if (user?.id) {
           const userDocRef = doc(db, "users", user.id);
           await updateDoc(userDocRef, {
             myResults: arrayUnion(docData),
           });
         }
-  
+
         setIsSubmitting(false);
         setIsLoading(false);
         localStorage.removeItem("examSubmitted");
@@ -142,7 +140,6 @@ const TestPage = () => {
       console.log("Submission cancelled by user.");
     }
   };
-
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -159,7 +156,6 @@ const TestPage = () => {
   };
 
   const showSubmitButton = time <= 15 * 60;
-
 
   return (
     <div>

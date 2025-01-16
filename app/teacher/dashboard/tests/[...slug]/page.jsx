@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from "react";
 import { db, storage } from "@/firebase/firebase";
 import { addDoc, doc, getDoc, updateDoc, collection } from "firebase/firestore";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { mcqQuestionModel } from "@/models/QuestionModel";
 import { RxCrossCircled } from "react-icons/rx";
 import { deleteDoc } from "firebase/firestore";
@@ -28,9 +28,7 @@ const AddQuestionsPage = () => {
     ...mcqQuestionModel,
   });
   const [showForm, setShowForm] = useState(false);
-  const currentPage = usePathname();
-  const pathArray = currentPage.split("/");
-  const testId = pathArray[pathArray.length - 1];
+   const testId = usePathname().split("/").pop();
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [questionContent, setQuestionContent] = useState("");

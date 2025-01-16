@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { IoIosNotifications } from "react-icons/io";
 
 export const TopNavBar = () => {
   const path = usePathname();
-  const router = useRouter();
   const pathArray = path.split("/");
 
   return (

@@ -13,7 +13,6 @@ import { TestSeriesContext } from "@/providers/testSeriesProvider";
 
 const TestComplete = () => {
   const router = useRouter();
-  const path = usePathname();
   const [testData, setTestData] = useState(null);
   const [testCategory, setTestCategory] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -23,7 +22,7 @@ const TestComplete = () => {
   const [resultValue, setResultValue] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  const docId = path.split("/")[4];
+  const docId = usePathname().split("/")[4];
 
   useEffect(() => {
     const fetchResultData = async () => {

@@ -13,8 +13,7 @@ import { toast } from "react-toastify";
 const TestPackagePage = () => {
   const { allTests } = useContext(TestSeriesContext);
   const { testPackages } = useContext(TestContext);
-  const pathname = usePathname();
-  const id = pathname.split("/").pop();
+  const id = usePathname().split("/").pop();
   const [packageData, setPackageData] = useState(null);
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);

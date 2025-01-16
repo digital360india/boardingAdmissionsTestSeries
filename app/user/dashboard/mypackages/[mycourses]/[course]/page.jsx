@@ -9,9 +9,7 @@ import Loading from "@/app/loading";
 
 const Page = () => {
   const router = useRouter();
-  const pathname = usePathname();
-  const pathParts = pathname.split("/");
-  const course = pathParts[5];
+  const course = usePathname().split("/")[5];
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [courseData, setCourseData] = useState(null);
