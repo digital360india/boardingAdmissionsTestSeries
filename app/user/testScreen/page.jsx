@@ -138,7 +138,7 @@ const Page = () => {
 
             <button
               onClick={handleAccept}
-              disabled={!isChecked} // Disable button if not checked
+              disabled={!isChecked}
               className={`bg-gradient-to-r from-blue-500 to-teal-500 text-white py-3 px-8 rounded-lg shadow-lg transition-colors ${
                 isChecked ? 'hover:from-blue-600 hover:to-teal-600' : 'opacity-50 cursor-not-allowed'
               }`}

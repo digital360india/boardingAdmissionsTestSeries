@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Timestamp } from "firebase/firestore"; // Firebase Timestamp
+import { Timestamp } from "firebase/firestore"; 
 
 const DateInputDialog = ({ isOpen, onClose, onConfirm }) => {
   const [expirationDate, setExpirationDate] = useState("");

@@ -134,7 +134,6 @@ const Page = () => {
         id: docRef.id,
       });
 
-      // Reset form fields
       setFormData({
         packageName: "",
         price: "",
@@ -146,16 +145,10 @@ const Page = () => {
       setImagePreview(null);
       setSelectedtests([]);
       setImageFile(null);
-
-      // Show success toast
       toast.success("Test package created successfully!");
-
-      // Close the modal
       setIsModalOpen(false);
     } catch (err) {
       console.error("Error creating Test package:", err);
-
-      // Show error toast
       toast.error("Failed to create Test package. Please try again.");
     } finally {
       setIsLoading(false);

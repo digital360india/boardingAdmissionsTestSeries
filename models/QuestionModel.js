@@ -1,5 +1,3 @@
-//total marks are postive and neg_makrs are negative
-
 const passageQuestionModel = {
   questionId: "",
   heading: "",
@@ -61,22 +59,6 @@ const mcqQuestionModel = {
 
 };
 
-//TODO THIS SECTION TO BE DEVELOPED
-// const ImageMCQQuestionModel = {
-//   heading: "",
-//   questionType: "imageMCQ",
-//   question: "",
-//   imageUrl: "",
-//   answers: {
-//     a: "",
-//     b: "",
-//     c: "",
-//     d: "",
-//   },
-//   correctAnswer: "",
-//   totalmarks: "",
-//   sno: "",
-// };
 export {
   passageQuestionModel,
   mcqQuestionModel,

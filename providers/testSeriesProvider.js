@@ -20,7 +20,6 @@ export const TestSeriesProvider = ({ children }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch all tests from Firestore
   const fetchTests = async () => {
     setIsLoading(true);
     setError(null);
@@ -39,7 +38,6 @@ export const TestSeriesProvider = ({ children }) => {
     }
   };
 
-  // Add a new test
   const addTest = async (userData) => {
     setIsAdding(true);
     setError(null);
@@ -56,7 +54,6 @@ export const TestSeriesProvider = ({ children }) => {
     }
   };
 
-  // Edit an existing test
   const handleEdit = async (testId, updatedData) => {
     setError(null);
     try {
@@ -73,7 +70,6 @@ export const TestSeriesProvider = ({ children }) => {
     }
   };
 
-  // Delete a test
   const handleDelete = async (testIdToDelete) => {
     setError(null);
     try {

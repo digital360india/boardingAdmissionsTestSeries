@@ -59,5 +59,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/user/:path*", "/admin/:path*", "/teacher/:path*"], // Paths that need protection
+  matcher: ["/user/:path*", "/admin/:path*", "/teacher/:path*"],
 };

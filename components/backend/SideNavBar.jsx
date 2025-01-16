@@ -17,7 +17,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const router = useRouter();
   const { handleLogout } = useContext(UserContext);
   const Menus = [
-    { title: "Home", src: "/user/dashboard", icon: <FaHome /> }, // Add icons
+    { title: "Home", src: "/user/dashboard", icon: <FaHome /> }, 
 
     {
       title: "My Tests",

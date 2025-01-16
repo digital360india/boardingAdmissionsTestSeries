@@ -86,7 +86,7 @@ const TestComplete = () => {
           }
         } else {
           console.warn("No question IDs found in categoryData.test");
-          setQuestions([]); // Set empty state if no IDs
+          setQuestions([]); 
         }
       }
     };

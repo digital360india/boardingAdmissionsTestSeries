@@ -17,7 +17,6 @@ const BottomNavbar = () => {
       : "flex flex-col items-center text-gray-600 hover:text-[#075D70] transition duration-200";
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -32,35 +31,29 @@ const BottomNavbar = () => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
       <div className="flex justify-around items-center py-3 relative">
-        {/* Dashboard */}
+      
         <Link href="/user/dashboard" className={getLinkClass("/user/dashboard")}>
           <FaHome className="text-2xl" />
           <span className="text-xs">Dashboard</span>
         </Link>
 
-        {/* Packages */}
         <Link href="/user/dashboard/mytests" className={getLinkClass("/user/dashboard/mytests")}>
           <FaPen className="text-2xl" />
           <span className="text-xs">Packages</span>
         </Link>
 
-        {/* My Results */}
         <Link href="/user/dashboard/myresults" className={getLinkClass("/user/dashboard/myresults")}>
           <FaBook className="text-2xl" />
           <span className="text-xs">My Results</span>
         </Link>
-
-        {/* Settings with Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <div
-            onClick={() => setIsOpen(!isOpen)} // Toggle dropdown
+            onClick={() => setIsOpen(!isOpen)}
             className="cursor-pointer flex flex-col items-center text-gray-600 hover:text-[#075D70] transition duration-200"
           >
             <FaCog className="text-2xl" />
             <span className="text-xs">Settings</span>
           </div>
-
-          {/* Dropdown Menu */}
           {isOpen && (
             <div className="absolute bottom-12 right-0 bg-white shadow-lg rounded-md border border-gray-200">
               <ul>

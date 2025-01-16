@@ -5,7 +5,7 @@ import { doc } from "firebase/firestore";
 import { TestContext } from "@/providers/testProvider";
 import { UserContext } from "@/providers/userProvider";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { toast } from "react-toastify"; // Ensure correct imports
+import { toast } from "react-toastify"; 
 
 import PackageTable from "./PackageTableComponent";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
@@ -35,8 +35,6 @@ const TestPackagesList = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-
-    // Convert the value back to a Date object if the input is for startingDate
     const newValue = name === "startingDate" ? new Date(value) : value;
 
     setEditFormData({
@@ -55,9 +53,7 @@ const TestPackagesList = () => {
 
   const handleEdit = async (e, packageId) => {
     try {
-      // Validate starting date if necessary
       const startingDate = editFormData.startingDate;
-  
       const packageRef = doc(db, "testPackages", packageId);
       const updatedData = {
         ...editFormData,
@@ -67,7 +63,6 @@ const TestPackagesList = () => {
         ...(user && { updatedBy: user.id }),
       };
   
-      // Handle image upload if a new image is provided
       if (imageFile) {
         if (imageFile.size <= 100 * 1024) {
           const imageUrl = await uploadImage(imageFile, "packages");
@@ -78,18 +73,11 @@ const TestPackagesList = () => {
           return;
         }
       }
-  
-      // Update the test package in the database
       await updateTestPackage(packageId, updatedData);
-  
-      // Reset the form and states
       setEditingPackage(null);
       setImageFile(null);
-  
-      // Success toast
       toast.success("Test package updated successfully!");
     } catch (err) {
-      // Error toast and error logging
       toast.error("Failed to update course package. Please try again.");
       console.error("Error updating course package:", err);
       showError(err.message);

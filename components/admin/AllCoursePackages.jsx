@@ -80,7 +80,7 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
         startingDate: new Date(editFormData.startingDate).toISOString(),
       });
       setEditingPackage(null);
-      fetchCoursePackages(); // Refresh the course packages list
+      fetchCoursePackages(); 
     } catch (err) {
       console.error("Error updating course package:", err);
       alert("Failed to update course package.");
@@ -90,8 +90,8 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
   const handleDelete = async (packageId) => {
     try {
       await deleteDoc(doc(db, "coursePackages", packageId));
-      fetchCoursePackages(); // Refresh the course packages list
-      onDelete(packageId); // Notify parent component
+      fetchCoursePackages(); 
+      onDelete(packageId); 
     } catch (err) {
       console.error("Error deleting course package:", err);
       alert("Failed to delete course package.");

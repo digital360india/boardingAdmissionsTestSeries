@@ -11,7 +11,7 @@ import "./global.css";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { getQuestionModel } from "@/utils/functions/getQuestionsModel";
 import { UserContext } from "@/providers/userProvider";
-import { serverTimestamp } from "firebase/firestore"; // Import serverTimestamp
+import { serverTimestamp } from "firebase/firestore"; 
 import { renderQuestionContent } from "@/utils/functions/renderQuestionContent";
 import { FiDelete, FiEdit } from "react-icons/fi";
 import GoBackButton from "@/components/backend/Gobackbutton";
@@ -129,7 +129,7 @@ const AddQuestionsPage = () => {
       console.error("Error uploading image:", error);
       showError(error.message);
       toast.error("Error uploading image. Please try again.");
-      setUploading(false); // Reset loading state if there is an error
+      setUploading(false);
     }
   };
 
@@ -175,7 +175,7 @@ const AddQuestionsPage = () => {
       console.error("Error uploading answer image:", error);
       showError(error.message);
       toast.error("Error uploading answer image. Please try again.");
-      setUploading(false); // Reset loading state if there is an error
+      setUploading(false);
     }
   };
 
@@ -784,10 +784,10 @@ const AddQuestionsPage = () => {
   const addSolution = () => {
     setNewQuestion((prev) => ({
       ...prev,
-      solutions: [...prev.solutions, prev.solution], // Add new solution to the array
-      solution: "", // Reset the current solution input
+      solutions: [...prev.solutions, prev.solution],
+      solution: "",
     }));
-    setImagePreview(null); // Reset image preview after adding solution
+    setImagePreview(null); 
   };
 
   return (
@@ -798,8 +798,8 @@ const AddQuestionsPage = () => {
         <button
           onClick={() => {
             setShowForm(!showForm);
-            setEditingQuestionId(null); // Reset editing state for new questions
-            setNewQuestion({ questionType: "mcq", ...mcqQuestionModel }); // Reset form data
+            setEditingQuestionId(null); 
+            setNewQuestion({ questionType: "mcq", ...mcqQuestionModel }); 
           }}
           className=" px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
         >

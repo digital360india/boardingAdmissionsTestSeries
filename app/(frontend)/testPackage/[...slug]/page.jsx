@@ -46,7 +46,6 @@ const TestPackagePage = () => {
       setLoading(false);
     };
 
-    // Wait until testPackages and allTests are populated
     if (testPackages.length > 0 && allTests.length > 0) {
       fetchDataFromProviders();
     }
@@ -67,14 +66,14 @@ const TestPackagePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const leadDoc = doc(db, "leads", formData.email); // Use email as a unique identifier
-      await setDoc(leadDoc, formData); // Save form data to Firestore
-      setShowForm(false); // Close the form
-      setFormData({ name: "", phonenumber: "", email: "" }); // Reset form
-      alert("Enrollment successful!"); // Optional: Notify user
+      const leadDoc = doc(db, "leads", formData.email);
+      await setDoc(leadDoc, formData); 
+      setShowForm(false); 
+      setFormData({ name: "", phonenumber: "", email: "" }); 
+      alert("Enrollment successful!"); 
     } catch (error) {
       console.error("Error saving lead: ", error);
-      alert("Enrollment failed. Please try again."); // Optional: Notify user
+      alert("Enrollment failed. Please try again."); 
     }
   };
 

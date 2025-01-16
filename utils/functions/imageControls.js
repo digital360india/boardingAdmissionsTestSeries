@@ -8,7 +8,7 @@ export const uploadImage = async (file, folderName) => {
   
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "p2pvclwt"); // Unsigned upload preset
+  formData.append("upload_preset", "p2pvclwt"); 
   if (folderName) {
     formData.append("folder", "profile");
   }
@@ -22,7 +22,7 @@ export const uploadImage = async (file, folderName) => {
     });
   
     if (!response.ok) {
-      const errorResponse = await response.text(); // Fetch the detailed error response
+      const errorResponse = await response.text(); 
       console.error("Response Error:", errorResponse);
       throw new Error(`Failed to upload image: ${response.statusText}`);
     }

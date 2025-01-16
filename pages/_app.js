@@ -1,5 +1,3 @@
-// pages/_app.js
-
 import { UserProvider } from '@/providers/userProvider';
 
 function MyApp({ Component, pageProps }) {

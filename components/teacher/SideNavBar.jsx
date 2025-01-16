@@ -9,7 +9,7 @@ import { FaPen, FaVideo } from "react-icons/fa6";
 export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { handleLogout } = useContext(UserContext);
   const Menus = [
-    { title: "Home", src: "/teacher/dashboard", icon: <FaHome /> }, // Add icons
+    { title: "Home", src: "/teacher/dashboard", icon: <FaHome /> }, 
 
     {
       title: "Tests Maker",

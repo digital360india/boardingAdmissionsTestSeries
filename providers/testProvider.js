@@ -19,7 +19,6 @@ export const TestProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch test packages from Firestore
   const fetchTestPackages = async () => {
     setLoading(true);
     setError(null);
@@ -38,7 +37,6 @@ export const TestProvider = ({ children }) => {
     }
   };
 
-  // Add a new test package
   const addPackage = async (packageData) => {
     try {
       const docRef = await addDoc(collection(db, "testPackages"), packageData);
@@ -51,7 +49,6 @@ export const TestProvider = ({ children }) => {
     }
   };
 
-  // Delete a test package
   const handleDelete = async (packageIdToDelete) => {
     try {
       await deleteDoc(doc(db, "testPackages", packageIdToDelete));
@@ -64,7 +61,6 @@ export const TestProvider = ({ children }) => {
     }
   };
 
-  // Update a test package
   const updateTestPackage = async (packageId, updatedData) => {
     try {
       const packageRef = doc(db, "testPackages", packageId);

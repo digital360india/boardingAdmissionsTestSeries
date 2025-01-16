@@ -17,23 +17,19 @@ const MakeLiveTest = ({ testId }) => {
       alert("Please select both start and end dates.");
       return;
     }
-
-    // Validate if the start date is before the end date
     if (new Date(startDate) >= new Date(endDate)) {
       alert("Start date must be before the end date.");
       return;
     }
 
-    setStep(3); // Move to confirmation step
+    setStep(3);
   };
 
   const handleFinalConfirmation = async () => {
     try {
       const startTimestamp = Timestamp.fromDate(new Date(startDate));
       const endTimestamp = Timestamp.fromDate(new Date(endDate));
-      const createdAt = Timestamp.fromDate(new Date()); // Current timestamp
-
-      // Add the test to the "livetests" collection
+      const createdAt = Timestamp.fromDate(new Date()); 
       await addDoc(collection(db, "livetests"), {
         testId,
         startDate: startTimestamp,
@@ -42,7 +38,7 @@ const MakeLiveTest = ({ testId }) => {
       });
 
       alert("Test has been made live successfully!");
-      setStep(0); // Reset to initial state
+      setStep(0); 
     } catch (error) {
       console.error("Error adding live test:", error);
       alert("Failed to make the test live. Please try again.");
@@ -51,7 +47,6 @@ const MakeLiveTest = ({ testId }) => {
 
   return (
     <div>
-      {/* Step 0: Initial Confirmation */}
       {step === 0 && (
         <div className="flex items-center justify-center h-[200px]">
           <div className="text-center">
@@ -75,7 +70,6 @@ const MakeLiveTest = ({ testId }) => {
         </div>
       )}
 
-      {/* Step 1: Information */}
       {step === 1 && (
         <div className="flex items-center justify-center h-[200px]">
           <div className="text-center">
@@ -104,8 +98,6 @@ const MakeLiveTest = ({ testId }) => {
           </div>
         </div>
       )}
-
-      {/* Step 2: Date Selection */}
       {step === 2 && (
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-md">
@@ -153,8 +145,6 @@ const MakeLiveTest = ({ testId }) => {
           </div>
         </div>
       )}
-
-      {/* Step 3: Final Confirmation */}
       {step === 3 && (
         <div className="flex items-center justify-center h-screen bg-gray-100">
           <div className="text-center">

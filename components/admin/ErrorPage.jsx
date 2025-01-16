@@ -17,6 +17,6 @@ export default function ErrorPage({ message, onClose }) {
         </div>
       </div>
     </div>,
-    document.body // Renders the popup to the body
+    document.body 
   );
 }

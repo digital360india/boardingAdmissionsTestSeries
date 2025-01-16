@@ -21,8 +21,7 @@ export const TopNavBar = () => {
     {
       title: "Test Packages",
       src: "/admin/dashboard/testpackages",
-      icon: <LucidePackageOpen />
-      
+      icon: <LucidePackageOpen />,
     },
 
     {
@@ -39,22 +38,17 @@ export const TopNavBar = () => {
     {
       title: "My Leads",
       src: "/admin/dashboard/leads",
-      icon: <AiFillContacts />
-      
+      icon: <AiFillContacts />,
     },
-
   ];
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Toggle the sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <div>
-      {/* Mobile: Only Dashboard + Hamburger */}
       <div className="bg-white text-[#151D48] p-4 mt-7 rounded-lg shadow-md flex justify-between md:hidden">
         <h2 className="text-2xl font-semibold capitalize">Dashboard</h2>
         <button onClick={toggleSidebar} className="text-3xl">
@@ -62,42 +56,41 @@ export const TopNavBar = () => {
         </button>
       </div>
 
-      {/* Sidebar */}
       <div
         className={`fixed top-0 right-0 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out 
           ${isSidebarOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        {/* Close Button */}
         <div className="flex justify-end p-4">
           <button onClick={toggleSidebar} className="text-3xl">
             <IoClose />
           </button>
         </div>
         <ul className="flex flex-col gap-4 p-5">
-  {Menus.map((menu, index) => (
-    <li key={index}>
-     <Link
-  href={menu.src}
-  onClick={() => setIsSidebarOpen(false)} // Close sidebar
-  className={`text-lg flex items-center gap-2 ${
-    path === menu.src ? "font-bold text-[#075D70]" : "text-[#151D48]"
-  }`}
->
-  {menu.icon}
-  {menu.title}
-</Link>
-
-    </li>
-  ))}
-  <li>
-    <button
-      onClick={handleLogout}
-      className="text-lg text-[#151D48] hover:text-red-500"
-    >
-      Logout
-    </button>
-  </li>
-</ul>
+          {Menus.map((menu, index) => (
+            <li key={index}>
+              <Link
+                href={menu.src}
+                onClick={() => setIsSidebarOpen(false)}
+                className={`text-lg flex items-center gap-2 ${
+                  path === menu.src
+                    ? "font-bold text-[#075D70]"
+                    : "text-[#151D48]"
+                }`}
+              >
+                {menu.icon}
+                {menu.title}
+              </Link>
+            </li>
+          ))}
+          <li>
+            <button
+              onClick={handleLogout}
+              className="text-lg text-[#151D48] hover:text-red-500"
+            >
+              Logout
+            </button>
+          </li>
+        </ul>
       </div>
 
       {isSidebarOpen && (
@@ -107,7 +100,6 @@ export const TopNavBar = () => {
         ></div>
       )}
 
-      {/* Above MD Screens */}
       <div className="hidden md:flex bg-white text-[#151D48] p-4 m-4 mt-7 rounded-lg shadow-md justify-between items-center gap-4">
         {/* Title */}
         <div className="text-left">
@@ -119,7 +111,6 @@ export const TopNavBar = () => {
           </h2>
         </div>
 
-        {/* User Profile */}
         <div className="flex gap-4 items-center">
           <div>
             <Link href="#">

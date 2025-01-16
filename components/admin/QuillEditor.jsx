@@ -41,8 +41,6 @@ export const QuillEditor = ({ value, onContentChange }) => {
       if (value) {
         quillInstance.clipboard.dangerouslyPasteHTML(value);
       }
-
-      // Override image handler to restrict image size to 10KB
       const imageHandler = () => {
         const input = document.createElement("input");
         input.setAttribute("type", "file");
@@ -51,9 +49,7 @@ export const QuillEditor = ({ value, onContentChange }) => {
 
         input.onchange = () => {
           const file = input.files[0];
-
-          // Check if the file exists and its size
-          if (file && file.size <= 10 * 1024) { // 10KB limit
+          if (file && file.size <= 10 * 1024) { 
             const reader = new FileReader();
             reader.onload = () => {
               const range = quillInstance.getSelection();
@@ -66,7 +62,6 @@ export const QuillEditor = ({ value, onContentChange }) => {
         };
       };
 
-      // Set the custom image handler
       quillInstance.getModule("toolbar").addHandler("image", imageHandler);
 
       quillInstance.on("text-change", () => {

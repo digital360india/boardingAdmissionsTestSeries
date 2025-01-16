@@ -18,13 +18,10 @@ const EditTestModal = ({
   const [uploading, setUploading] = useState(false);
 
   if (!isOpen) return null;
-
-  // Handle PDF File Selection
   const handlePdfChange = (e) => {
     setPdfFile(e.target.files[0]);
   };
 
-  // Handle Form Submission
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -33,10 +30,9 @@ const EditTestModal = ({
         setUploading(true);
         const pdfUrl = await uploadImage(pdfFile, "pdfTest");
         setUploading(false);
-        editTest.testpdf = pdfUrl; // Update testpdf link if a new file is uploaded
+        editTest.testpdf = pdfUrl; 
       }
 
-      // Call the original edit test handler
       handleEditTest();
     } catch (error) {
       console.error("Error uploading PDF:", error);
