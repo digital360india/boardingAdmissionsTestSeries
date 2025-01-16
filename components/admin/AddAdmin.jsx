@@ -79,7 +79,6 @@ export default function AddAdmin({ userData, onClose }) {
         if (formData.photoURL) {
           photoURLURL = await uploadImage(formData.photoURL, "profilephoto");
         }
-        console.log("Updated photo URL:", photoURLURL);
 
         const userDataToUpdate = {
           displayName,
@@ -119,7 +118,7 @@ export default function AddAdmin({ userData, onClose }) {
                 formData.photoURL,
                 "profilephoto"
               );
-              console.log("Photo uploaded:", photoURLURL);
+            
             } catch (uploadError) {
               console.error("Error uploading photo:", uploadError);
               toast.error("Error uploading profile picture.");

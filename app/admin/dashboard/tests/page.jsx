@@ -320,7 +320,6 @@ const TestPage = () => {
   if (!Array.isArray(tests) || tests.length === 0) {
     return <p>No tests available.</p>;
   }
-  console.log(tests);
   return (
     <div className="space-y-4">
       <ToastContainer />

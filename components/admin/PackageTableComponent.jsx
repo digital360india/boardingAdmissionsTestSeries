@@ -17,7 +17,6 @@ const PackageTable = ({
   const [packageIdToDelete, setPackageIdToDelete] = useState(null);
 
   const handleEditClick = (pkg) => {
-    console.log(pkg);
     setEditingPackage(pkg.id);
     setEditFormData({
       packageName: pkg.packageName,

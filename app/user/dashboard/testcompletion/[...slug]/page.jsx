@@ -80,8 +80,6 @@ const TestComplete = () => {
 
             const questionData = await Promise.all(questionDataPromises);
             const validQuestions = questionData.filter((q) => q !== null);
-
-            console.log(validQuestions);
             setQuestions(validQuestions);
           } catch (error) {
             console.error("Error fetching questions:", error);

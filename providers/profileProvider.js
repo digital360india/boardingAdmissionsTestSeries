@@ -47,7 +47,6 @@ export const ProfileProvider = ({ children }) => {
 
     try {
       if (usersCache[page]) {
-        console.log(`Page ${page} found in cache.`);
         setLoading(false);
         return usersCache[page];
       }
@@ -128,7 +127,6 @@ export const ProfileProvider = ({ children }) => {
           id: doc.id,
           ...doc.data(),
         }));
-        console.log(searchResults);
         setTotalPages(1);
         setCurrentPage(1);
         return searchResults;

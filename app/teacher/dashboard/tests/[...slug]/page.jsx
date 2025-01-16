@@ -220,7 +220,6 @@ const AddQuestionsPage = () => {
           .split("?")[0];
         const filename = decodeURIComponent(filenameWithEncodedChars);
         const imageRef = ref(storage, `${filename}`);
-        console.log(`Deleted image: ${imageRef}`);
       }
       const updatedSolutions = newQuestion.solutions.filter(
         (_, i) => i !== index

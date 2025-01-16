@@ -99,7 +99,7 @@ export default function AddUser({ userData, onClose }) {
       const { email, displayName, dob, phoneNumber } = formData;
 
       if (!userData) {
-        console.log("Creating a new user");
+       
         userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
@@ -111,7 +111,7 @@ export default function AddUser({ userData, onClose }) {
         if (formData.photoURL) {
           photoURLURL = await uploadImage(formData.photoURL, "profilephoto");
         }
-        console.log("Photo URL:", photoURLURL);
+        
         const verificationCode = generateVerificationCode();
         const newUser = {
           id: profile.uid,
@@ -133,7 +133,6 @@ export default function AddUser({ userData, onClose }) {
           isVerified: false,
         };
 
-        console.log("New User Data:", newUser);
         try {
           await addUser(profile, newUser);
           toast.success("User added successfully!");
@@ -151,7 +150,6 @@ export default function AddUser({ userData, onClose }) {
           onClose();
         }
       } else {
-        console.log("Editing an existing user");
         const updatedUserData = {
           ...userData,
           displayName,
@@ -165,7 +163,6 @@ export default function AddUser({ userData, onClose }) {
           updatedAt: new Date().toISOString(),
           updatedBy: user?.id,
         };
-        console.log("Updated User Data:", updatedUserData);
         await editUser(userData, updatedUserData);
         toast.success("User updated successfully!");
         onClose();

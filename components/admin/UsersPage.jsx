@@ -158,7 +158,6 @@ const UsersPage = () => {
       console.error("Search error:", error);
     }
   };
-  console.log(usersCache);
   const handleUserClick = (user) => {
     setSelectedUser(user);
   };
@@ -186,7 +185,6 @@ const UsersPage = () => {
   };
 
   const confirmDelete = async () => {
-    console.log(selectedUserId);
     if (!selectedUserId) {
       toast.error("No user selected for deletion.");
       return;

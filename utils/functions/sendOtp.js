@@ -7,7 +7,6 @@ export const sendOtp = async (name, email, verificationCode) => {
             email,
             verificationCode,
         });
-        console.log("OTP sent successfully:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error sending OTP:", error);

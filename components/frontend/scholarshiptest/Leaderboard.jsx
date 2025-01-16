@@ -45,8 +45,7 @@ const Leaderboard = ({ resultValue, testId }) => {
   if (loading) {
     return <div>Loading leaderboard...</div>;
   }
-console.log(leaderboardData);
-console.log(resultValue)
+
   return (
     <div className="border border-background04 rounded-md p-4 h-fit max-w-4xl mx-auto">
     <h1 className="text-2xl font-semibold text-background04 text-center">Leaderboard</h1>

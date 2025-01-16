@@ -120,8 +120,6 @@ export default function AddTeacher({ userData, onClose }) {
           updatedBy: user?.id,
         };
 
-        console.log("Updated Teacher Data:", updatedTeacherData);
-
         try {
           await editUser(userData, updatedTeacherData);
           toast.success("Teacher updated successfully!");

@@ -29,12 +29,9 @@ const AddTestDialog = ({
       if (pdfFile) {
         setUploading(true);
         const pdfUrl = await uploadImage(pdfFile, "pdfTest");
-        console.log(pdfUrl);
         setUploading(false);
         newTest.testpdf = pdfUrl;
       }
-
-      // Call the original add test handler
       handleAddTest();
     } catch (error) {
       console.error("Error uploading PDF:", error);
