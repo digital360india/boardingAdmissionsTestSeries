@@ -62,19 +62,9 @@ export default function ContactForm() {
           </div>
         </div>
         <div className="space-y-10 flex flex-col  items-center">
-          {/* <img src="./images/enquiry.png" alt="" /> */}
+       
           <div className="space-y-10">
-            {/* <div className="space-y-4">
-              <p className="text-[32px] font-medium">Boarding Admissions</p>
-              <p className="text-[18px] lg:w-[340px]">
-                Lorem ipsum dolor sit amet consectetur. Id nisi et consectetur
-                gravida suspendisse gravida. Mattis.
-              </p>
-              <p className="text-[18px] lg:w-[340px]">
-                Lorem ipsum dolor sit amet consectetur. Id nisi et consectetur
-                gravida suspendisse gravida. Mattis.
-              </p>
-            </div> */}
+            
             <div className="space-y-4">
               <p className="text-[24px] font-medium text-center">
                 Boarding Admission Enquiry

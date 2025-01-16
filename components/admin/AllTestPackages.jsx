@@ -411,14 +411,6 @@ const TestPackagesList = () => {
                       {selectedPackage?.studentsEnrolled?.length || "0"}
                     </td>
                   </tr>
-                  {/* <tr className="even:bg-gray-100 hover:bg-gray-300">
-                    <td className="py-2 px-4 border-b border-r border-gray-300">
-                      <strong>Package Description:</strong>
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-300">
-                   { selectedPackage?.packageDescription}
-                    </td>
-                  </tr> */}
                 </tbody>
               </table>
             )}

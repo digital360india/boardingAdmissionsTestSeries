@@ -139,23 +139,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           </button>
         </ul>
 
-        {/* <div className="mt-auto flex items-center gap-6 border border-[#FFFFFF40] hover:border-[#FFFFFF] rounded-md p-2 w-full cursor-pointer">
-          <button
-            onClick={handleLogout}
-            className="text-[#fff] flex items-center gap-2"
-          >
-            <FaSignOutAlt
-              className={`text-xl ${!isSidebarOpen && "text-center"}`}
-            />
-            <span
-              className={`${
-                !isSidebarOpen && "hidden"
-              } origin-left tracking-wide duration-200 text-base`}
-            >
-              Log Out
-            </span>
-          </button>
-        </div> */}
+       
       </div>
     </div>
   );

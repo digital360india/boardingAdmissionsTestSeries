@@ -11,7 +11,6 @@ const TestPackages = () => {
     <div className="max-w-7xl mx-auto p-4">
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold mb-6">Available Test Packages</h2>
-        {/* <button onClick={goToAllPackages} className="text-sm underline text-background04 font-medium">See All Packages</button> */}
       </div>
       <div className="">
         <Swiper

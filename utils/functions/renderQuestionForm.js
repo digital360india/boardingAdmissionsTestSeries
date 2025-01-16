@@ -21,35 +21,6 @@ export const renderQuestionForm = ({
         />
       </label>
 
-      {/* <label className="flex items-center gap-4 w-fit">
-          <span className="text-gray-700">Use Existing Question</span>
-          <select
-            name="existingQuestion"
-            onChange={(e) => {
-              const selectedQuestion = questions.find(
-                (question) => question.id === e.target.value
-              );
-              if (selectedQuestion) {
-                setNewQuestion({ ...selectedQuestion });
-                setEditMode(true);
-              }
-            }}
-            className="w-[350px] border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          >
-            <option value="">Select Existing Question</option>
-
-            {allQuestions
-              .filter(
-                (question) => question.questionType === newQuestion.questionType
-              )
-              .map((filteredQuestion) => (
-                <option key={filteredQuestion.id} value={filteredQuestion.id}>
-                  {filteredQuestion.sno}.{" "}
-                  <EquationDisplay question={filteredQuestion.question} />
-                </option>
-              ))}
-          </select>
-        </label> */}
 
       {(() => {
         switch (newQuestion.questionType) {

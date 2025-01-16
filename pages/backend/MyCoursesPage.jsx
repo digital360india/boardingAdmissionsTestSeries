@@ -85,22 +85,14 @@ const MyCoursesPage = () => {
                     <h2 className="text-[16px] font-semibold text-[#075D70]">
                       {pkg.packageName}
                     </h2>
-                    {/* <p className="text-gray-700 mt-2">{`Starting Date: ${new Date(
-            pkg.startingDate
-          ).toLocaleDateString()}`}</p> */}
-
+                    
                     <p className="text-[#777777] text-[12px] ">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                       Duis pulvinar magna risus, et iaculis libero elementum at.
                       Etiam pellentesque ut massa ut gravida. Proin eget neque
                       elementum
                     </p>
-                    {/* <p className="text-gray-700 mt-1">{`Date of Creation: ${new Date(
-            pkg.dateOfCreation
-          ).toLocaleDateString()}`}</p>
-          <p className="text-gray-700 mt-1">{`Students Enrolled: ${pkg.studentsEnrolled}`}</p>
-          <p className="text-gray-700 mt-1">{`Price: ₹${pkg.price}`}</p>
-          <p className="text-gray-700 mt-1">{`Discounted Price: ₹${pkg.discountedPrice}`}</p> */}
+                   
                     <div className=" ">
                       <Link
                         className="flex w-full"

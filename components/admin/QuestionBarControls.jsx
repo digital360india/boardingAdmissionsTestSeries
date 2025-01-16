@@ -97,22 +97,7 @@ const QuestionBarControls = ({
           >
             Add New Question
           </button>
-{/* 
-          <div className="flex justify-end items-center gap-5">
-            {" "}
-            <button
-              onClick={() => setShowLiveTestForm(true)}
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-            >
-              Live Test
-            </button>{" "}
-            <button
-              onClick={() => setShowPaperCheck(true)}
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-            >
-              Paper Checker
-            </button>
-          </div> */}
+
         </div>
         <div className="text-lg flex w-full justify-between font-semibold mt-4">
           <p className="text-xl font-semibold">Existing questions:</p>
