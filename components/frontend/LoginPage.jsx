@@ -105,7 +105,7 @@ const LoginPage = () => {
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="bg-cover bg-gray-100 bg-center bg-no-repeat h-screen w-full">
         <div className="flex justify-center h-[90vh] relative top-10 px-10 overflow-hidden">
           <div className="absolute bg-opacity-20 rounded-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
@@ -232,6 +232,7 @@ const LoginPage = () => {
                       </label>
                     </div>
                     <button
+                      type="button"
                       className="text-white underline m-2 text-sm"
                       onClick={handleResetPassword}
                     >
@@ -243,11 +244,7 @@ const LoginPage = () => {
                     type="submit"
                     className="bg-blue-500 text-white px-12 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300"
                   >
-                    <p
-                      className="
-                 text-white text-lg"
-                    >
-                      {" "}
+                    <p className="text-white text-lg">
                       {loading ? <>Signing in...</> : <>Sign in</>}{" "}
                     </p>
                   </button>

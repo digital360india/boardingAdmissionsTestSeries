@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   icons: [{ rel: "icon", url: "./Ace.svg" }],
 
-  title: "AppInfoLogic",
+  title: "BoardingAdmissions",
 };
 
 export default function RootLayout({ children }) {

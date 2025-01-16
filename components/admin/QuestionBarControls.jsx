@@ -118,7 +118,7 @@ const QuestionBarControls = ({
               ✖️
             </button>
             <h2 className="text-2xl font-semibold mb-4 text-center text-blue">
-              Appinfologic Paper Checker
+              BoardingAdmissions Paper Checker
             </h2>
             <hr className="my-2 text-blue  " />
             <p className="mb-2">
