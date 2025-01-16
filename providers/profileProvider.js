@@ -1,6 +1,5 @@
 "use client";
 import { db } from "@/firebase/firebase";
-import { sendOtp } from "@/utils/functions/sendOtp";
 import {
   doc,
   setDoc,
@@ -146,7 +145,6 @@ export const ProfileProvider = ({ children }) => {
     try {
       const userRef = doc(db, "users", profile.uid);
       await setDoc(userRef, newUser);
-      await sendOtp(newUser.name, newUser.email, newUser.verificationCode);
       toast.success("Verification email sent successfully!");
        setUsersCache((prevCache) => {
         const updatedCache = { ...prevCache };

@@ -9,7 +9,6 @@ import { TestContext } from "@/providers/testProvider";
 import { ProfileContext } from "@/providers/profileProvider";
 import { uploadImage } from "@/utils/functions/imageControls";
 import showError from "@/utils/functions/showError";
-import { sendOtp } from "@/utils/functions/sendOtp";
 import { generateVerificationCode } from "@/utils/functions/generateVerificationCode";
 import { MdDelete } from "react-icons/md";
 

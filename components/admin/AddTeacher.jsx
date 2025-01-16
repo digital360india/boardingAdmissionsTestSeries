@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { uploadImage } from "@/utils/functions/imageControls";
 import { ProfileContext } from "@/providers/profileProvider";
 import showError from "@/utils/functions/showError";
-import { sendOtp } from "@/utils/functions/sendOtp";
 import { isAdult } from "@/utils/functions/isAdult";
 import { generateVerificationCode} from "@/utils/functions/generateVerificationCode";
 import { displayName } from "react-quill";
