@@ -117,6 +117,4 @@ export default function AddQuestionsSlugPage() {
   );
 }
 
-{
-  /* <p> Starits of india, Imports and Exports human anotomy, Vitamins, disease , physics laws, periodic table and rivers and water disputes , biodiversity and wildlife santuary , dance forms , famous fairs  ,</p> */
-}
+
