@@ -3,78 +3,89 @@ import React, { useContext } from "react";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import { TestContext } from "@/providers/testProvider";
 import { UserContext } from "@/providers/userProvider";
-import Image from "next/image"; 
+import Image from "next/image";
 
 const Page = () => {
   const { allTests } = useContext(TestSeriesContext);
   const { testPackages } = useContext(TestContext);
   const { user } = useContext(UserContext);
 
+  const userDetails = [
+    { label: "Admin Name", value: user?.displayName || "Admin" },
+    { label: "E-mail", value: user?.email || "Email not provided" },
+    {
+      label: "Phone number",
+      value: user?.phoneNumber || "Phone number not available",
+    },
+    { label: "Address", value: user?.address || "Address not available" },
+  ];
+
+  const statsData = [
+    { count: allTests.length, label: "Total Tests" },
+    { count: testPackages.length, label: "Total Test Packages" },
+  ];
+
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col p-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
-      <div className="bg-white shadow-lg rounded-lg p-8 mb-8 flex flex-col lg:flex-row gap-8">
-        {user?.photoURL ? (
-          <div className="w-24 h-24 bg-gray-200 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
-            <Image
-              src={user?.photoURL || "/default-avatar.png"}
-              alt="User Avatar"
-              width={96}
-              height={96}
-              className="object-cover w-full h-full"
-              priority
-            />
+    <div className=" flex flex-col p-6">
+      <div className="flex space-x-4 mb-4">
+        {statsData.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-[#075D70] w-[243px] h-[143px] text-white p-[20px] rounded-lg shadow-sm flex flex-col items-center justify-center"
+          >
+            <p className="text-[45px] font-bold">{stat.count}</p>
+            <h3 className="text-xl font-semibold mb-2">{stat.label}</h3>
           </div>
-        ) : (
-          <></>
-        )}
-        <div className="flex flex-col justify-between space-y-6 lg:space-y-4">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-semibold text-gray-900">
-              {user?.name || "Admin"}
-            </h2>
-            <p className="text-gray-700 text-lg">
-              {user?.designation || "Designation not available"}
-            </p>
-            <p className="text-gray-600">
-              {user?.email || "Email not provided"}
-            </p>
-            <p className="text-gray-600">
-              {user?.phoneNumber || "Phone number not available"}
-            </p>
-            <p className="text-gray-600">
-              {user?.address || "Address not available"}
+        ))}
+      </div>
+
+      <div className="w-[60vw] h-[260px]  mb-8">
+        <div className="px-8 py-4 bg-[#075D70] w-fit text-white rounded-t-lg ">
+          <p className="text-[20px] font-semibold">Admin Information</p>
+        </div>
+        <div className="border border-[#9999A4] bg-[#F8FAFB] rounded-b-lg rounded-tr-lg p-4 space-y-4">
+          <div className="flex justify-between w-full items-center ">
+            {user?.photoURL && user.photoURL.trim() !== "" ? (
+              <div className="w-24 h-24 ml-12 bg-gray-200 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
+                <Image
+                  src={user.photoURL}
+                  alt="User Avatar"
+                  width={96}
+                  height={96}
+                  className="object-cover w-full h-full"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="w-24 h-24 ml-12 bg-gray-200 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
+                <Image
+                  src="/navbar.svg"
+                  alt="Default Avatar"
+                  width={96}
+                  height={96}
+                  className="object-cover w-full h-full"
+                  priority
+                />
+              </div>
+            )}
+            <p className="text-[#9999A4] text-[18px]">
+              <span>Created At:</span>
+              {user?.createdAt
+                ? new Date(user?.createdAt).toLocaleDateString()
+                : new Date(user?.updatedAt).toLocaleDateString()}
             </p>
           </div>
 
-          <div className="space-y-1 text-sm text-gray-600">
-            <p>
-              <strong>Role:</strong> {user?.role || "N/A"}
-            </p>
-            <p>
-              <strong>Created At:</strong>{" "}
-              {user?.createdAt
-                ? new Date(user?.createdAt).toLocaleDateString()
-                : "N/A"}
-            </p>
-           
+          <div className="flex flex-col justify-between space-y-6 lg:space-y-4 pb-8">
+            <div className="space-y-2 w-[40%] text-[18px] pl-12">
+              {userDetails.map((item, index) => (
+                <div key={index} className="flex justify-between">
+                  <p className="text-[#9999A4]">{item.label}</p>
+                  <p>{item.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col items-center justify-center">
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">
-            Total Tests
-          </h3>
-          <p className="text-4xl font-bold text-gray-600">{allTests.length}</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col items-center justify-center">
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">
-            Total Test Packages
-          </h3>
-          <p className="text-4xl font-bold text-gray-600">
-            {testPackages.length}
-          </p>
         </div>
       </div>
     </div>
