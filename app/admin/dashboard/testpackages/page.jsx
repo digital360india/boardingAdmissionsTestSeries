@@ -11,8 +11,7 @@ import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import Loading from "@/app/loading";
 import { TestContext } from "@/providers/testProvider";
 import { uploadImage } from "@/utils/functions/imageControls";
-import showError from "@/utils/functions/showError";
-import { RxCross2 } from "react-icons/rx";
+import { CiSearch } from "react-icons/ci";
 
 const Page = () => {
   const { user } = useContext(UserContext);
@@ -39,9 +38,24 @@ const Page = () => {
     tests: [],
     studentFeedBack: [],
   });
-  const [selectedtests, setSelectedtests] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTests, setSelectedTests] = useState([]);
+
+  const filteredTests = tests.filter((course) =>
+    course.testTitle.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleTestSelection = (e, id) => {
+    if (e.target.checked) {
+      setSelectedTests((prevSelectedTests) => [...prevSelectedTests, id]);
+    } else {
+      setSelectedTests((prevSelectedTests) =>
+        prevSelectedTests.filter((testId) => testId !== id)
+      );
+    }
+  };
 
   useEffect(() => {
     if (allTests.length > 0) {
@@ -86,13 +100,6 @@ const Page = () => {
     }
   };
 
-  const handletestselection = (e, courseId) => {
-    if (e.target.checked) {
-      setSelectedtests([...selectedtests, courseId]);
-    } else {
-      setSelectedtests(selectedtests.filter((id) => id !== courseId));
-    }
-  };
 
   const handlePackageCreation = async (e) => {
     e.preventDefault();
@@ -119,7 +126,7 @@ const Page = () => {
         startingDate: formData.startingDate,
         createdAt: new Date().toISOString(),
         createdBy: user.id,
-        tests: selectedtests,
+        tests: selectedTests,
         packageImage: imageUrl || "",
       };
 
@@ -143,7 +150,7 @@ const Page = () => {
         packageDescription: "",
       });
       setImagePreview(null);
-      setSelectedtests([]);
+      setSelectedTests([]);
       setImageFile(null);
       toast.success("Test package created successfully!");
       setIsModalOpen(false);
@@ -156,8 +163,14 @@ const Page = () => {
   };
 
   const handleModalToggle = () => {
-    setIsModalOpen(true);
+    if (isModalOpen) {
+      // Modal is being closed, reset form states
+      setSelectedTests([]); // Clear selected tests
+      setFormState(initialFormState); // Reset other form fields if necessary
+    }
+    setIsModalOpen(!isModalOpen);
   };
+
   const handleOnClose = () => {
     setFormData({
       packageName: "",
@@ -168,160 +181,210 @@ const Page = () => {
       packageDescription: "",
     });
     setImagePreview(null);
-    setSelectedtests([]);
+    setSelectedTests([]);
     setImageFile(null);
     setIsModalOpen(false);
   };
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
       <ToastContainer />
-      <div className="flex justify-between mb-6">
+      <div className="flex justify-between mb-6 ">
         <div className="text-[28px] font-medium ">Test Packages</div>
-        <div className="flex bg-[#5D5FEF] items-center text-white rounded-lg pl-1 pr-3">
+        <div
+          className="flex bg-[#5D5FEF] cursor-pointer items-center text-white rounded-lg pl-1 pr-3"
+          onClick={handleModalToggle}
+        >
           <div className="text-[26px] px-2">+</div>
-          <button onClick={handleModalToggle} className="my-auto">
-            Create Test Package
-          </button>
+          <button className="my-auto">Create Test Package</button>
         </div>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[36vw] relative max-h-[90vh] overflow-y-scroll">
-            <button
-              onClick={handleOnClose}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-            >
-              <RxCross2 className="text-red-600 w-8 h-8" />
-            </button>
-            <h2 className="text-xl font-bold mb-4">Create Test Package</h2>
-            <form onSubmit={handlePackageCreation}>
-              <div className="flex gap-4">
-                <div className="mb-4">
-                  <label className="block text-gray-700">Package Name:</label>
-                  <input
-                    type="text"
-                    name="packageName"
-                    value={formData.packageName}
-                    onChange={handleInputChange}
-                    placeholder="Enter Name"
-                    className="mt-1 block  p-2 border border-gray-300 rounded w-[270px]"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">Starting Date:</label>
-                  <input
-                    type="date"
-                    name="startingDate"
-                    value={formData.startingDate}
-                    onChange={handleInputChange}
-                    className="mt-1 block p-2 border border-gray-300 w-[270px] rounded"
-                    required
-                  />
-                </div>
+        <div className="absolute top-0 left-0 flex items-center w-full bg-background00 ">
+          <div className="w-[85vw]">
+            <div className="bg-white  mx-auto rounded-lg shadow-lg w-[66vw]  relative max-h-[78vh] ">
+              <div className="bg-background05 p-3 h-14 rounded-t-lg ">
+                <h2 className="text-xl font-medium text-background01 ">
+                  Create Test Package
+                </h2>
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">
-                  Package Description:
-                </label>
-                <textarea
-                  name="packageDescription"
-                  value={formData.packageDescription}
-                  onChange={handleInputChange}
-                  placeholder="value"
-                  className="mt-1 block p-2 border border-gray-300 rounded h-20 w-full"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-18px">Upload Package Image:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  placeholder="File Size <= 100kb"
-                  onChange={handleImageUpload}
-                  className="mt-1 block p-2 border w-[100%] border-gray-300 rounded "
-                />
-
-                {imagePreview && (
-                  <img
-                    src={imagePreview}
-                    alt="Selected Package"
-                    className="mt-2 h-32 w-32 object-cover border border-gray-300 rounded"
-                  />
-                )}
-              </div>
-              <div className="flex gap-4">
-                <div className="mb-4">
-                  <label className="block text-gray-700">Price:</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    name="price"
-                    value={formData.price}
-                    placeholder="Price"
-                    onChange={handleInputChange}
-                    className="mt-1 block w-[15.4vw] p-2 border border-gray-300 rounded"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">
-                    Discounted Price:
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    name="discountedPrice"
-                    value={formData.discountedPrice}
-                    onChange={handleInputChange}
-                    placeholder="Discounted Price"
-                    className="mt-1 block w-[15.4vw] p-2 border border-gray-300 rounded"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="mb-4 h-32">
-                <h3 className="text-lg font-semibold mb-2">Select tests:</h3>
-                <div className="h-[calc(100%-32px)] overflow-y-scroll border p-2">
-                  {tests.map((course) => (
-                    <label key={course.id} className="flex items-center">
+              <div className="p-6 bg-background06 overflow-y-scroll max-h-[74vh] border border-[#9999A4] rounded-b-lg">
+                <form onSubmit={handlePackageCreation}>
+                  <div className="flex gap-12">
+                    <div className="mb-4">
+                      <label className="block text-15px font-semibold text-neutral02">
+                        Package Name:
+                      </label>
                       <input
-                        type="checkbox"
-                        value={course.id}
-                        onChange={(e) => handletestselection(e, course.id)}
-                        className="mr-2"
+                        type="text"
+                        name="packageName"
+                        value={formData.packageName}
+                        onChange={handleInputChange}
+                        placeholder="Enter Name"
+                        className="mt-1 block  p-2 border border-gray-300 rounded w-[45vw]"
+                        required
                       />
-                      {course.testTitle}
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-15px font-semibold text-neutral02">
+                        Starting Date:
+                      </label>
+                      <input
+                        type="date"
+                        name="startingDate"
+                        value={formData.startingDate}
+                        onChange={handleInputChange}
+                        className="mt-1 block p-2 border border-gray-300 w-[14vw] rounded"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-15px font-semibold text-neutral02">
+                      Package Description:
                     </label>
-                  ))}
-                </div>
-              </div>
+                    <input
+                      name="packageDescription"
+                      value={formData.packageDescription}
+                      onChange={handleInputChange}
+                      placeholder="Enter Package Description"
+                      className="mt-1 block p-2 border border-gray-300 rounded h-10 w-full"
+                      required
+                    />
+                  </div>
+                  <div className="flex justify-end text-[#AAAAAA] text-14px">
+                    <p>Max. 100 characters</p>
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-18px font-medium mb-2">
+                      Package Image
+                    </label>
+                    <div className="flex items-center justify-center w-full bg-background05 bg-opacity-5 p-2 border-2 border-background05 border-dashed rounded-lg text-center">
+                      <input
+                        type="file"
+                        accept=".jpg,.jpeg,.png"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        id="file-upload"
+                      />
+                      <label
+                        htmlFor="file-upload"
+                        className="cursor-pointer flex gap-4 items-center text-gray-500 hover:text-blue-500"
+                      >
+                        <img src="/Upload icon.svg" alt="" className="w-6" />
+                        <p className="text-16px font-semibold">
+                          Drag & drop files or{" "}
+                          <span className="text-background05 underline">
+                            Browse
+                          </span>
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          Supported formats: JPEG, PNG
+                        </p>
+                      </label>
+                    </div>
 
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleOnClose}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-gray-600"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={`bg-blue-500 text-white px-4 py-2 rounded-md 
-                    ${
-                      isLoading
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-blue-600"
-                    }`}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "loading..." : "Create Package"}
-                </button>
+                    {imagePreview && (
+                      <img
+                        src={imagePreview}
+                        alt="Selected Package"
+                        className="mt-4 h-32 w-32 object-cover border border-gray-300 rounded"
+                      />
+                    )}
+                  </div>
+
+                  <div className="flex w-full gap-4">
+                    <div className="w-[35%]">
+                      <div className="mb-4">
+                        <label className="block text-15px text-neutral02">
+                          Package Price (without discount)
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          name="price"
+                          value={formData.price}
+                          placeholder="Price"
+                          onChange={handleInputChange}
+                          className="mt-1 block w-[20vw] p-2 border border-gray-300 rounded"
+                          required
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-15px text-neutral02">
+                          Discounted Price:
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          name="discountedPrice"
+                          value={formData.discountedPrice}
+                          onChange={handleInputChange}
+                          placeholder="Discounted Price"
+                          className="mt-1 block w-[20vw] p-2 border border-gray-300 rounded"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4 w-[65%]">
+                      <h3 className="text-15px font-semibold text-neutral02 mb-2">
+                        Test Subjects Selection
+                      </h3>
+                      <div className="relative flex mb-2 justify-center items-center w-full border border-gray-300 rounded-xl p-2 pl-10 text-sm">
+                        <input
+                          type="text"
+                          placeholder="Search subject here..."
+                          className="focus:outline-none"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <CiSearch />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 overflow-y-scroll max-h-48">
+                        {filteredTests.map((course) => (
+                          <label
+                            key={course.id}
+                            className="flex items-center space-x-2 text-gray-800 text-sm"
+                          >
+                            <input
+                              type="checkbox"
+                              value={course.id}
+                              checked={selectedTests.includes(course.id)}
+                              onChange={(e) =>
+                                handleTestSelection(e, course.id)
+                              }
+                              className="accent-teal-600 w-5 h-5 rounded-xl focus:ring-teal-500"
+                            />
+                            <span className="font-medium">
+                              {course.testTitle}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between bg-background06 rounded-b-lg sticky bottom-0 border-gray-300">
+                    <button
+                      type="submit"
+                      className={`bg-background05 text-white px-6 py-2 rounded-md 
+          ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "loading..." : "Create Package"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleOnClose}
+                      className=" text-[#9999A4] border border-[#9999A4] px-6 py-2 rounded-md mr-2"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}

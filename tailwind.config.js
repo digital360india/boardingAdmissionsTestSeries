@@ -19,12 +19,14 @@ module.exports = {
       },
       
       colors: {
+        background00:"#f5f5f5",
         background01: "#F4FCFC",
         background02: "#FEFEFE",
         background03: "#F6F4F1",
         background04: "#5882E6",
-        background05:"#075D70"
-,        primary01: "#7791A1",
+        background05:"#075D70",
+        background06:"#F8FAFB",
+        primary01: "#7791A1",
         primary02: "#075D70",
         primary03: "#5C616E",
         secondary01: "#CBBEA6",
@@ -53,6 +55,8 @@ module.exports = {
         '24px': '24px',
         '32px': '32px',
         '14px': '14px',
+        '15px': '15px',
+        '16px': '16px',
         '8px': '8px',
         '13px': '13px',
         '16px': '16px',
