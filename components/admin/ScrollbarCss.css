@@ -10,12 +10,12 @@
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #3b82f6; /* Blue */
+    background-color: #075D70; /* Blue */
     border-radius: 10px;
     border: 2px solid #e5e7eb; /* White space effect */
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #2563eb; /* Darker blue */
+    background-color: #075D70; /* Darker blue */
   }
   

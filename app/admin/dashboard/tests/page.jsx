@@ -321,7 +321,7 @@ const TestPage = () => {
     return <p>No tests available.</p>;
   }
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 relative">
       <ToastContainer />
       <div className="flex items-center justify-between px-4 gap-10 h-[70px]">
       <div className="text-24px font-medium">Test</div>
@@ -385,16 +385,16 @@ const TestPage = () => {
       )}
 
       {isDialogOpen && (
-        <AddTestDialog
-          isOpen={isDialogOpen}
-          newTest={newTest}
-          teachers={teachers}
-          handleInputChange={handleInputChange}
-          handleTeacherSelect={handleTeacherSelect}
-          handleSubjectChange={handleSubjectChange}
-          handleAddTest={handleAddTest}
-          handleCloseDialog={() => setIsDialogOpen(false)}
-        />
+          <AddTestDialog
+            isOpen={isDialogOpen}
+            newTest={newTest}
+            teachers={teachers}
+            handleInputChange={handleInputChange}
+            handleTeacherSelect={handleTeacherSelect}
+            handleSubjectChange={handleSubjectChange}
+            handleAddTest={handleAddTest}
+            handleCloseDialog={() => setIsDialogOpen(false)}
+          />
       )}
       <TestTable
         expandedRows={expandedRows}
