@@ -17,6 +17,7 @@ const TestPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPdfUploaded, setIsPdfUploaded] = useState(false);
+  const [fileName, setFileName] = useState("");
   const [canSubmit, setCanSubmit] = useState(false);
   const router = useRouter();
 
@@ -57,10 +58,37 @@ const TestPage = () => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0"
-    )}:${String(secs).padStart(2, "0")}`;
+    return (
+      <div className="flex w-full justify-between px-1 lg:px-[25px] py-4">
+        <div>
+          <p>{String(hours).padStart(2, "0")}</p>
+          <p className="hidden md:block text-[14px] lg:text-[16px] text-background05">
+            Hours
+          </p>
+          <p className="md:hidden text-[14px] lg:text-[16px] text-background05">
+            HH
+          </p>
+        </div>
+        <div>
+          <p>{String(minutes).padStart(2, "0")}</p>
+          <p className="hidden md:block text-[14px] lg:text-[16px] text-background05">
+            Minutes
+          </p>
+          <p className="md:hidden text-[14px] lg:text-[16px] text-background05">
+            MM
+          </p>
+        </div>
+        <div>
+          <p>{String(secs).padStart(2, "0")}</p>
+          <p className=" hidden md:block text-[14px] lg:text-[16px] text-background05">
+            Seconds
+          </p>
+          <p className="md:hidden text-[14px] lg:text-[16px] text-background05">
+            SS
+          </p>
+        </div>
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -143,6 +171,7 @@ const TestPage = () => {
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
+    setFileName(file.name);
     try {
       const pdfUrl = await uploadImage(file, "pdfTest");
       setPdfLink(pdfUrl);
@@ -160,54 +189,97 @@ const TestPage = () => {
   return (
     <div>
       {isLoading && <Loading />}
-      <div className="relative">
-        <div className="absolute top-0 right-0 p-4 bg-white shadow-md">
-          <p className="font-bold text-lg text-red-500">{formatTime(time)}</p>
-        </div>
-      </div>
 
-      <div className="flex">
-        <div className="w-2/3 p-4">
-          <iframe
-            src={testDetails.testpdf || "about:blank"}
-            className="w-full h-[100vh]"
-            title="Test PDF"
-            frameBorder="0"
-          ></iframe>
+      <div className="flex ">
+        <div className="flex flex-col w-[75vw]">
+          <div className="w-full">
+            <iframe
+              src={testDetails.testpdf || "about:blank"}
+              className="w-full h-[100vh]"
+              title="Test PDF"
+              frameBorder="0"
+            ></iframe>
+          </div>
         </div>
 
-        <div className="w-1/3 p-4 bg-white shadow-lg">
-          <h2 className="font-bold text-xl">{testDetails.testTitle}</h2>
-          <p>{testDetails.testDescription}</p>
-          <p>
-            <strong>Duration:</strong> {testDetails.duration || "N/A"} minutes
-          </p>
-          <p>
-            <strong>Total Marks:</strong> {testDetails.totalMarks || "N/A"}
-          </p>
-          <p>
-            <strong>Subjects:</strong>{" "}
-            {testDetails.subjects?.join(", ") || "N/A"}
-          </p>
-          {showSubmitButton && (
-            <div className="mt-4">
-              <input
-                type="file"
-                accept=".pdf"
-                onChange={handleFileUpload}
-                className="mb-4"
-              />
-              <button
-                onClick={handleSubmit}
-                className={`${
-                  showSubmitButton && canSubmit ? "bg-red-500" : "bg-gray-500"
-                } text-white px-4 py-2 rounded`}
-                disabled={!canSubmit || isSubmitting}
-              >
-                Submit Test
-              </button>
+        <div className="">
+          <div className="text-center bg-[#F8F8F8] w-[25vw] rounded-br-md border-2 border-background05">
+            <div className="text-[14px] md:text-[22px] lg:text-[30px] font-semibold text-background05">
+              {formatTime(time)}
             </div>
-          )}
+          </div>
+          <div className="flex flex-col items-center justify-center p-[20px]">
+            <h2 className="font-bold text-[22px] text-background05 mb-2">
+              {testDetails.testTitle}
+            </h2>
+            <div className="w-[280px] font-semibold space-y-2">
+              <div className="flex justify-between">
+                <p>Duration</p>
+                <p className="text-background05">
+                  {testDetails.duration || "N/A"} minutes
+                </p>
+              </div>
+              <div className="flex justify-between">
+                <p>Total Marks</p>
+                <p className="text-background05">
+                  {testDetails.totalMarks || "N/A"}
+                </p>
+              </div>
+              <div className="flex justify-between">
+                <p>Subjects</p>
+                <p className="text-background05">
+                  {testDetails.subjects?.join(", ") || "N/A"}
+                </p>
+              </div>
+              <div className="w-full flex flex-col justify-center items-center h-[400px] " >
+                {!fileName ? (
+                  <div className="border border-dashed border-[#075D7030] h-[108px] bg-[#075D7005] p-4 rounded">
+                    <input
+                      type="file"
+                      id="file-input"
+                      className="hidden"
+                      onChange={handleFileUpload}
+                    />
+                    <div className="w-full text-center space-y-2">
+                      <img
+                        src="/cloud.svg"
+                        alt="Cloud Icon"
+                        className="mx-auto"
+                      />
+                      <label
+                        htmlFor="file-input"
+                        className="cursor-pointer text-background05 underline"
+                      >
+                        Browse
+                      </label>
+                      <span> file here</span>
+                      <p className="text-[#676767]">Supported formats: PDF</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full flex items-center justify-center h-[108px]  space-y-2 border border-background05 rounded">
+                    {fileName && (
+                      <p className="text-sm text-gray-600">{fileName}</p>
+                    )}
+                  </div>
+                )}
+
+                <div className="mt-4">
+                  <button
+                    onClick={handleSubmit}
+                    className={`${
+                      showSubmitButton && canSubmit
+                        ? "bg-background05 "
+                        : "bg-gray-500"
+                    } text-white px-4 py-2 rounded rounded-lg`}
+                    disabled={!canSubmit || isSubmitting}
+                  >
+                    Submit Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
