@@ -57,12 +57,12 @@ const AddTestDialog = ({
 
   return (
     <div className="absolute -top-4 left-0 flex items-center w-full bg-background00 z-50 ">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[70vw] mx-auto">
-        <div className="flex justify-between">
-          <div className="text-xl font-bold mb-4">Create Test</div>
+      <div className="bg-white rounded-lg shadow-lg w-[70vw] mx-auto">
+        <div className="flex justify-between  bg-background05 w-full rounded-t-lg">
+          <div className="text-[20px] font-medium ml-8 my-4 text-white">Create Test</div>
           
         </div>
-        <form onSubmit={handleFormSubmit} className="space-y-4">
+        <form onSubmit={handleFormSubmit} className="space-y-4 p-6 ">
           <div className="flex gap-12">
             <div>
               <label className="block text-15px font-semibold text-neutral02">
