@@ -100,7 +100,6 @@ const Page = () => {
     }
   };
 
-
   const handlePackageCreation = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -200,18 +199,18 @@ const Page = () => {
       </div>
 
       {isModalOpen && (
-        <div className="absolute top-0 left-0 flex items-center w-full bg-background00 ">
-          <div className="w-[85vw]">
-            <div className="bg-white  mx-auto rounded-lg shadow-lg w-[66vw]  relative max-h-[78vh] ">
+        <div className="absolute top-0 left-0 flex items-center w-full md:h-screen h-full bg-background00 ">
+          <div className="w-[85vw] md:mx:0 mx-auto -mt-10">
+            <div className="bg-white  mx-auto rounded-lg shadow-lg md:w-[66vw]  relative max-h-[78vh] ">
               <div className="bg-background05 p-3 h-14 rounded-t-lg ">
                 <h2 className="text-xl font-medium text-background01 ">
                   Create Test Package
                 </h2>
               </div>
-              <div className="p-6 bg-background06 overflow-y-scroll max-h-[74vh] border border-[#9999A4] rounded-b-lg">
+              <div className="md:px-6 px-4 bg-background06 overflow-y-scroll max-h-[74vh] border border-[#9999A4] rounded-b-lg">
                 <form onSubmit={handlePackageCreation}>
-                  <div className="flex gap-12">
-                    <div className="mb-4">
+                  <div className="md:flex items-center xl:gap-12 lg:gap-10">
+                    <div className="mb-4 mt-4">
                       <label className="block text-15px font-semibold text-neutral02">
                         Package Name:
                       </label>
@@ -221,11 +220,11 @@ const Page = () => {
                         value={formData.packageName}
                         onChange={handleInputChange}
                         placeholder="Enter Name"
-                        className="mt-1 block  p-2 border border-gray-300 rounded w-[45vw]"
+                        className="mt-1 block  p-2 border border-gray-300 w-full rounded xl:w-[45vw] lg:w-[43vw]"
                         required
                       />
                     </div>
-                    <div className="mb-4">
+                    <div className="md:mb-0 mb-4">
                       <label className="block text-15px font-semibold text-neutral02">
                         Starting Date:
                       </label>
@@ -234,7 +233,7 @@ const Page = () => {
                         name="startingDate"
                         value={formData.startingDate}
                         onChange={handleInputChange}
-                        className="mt-1 block p-2 border border-gray-300 w-[14vw] rounded"
+                        className="mt-1 block p-2 border border-gray-300 md:w-[14vw] w-full rounded"
                         required
                       />
                     </div>
@@ -259,7 +258,7 @@ const Page = () => {
                     <label className="block text-18px font-medium mb-2">
                       Package Image
                     </label>
-                    <div className="flex items-center justify-center w-full bg-background05 bg-opacity-5 p-2 border-2 border-background05 border-dashed rounded-lg text-center">
+                    <div className="flex items-center justify-center w-full bg-background05 bg-opacity-5 p-2 md:border-2 border border-background05 border-dashed rounded-lg text-center">
                       <input
                         type="file"
                         accept=".jpg,.jpeg,.png"
@@ -269,8 +268,9 @@ const Page = () => {
                       />
                       <label
                         htmlFor="file-upload"
-                        className="cursor-pointer flex gap-4 items-center text-gray-500 hover:text-blue-500"
+                        className="cursor-pointer md:flex gap-4 items-center text-gray-500 hover:text-blue-500"
                       >
+                        <div className="flex items-center gap-2">
                         <img src="/Upload icon.svg" alt="" className="w-6" />
                         <p className="text-16px font-semibold">
                           Drag & drop files or{" "}
@@ -278,6 +278,7 @@ const Page = () => {
                             Browse
                           </span>
                         </p>
+                        </div>
                         <p className="text-xs text-gray-400">
                           Supported formats: JPEG, PNG
                         </p>
@@ -293,8 +294,8 @@ const Page = () => {
                     )}
                   </div>
 
-                  <div className="flex w-full gap-4">
-                    <div className="w-[35%]">
+                  <div className="md:flex w-full gap-4">
+                    <div className="md:w-[35%] ">
                       <div className="mb-4">
                         <label className="block text-15px text-neutral02">
                           Package Price (without discount)
@@ -306,7 +307,7 @@ const Page = () => {
                           value={formData.price}
                           placeholder="Price"
                           onChange={handleInputChange}
-                          className="mt-1 block w-[20vw] p-2 border border-gray-300 rounded"
+                          className="mt-1 block md:w-[20vw] w-full  p-2 border border-gray-300 rounded"
                           required
                         />
                       </div>
@@ -321,13 +322,13 @@ const Page = () => {
                           value={formData.discountedPrice}
                           onChange={handleInputChange}
                           placeholder="Discounted Price"
-                          className="mt-1 block w-[20vw] p-2 border border-gray-300 rounded"
+                          className="mt-1 block md:w-[20vw] w-full p-2 border border-gray-300 rounded"
                           required
                         />
                       </div>
                     </div>
 
-                    <div className="mb-4 w-[65%]">
+                    <div className="mb-4 md:w-[65%]">
                       <h3 className="text-15px font-semibold text-neutral02 mb-2">
                         Test Subjects Selection
                       </h3>
@@ -341,7 +342,7 @@ const Page = () => {
                         />
                         <CiSearch />
                       </div>
-                      <div className="grid grid-cols-2 gap-4 overflow-y-scroll max-h-48">
+                      <div className="grid md:grid-cols-2 grid-cols-1 md:mt-0 mt-4 gap-4 overflow-y-scroll max-h-48">
                         {filteredTests.map((course) => (
                           <label
                             key={course.id}
@@ -365,10 +366,13 @@ const Page = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-between bg-background06 rounded-b-lg sticky bottom-0 border-gray-300">
+                  <div className="rounded-b-lg sticky bottom-0 border-gray-300">
+                 
+<div className="flex justify-between py-4  bg-background06  ">
+
                     <button
                       type="submit"
-                      className={`bg-background05 text-white px-6 py-2 rounded-md 
+                      className={`bg-background05 md:text:md  text-sm text-white px-2 md:px-6 py-2 rounded-md 
           ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={isLoading}
                     >
@@ -377,11 +381,13 @@ const Page = () => {
                     <button
                       type="button"
                       onClick={handleOnClose}
-                      className=" text-[#9999A4] border border-[#9999A4] px-6 py-2 rounded-md mr-2"
+                      className=" text-[#9999A4] md:text:md text-sm border border-[#9999A4] px-6 py-2 rounded-md mr-2"
                     >
                       Cancel
                     </button>
-                  </div>
+</div>
+                    </div>
+               
                 </form>
               </div>
             </div>
