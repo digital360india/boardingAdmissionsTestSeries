@@ -272,13 +272,13 @@ const Page = () => {
                         className="cursor-pointer md:flex gap-4 items-center text-gray-500 hover:text-blue-500"
                       >
                         <div className="flex items-center gap-2">
-                        <img src="/Upload icon.svg" alt="" className="w-6" />
-                        <p className="text-16px font-semibold">
-                          Drag & drop files or{" "}
-                          <span className="text-background05 underline">
-                            Browse
-                          </span>
-                        </p>
+                          <img src="/Upload icon.svg" alt="" className="w-6" />
+                          <p className="text-16px font-semibold">
+                            Drag & drop files or{" "}
+                            <span className="text-background05 underline">
+                              Browse
+                            </span>
+                          </p>
                         </div>
                         <p className="text-xs text-gray-400">
                           Supported formats: JPEG, PNG
@@ -368,27 +368,24 @@ const Page = () => {
                   </div>
 
                   <div className="rounded-b-lg sticky bottom-0 border-gray-300">
-                 
-<div className="flex justify-between py-4  bg-background06  ">
-
-                    <button
-                      type="submit"
-                      className={`bg-background05 md:text:md  text-sm text-white px-2 md:px-6 py-2 rounded-md 
+                    <div className="flex justify-between py-4  bg-background06  ">
+                      <button
+                        type="submit"
+                        className={`bg-background05 md:text:md  text-sm text-white px-2 md:px-6 py-2 rounded-md 
           ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? "loading..." : "Create Package"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleOnClose}
-                      className=" text-[#9999A4] md:text:md text-sm border border-[#9999A4] px-6 py-2 rounded-md mr-2"
-                    >
-                      Cancel
-                    </button>
-</div>
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "loading..." : "Create Package"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleOnClose}
+                        className=" text-[#9999A4] md:text:md text-sm border border-[#9999A4] px-6 py-2 rounded-md mr-2"
+                      >
+                        Cancel
+                      </button>
                     </div>
-               
+                  </div>
                 </form>
               </div>
             </div>

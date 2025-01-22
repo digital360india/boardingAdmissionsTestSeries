@@ -211,7 +211,9 @@ const TestPackagesList = () => {
               className="mt-1 block w-full h-[100px] p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
             />
           </div>
-    
+          <div className="flex justify-end text-[#AAAAAA] text-[12px]">
+          <p>Max. 100 characters</p>
+        </div>
           <div className="mb-4">
             {editFormData.packageImage && (
               <div className="mb-4">
