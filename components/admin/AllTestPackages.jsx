@@ -5,13 +5,14 @@ import { doc } from "firebase/firestore";
 import { TestContext } from "@/providers/testProvider";
 import { UserContext } from "@/providers/userProvider";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { toast } from "react-toastify"; 
-
+import { toast } from "react-toastify";
+import "@/components/admin/ScrollbarCss.css";
 import PackageTable from "./PackageTableComponent";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import { IoClose } from "react-icons/io5";
 import { uploadImage } from "@/utils/functions/imageControls";
 import showError from "@/utils/functions/showError";
+import { CiSearch } from "react-icons/ci";
 
 const TestPackagesList = () => {
   const { user } = useContext(UserContext);
@@ -62,7 +63,7 @@ const TestPackagesList = () => {
         updatedAt: new Date().toISOString(),
         ...(user && { updatedBy: user.id }),
       };
-  
+
       if (imageFile) {
         if (imageFile.size <= 100 * 1024) {
           const imageUrl = await uploadImage(imageFile, "packages");
@@ -83,7 +84,6 @@ const TestPackagesList = () => {
       showError(err.message);
     }
   };
-  
 
   const handleTestSelection = (e, testId) => {
     const { checked } = e.target;
@@ -134,6 +134,13 @@ const TestPackagesList = () => {
       tests: prevData.tests.filter((id) => id !== testId),
     }));
   };
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <div className="w-full mx-auto p-6 bg-white rounded-lg shadow-md">
       {/* <h2 className="text-3xl font-bold text-gray-800 mb-4">Test Packages</h2> */}
@@ -148,209 +155,236 @@ const TestPackagesList = () => {
         testPackages={testPackages}
       />
       {editingPackage && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ">
-          <div className="relative w-[50vw] h-[80vh]  bg-white  rounded-lg shadow overflow-y-scroll border-2 border-background04">
-            <div className="flex justify-between items-center pl-4 pt-5 sticky top-0 bg-white border-b-2 border-background04">
-              <h4 className="text-2xl font-semibold text-background04 ">
-                Edit Package
-              </h4>{" "}
-              <div className=" ">
-                <button
-                  onClick={() => setEditingPackage(false)}
-                  className="text-red-400 text-3xl"
-                >
-                  <IoClose />
-                </button>
-              </div>
+      <div className="absolute w-full top-0 xl:h-auto h-full bg-background00 left-0 flex items-center justify-center">
+      <div className="w-[90vw] sm:w-[80vw] md:w-[65vw] h-[80vh] bg-white rounded-lg custom-scrollbar shadow overflow-y-scroll border-2 border-background05">
+        <div className="bg-background05 pl-4 py-4 sticky top-0 border-b-2 border-background04">
+          <h4 className="text-2xl font-semibold text-white">Edit Package</h4>
+        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleEdit(e, editingPackage);
+          }}
+          className="space-y-4 px-4 mt-4 text-sm"
+        >
+          <div className="flex flex-wrap gap-4 items-center justify-between">
+            <div className="w-full sm:w-[48%]">
+              <label className="block text-15px font-semibold text-neutral02">
+                Package Name:
+              </label>
+              <input
+                type="text"
+                name="packageName"
+                value={editFormData.packageName}
+                onChange={handleEditChange}
+                className="mt-1 block p-2 border border-gray-300 w-full rounded"
+                required
+              />
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEdit(e, editingPackage);
-              }}
-              className="space-y-4 pl-4 mt-4 text-sm "
-            >
-              <div className="mb-4 flex justify-start items-center gap-2">
-                <label className="block text-black font-semibold">
-                  Package Name :
+            <div className="w-full sm:w-[48%]">
+              <label className="block text-15px font-semibold text-neutral02">
+                Starting Date:
+              </label>
+              <input
+                type="date"
+                name="startingDate"
+                value={editFormData.startingDate || ""}
+                onChange={(e) =>
+                  setEditFormData({
+                    ...editFormData,
+                    startingDate: e.target.value,
+                  })
+                }
+                className="mt-1 block p-2 border border-gray-300 w-full rounded"
+              />
+            </div>
+          </div>
+    
+          <div className="mb-4">
+            <label className="block text-15px font-semibold text-neutral02">
+              Package Description:
+            </label>
+            <textarea
+              name="packageDescription"
+              value={editFormData.packageDescription}
+              onChange={handleEditChange}
+              className="mt-1 block w-full h-[100px] p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+            />
+          </div>
+    
+          <div className="mb-4">
+            {editFormData.packageImage && (
+              <div className="mb-4">
+                <label className="block text-black font-medium mb-2">
+                  Current Package Image:
                 </label>
-                <input
-                  type="text"
-                  name="packageName"
-                  value={editFormData.packageName}
-                  onChange={handleEditChange}
-                  className="mt-1 block  p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-                  required
+                <img
+                  src={editFormData.packageImage}
+                  alt="Package"
+                  className="w-32 h-32 object-cover rounded"
                 />
               </div>
-
-              <div className="mb-4">
-                <label className="block text-black font-semibold">
-                  Package Description:
-                </label>
-                <textarea
-                  name="packageDescription"
-                  value={editFormData.packageDescription}
-                  onChange={handleEditChange}
-                  className="mt-1 block w-full h-[100px] p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-                />
-              </div>
-
-              <div className="flex justify-start items-center gap-10">
-                {" "}
-                <div className="flex flex-col gap-4 justify-center items-start">
-                  <h4 className="text-medium font-semibold text-black ">
-                    Packages Pricings :
-                  </h4>{" "}
-                  <div className="flex gap-1 justify-star items-center">
-                    <label className="block text-black font-semibold">
-                      Price:
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="price"
-                      value={editFormData.price}
-                      onChange={handleEditChange}
-                      className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-                    />
-                  </div>
-                  <div className=" flex gap-1 justify-star items-center">
-                    <label className="block text-black font-medium">
-                      Discounted Price:
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="discountedPrice"
-                      value={editFormData.discountedPrice}
-                      onChange={handleEditChange}
-                      className=" block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-                    />
-                  </div>
-                  <div className="flex gap-1 justify-start items-center">
-                    <label className="block text-black font-medium">
-                      Starting Date:
-                    </label>
-                    <input
-                      type="date"
-                      name="startingDate"
-                      value={editFormData.startingDate || ""}
-                      onChange={(e) =>
-                        setEditFormData({
-                          ...editFormData,
-                          startingDate: e.target.value,
-                        })
-                      }
-                      className="block pl-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-                    />
-                  </div>
-                </div>
-                {editFormData.packageImage && (
-                  <div className="mb-4">
-                    <label className="block text-black font-medium">
-                      Current Package Image:
-                    </label>
-                    <img
-                      src={editFormData.packageImage}
-                      alt="Package"
-                      className="w-32 h-32 object-cover rounded"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-black font-medium">
-                  Upload New Package Image:
-                </label>
+            )}
+    
+            <div className="mb-4">
+              <label className="block text-[18px] font-medium mb-2">Package Image</label>
+              <div className="flex items-center justify-center w-full bg-background05 bg-opacity-5 p-4 md:border-2 border border-background05 border-dashed rounded-lg text-center">
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                  className="hidden"
+                  id="file-upload"
                 />
-              </div>
-
-              <div className="">
-                <label className="block text-black font-medium">
-                  Test IDs:
-                </label>
-                {editFormData?.tests && editFormData.tests.length > 0 ? (
-                  <ul className="grid grid-cols-2 gap-x-5 pr-4 list-disc pl-5 min-h-28 py-4 overflow-y-scroll bg-gray-100">
-                    {editFormData.tests.map((testId, index) => {
-                      const test = allTests?.find((t) => t.id === testId);
-                      return (
-                        <li
-                          key={index}
-                          className="text-gray-700 flex justify-between items-center"
-                        >
-                          <div>
-                            <span className="w-3">{index + 1}, </span>
-                            {test
-                              ? test.testTitle
-                              : `No title found for test ID: ${testId}`}
-                          </div>
-                          <button
-                            onClick={() => handleDelete1(testId)}
-                            className="ml-2 text-red-500 hover:text-red-700"
-                          >
-                            <FaRegTrashAlt />
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <p className="font-semibold text-lg text-gray-700">
-                    No Test IDs available for this package.
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer flex items-center gap-2 text-gray-500 hover:text-blue-500"
+                >
+                  <img
+                    src="/Upload icon.svg"
+                    alt="Upload Icon"
+                    className="w-5"
+                  />
+                  <p className="text-[16px] font-semibold">
+                    Drag & drop files or{" "}
+                    <span className="text-blue-500 underline">Browse</span>
                   </p>
-                )}
+                  <p className="text-xs text-gray-400 ml-2">
+                    Supported formats: JPEG, PNG
+                  </p>
+                </label>
               </div>
-
-              <div className="mb-20 ">
-                <h3 className="text-lg font-semibold mb-2">Select tests:</h3>
-                <div className="space-y-2 overflow-y-scroll max-h-32 bg-gray-100 p-2">
-                  {tests.map((course) => (
-                    <label key={course.id} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        value={course.id}
-                        checked={editFormData.tests.includes(course.id)}
-                        onChange={(e) => handleTestSelection(e, course.id)}
-                        className="mr-2"
-                      />
-                      {course.testTitle}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div className="h-14"></div>
-              <div className="flex justify-between items-center pr-2 pb-2 pt-2 pl-2  space-x-2 mt-10 sticky bottom-0 bg-white  w-full ">
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                >
-                  Update Package
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditingPackage(null)}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
+    
+          <div className="flex gap-10 flex-wrap">
+            <div className="my-2 w-full sm:w-[48%]">
+              <label className="block text-15px mb-2 text-neutral02">
+                Package Price (without discount)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                name="price"
+                value={editFormData.price}
+                onChange={handleEditChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+    
+            <div className="w-full sm:w-[48%]">
+              <label className="block my-2 text-15px text-neutral02">
+                Discounted Price:
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                name="discountedPrice"
+                value={editFormData.discountedPrice}
+                onChange={handleEditChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+          </div>
+    
+          <div className="mb-20 w-full">
+            <h3 className="text-lg font-semibold mb-2">Test Subjects Selection</h3>
+    
+            <div className="relative flex mb-2 justify-center items-center w-full border border-gray-300 rounded-xl p-2 pl-10 text-sm">
+              <input
+                type="text"
+                placeholder="Search test subjects..."
+                className="focus:outline-none"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+               <CiSearch />
+            </div>
+            <div className="grid grid-cols-2 gap-4 overflow-y-scroll custom-scrollbar max-h-32 p-2">
+              {tests
+                .filter((course) =>
+                  course.testTitle
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                )
+                .map((course) => (
+                  <label key={course.id} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      value={course.id}
+                      checked={editFormData.tests.includes(course.id)}
+                      onChange={(e) => handleTestSelection(e, course.id)}
+                      className="accent-teal-600 w-5 mr-2 h-5 rounded-xl focus:ring-teal-500"
+                    />
+                    <span className="font-medium text-15px">{course.testTitle}</span>
+                  </label>
+                ))}
+            </div>
+          </div>
+    
+          <div className="space-y-4">
+            <label className="block text-black font-medium text-lg">Test IDs:</label>
+    
+            {editFormData?.tests && editFormData.tests.length > 0 ? (
+              <ul className="grid md:grid-cols-2 grid-cols-1 md:gap-x-5 gap-4 pr-4 list-disc pl-5 min-h-28 py-4 custom-scrollbar overflow-y-scroll bg-gray-100 rounded-lg shadow-sm">
+                {editFormData.tests.map((testId, index) => {
+                  const test = allTests?.find((t) => t.id === testId);
+                  return (
+                    <li
+                      key={index}
+                      className="text-gray-700 flex justify-between items-center space-x-2 bg-white p-2 rounded-lg shadow-sm hover:bg-gray-200"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-500">{index + 1}.</span>
+                        <span className="font-medium text-gray-700">
+                          {test
+                            ? test.testTitle
+                            : `No title found for test ID: ${testId}`}
+                        </span>
+                      </div>
+    
+                      <button
+                        onClick={() => handleDelete1(testId)}
+                        className="ml-2 text-red-500 hover:text-red-700 transition-all duration-200 ease-in-out"
+                      >
+                        <FaRegTrashAlt />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="font-semibold text-lg text-gray-700">
+                No Test IDs available for this package.
+              </p>
+            )}
+          </div>
+    
+          <div className="flex justify-between items-center pr-2 pb-2 pt-2 pl-2 space-x-2 mt-10 sticky bottom-0 bg-white w-full">
+            <button
+              type="submit"
+              className="bg-background05 text-white px-4 py-2 rounded-md"
+            >
+              Update Package
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditingPackage(null)}
+              className="border text-[#9999A4] border-[#9999A4] px-4 py-2 rounded-md"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
       )}
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
             <div className="flex justify-between items-start">
-              {" "}
               <h3 className="text-lg font-bold mb-4">Package Details</h3>
               <button onClick={() => setShowModal(false)}>
                 <IoClose className="text-red-600 text-xl" />
