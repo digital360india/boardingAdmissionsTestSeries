@@ -12,6 +12,7 @@ import Loading from "@/app/loading";
 import { TestContext } from "@/providers/testProvider";
 import { uploadImage } from "@/utils/functions/imageControls";
 import { CiSearch } from "react-icons/ci";
+import "@/components/admin/ScrollbarCss.css";
 
 const Page = () => {
   const { user } = useContext(UserContext);
@@ -207,7 +208,7 @@ const Page = () => {
                   Create Test Package
                 </h2>
               </div>
-              <div className="md:px-6 px-4 bg-background06 overflow-y-scroll max-h-[74vh] border border-[#9999A4] rounded-b-lg">
+              <div className="md:px-6 px-4 bg-background06 overflow-y-scroll custom-scrollbar max-h-[74vh] border border-[#9999A4] rounded-b-lg">
                 <form onSubmit={handlePackageCreation}>
                   <div className="md:flex items-center xl:gap-12 lg:gap-10">
                     <div className="mb-4 mt-4">
@@ -342,7 +343,7 @@ const Page = () => {
                         />
                         <CiSearch />
                       </div>
-                      <div className="grid md:grid-cols-2 grid-cols-1 md:mt-0 mt-4 gap-4 overflow-y-scroll max-h-48">
+                      <div className="grid md:grid-cols-2 grid-cols-1 md:mt-0 mt-4 gap-4 custom-scrollbar overflow-y-scroll max-h-48">
                         {filteredTests.map((course) => (
                           <label
                             key={course.id}
