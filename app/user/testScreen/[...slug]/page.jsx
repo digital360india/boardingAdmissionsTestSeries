@@ -295,8 +295,8 @@ const TestPage = () => {
           ></iframe>
         </div>
         <div className="hidden lg:block">
-          <div className="text-center bg-[#F8F8F8] w-[25vw] rounded-br-md border-2 border-background05">
-            <div className="text-[14px] md:text-[22px] lg:text-[30px] font-semibold text-background05">
+          <div className="text-center bg-[#F8F8F8] w-full rounded-br-md border-2 border-background05">
+            <div className="w-full text-[14px] md:text-[22px] lg:text-[30px] font-semibold text-background05">
               {formatTime(time)}
             </div>
           </div>
