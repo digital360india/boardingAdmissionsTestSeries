@@ -20,7 +20,7 @@ const TestPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPdfUploaded, setIsPdfUploaded] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [canSubmit, setCanSubmit] = useState(false);
+  // const [canSubmit, setCanSubmit] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const TestPage = () => {
         const confirmationMessage =
           "Your test will be submitted if you reload. Are you sure?";
         event.returnValue = confirmationMessage;
-        handleSubmit();
+        // handleSubmit();
         return confirmationMessage;
       };
 
@@ -272,11 +272,11 @@ const TestPage = () => {
                     <button
                       onClick={handleSubmit}
                       className={`${
-                        time <= 15 * 60 && canSubmit
+                        time <= 30 * 60
                           ? "bg-background05 "
                           : "bg-gray-500"
                       } text-white px-4 py-2 rounded rounded-lg`}
-                      disabled={!canSubmit || isSubmitting}
+                      disabled={ isSubmitting}
                     >
                       Submit Test
                     </button>
@@ -364,11 +364,11 @@ const TestPage = () => {
                   <button
                     onClick={handleSubmit}
                     className={`${
-                      time <= 15 * 60 && canSubmit
+                      time <= 30 * 60 
                         ? "bg-background05 "
                         : "bg-gray-500"
                     } text-white px-4 py-2 rounded rounded-lg`}
-                    disabled={!canSubmit || isSubmitting}
+                    disabled={isSubmitting}
                   >
                     Submit Test
                   </button>

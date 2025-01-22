@@ -74,6 +74,7 @@ const Page = () => {
             const hasResult = user?.myResults?.some(
               (result) => result.id === test.id
             );
+            console.log(hasResult);
 
             return (
               <div

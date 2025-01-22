@@ -66,7 +66,7 @@ const TestComplete = () => {
     router.push("/user/dashboard/myresults");
   };
 
-  const renderCard = (title, link) => {
+  const renderCard = (title, link) => { 
     const isAvailable = Boolean(link);
     return (
       <div className="flex flex-col items-center justify-center space-y-4">
@@ -98,15 +98,15 @@ const TestComplete = () => {
   }
 
   return (
-    <div className="w-[70vw] ">
+    <div className="lg:w-[70vw] ">
       <FaArrowLeft onClick={handleOnClick} className="cursor-pointer" />
-      <div className="py-10 px-8 ">
+      <div className="py-10 px-4 lg:px-8 ">
         <div className="flex justify-center lg:justify-between items-center w-full">
           <p className="text-center text-[18px] lg:text-[22px] text-green-600 font-semibold">
             Your test is submitted successfully!
           </p>
         </div>
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex flex-wrap items-center justify-between mt-4">
           {renderCard("Question PDF", testCategory?.testpdf)}
           {renderCard("Submitted Answers", testData?.pdfLink)}
           {renderCard("Checked Result", testData?.resultpdfLink)}
@@ -119,7 +119,7 @@ const TestComplete = () => {
           </p>
         )}
 
-        <div className="mt-6">
+        <div className="mb-10 mt-6">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background05 text-white font-semibold text-center">

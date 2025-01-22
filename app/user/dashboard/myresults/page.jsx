@@ -55,7 +55,7 @@ export default function Page() {
 
   return (
     <div className="container mx-auto p-4 pb-28 md:pb-0">
-      <h1 className="text-2xl font-bold text-center text-background04 mb-6">
+      <h1 className="text-2xl font-bold text-center text-background05 mb-6">
         My Test Results
       </h1>
       {data.length > 0 ? (
