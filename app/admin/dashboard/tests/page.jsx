@@ -308,6 +308,21 @@ const TestPage = () => {
     }));
   };
 
+  const [subjectSearch, setSubjectSearch] = useState("");
+  const filteredSubjects = [
+    "Math",
+    "Chemistry",
+    "Science",
+    "English",
+    "History",
+    "General Awareness",
+    "Hindi",
+    "Geography",
+    "Physics",
+  ].filter((subject) =>
+    subject.toLowerCase().includes(subjectSearch.toLowerCase())
+  );
+
   if (loading)
     return (
       <div>
@@ -382,18 +397,38 @@ const TestPage = () => {
           handleDeleteSubject={handleDeleteSubject}
           handleEditSubjectChange={handleEditSubjectChange}
         />
-      )}
+      )} 
 
       {isDialogOpen && (
           <AddTestDialog
             isOpen={isDialogOpen}
             newTest={newTest}
             teachers={teachers}
+            subjectSearch={subjectSearch}
+            filteredSubjects={filteredSubjects}
+            setSubjectSearch={setSubjectSearch}
             handleInputChange={handleInputChange}
             handleTeacherSelect={handleTeacherSelect}
             handleSubjectChange={handleSubjectChange}
             handleAddTest={handleAddTest}
-            handleCloseDialog={() => setIsDialogOpen(false)}
+            handleCloseDialog={() => {
+              setIsDialogOpen(false);
+              setNewTest({
+                testTitle: "",
+                testDescription: "",
+                testUploadDate: "",
+                duration: "",
+                totalMarks: 0,
+                subjects: [],
+                updatedAt: "",
+                updatedBy: "",
+                analytics: [],
+                test: [],
+                testpdf: "",
+                teachersAssigned: [],
+              });
+              setSelectedTeacher(null);
+            }}
           />
       )}
       <TestTable
