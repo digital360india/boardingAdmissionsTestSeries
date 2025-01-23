@@ -4,6 +4,7 @@ import { TestProvider } from "@/providers/testProvider";
 import { TestSeriesProvider } from "@/providers/testSeriesProvider";
 import { UserProvider } from "@/providers/userProvider";
 import "../../globals.css";
+import ResultDataProvider from "@/providers/resultDataProvider";
 
 export const metadata = {
   icons: [{ rel: "icon", url: "./Ace.svg" }],
@@ -17,9 +18,11 @@ export default function RootLayout({ children }) {
       <UserProvider>
         <TestProvider>
           <TestSeriesProvider>
-            <ProfileProvider>
-              <LayoutFile>{children}</LayoutFile>
-            </ProfileProvider>
+            <ResultDataProvider>
+              <ProfileProvider>
+                <LayoutFile>{children}</LayoutFile>
+              </ProfileProvider>
+            </ResultDataProvider>
           </TestSeriesProvider>
         </TestProvider>
       </UserProvider>

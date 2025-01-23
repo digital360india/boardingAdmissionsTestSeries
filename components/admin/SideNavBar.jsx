@@ -18,10 +18,14 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       icon: <LucidePackageOpen />
       
     },
-
     {
       title: "Test",
       src: "/admin/dashboard/tests",
+      icon: <FaEdit />,
+    },
+    {
+      title: "Results",
+      src: "/admin/dashboard/results",
       icon: <FaEdit />,
     },
     {

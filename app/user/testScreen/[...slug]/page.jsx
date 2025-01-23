@@ -20,7 +20,7 @@ const TestPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPdfUploaded, setIsPdfUploaded] = useState(false);
   const [fileName, setFileName] = useState("");
-  // const [canSubmit, setCanSubmit] = useState(false);
+  // const [canSubmit, setCanSubmit] = useState(false); 
   const router = useRouter();
 
   useEffect(() => {
@@ -117,6 +117,10 @@ const TestPage = () => {
           id: docId,
           subjects: testDetails.subjects,
           totalMarks: testDetails.totalMarks,
+          testTitle: testDetails.testTitle,
+          testDescription: testDetails.testDescription,
+          testpdf:testDetails.testpdf,
+          duration: testDetails.duration,
           result: [docData],
         });
       }
