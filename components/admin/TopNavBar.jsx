@@ -30,6 +30,11 @@ export const TopNavBar = () => {
       icon: <FaEdit />,
     },
     {
+      title: "Results",
+      src: "/admin/dashboard/results",
+      icon: <FaEdit />,
+    },
+    {
       title: "Users",
       src: "/admin/dashboard/allusers",
       icon: <FaUser />,
