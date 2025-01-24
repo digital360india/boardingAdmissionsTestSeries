@@ -2,7 +2,7 @@
 import { db } from "@/firebase/firebase";
 import { ResultContext } from "@/providers/resultDataProvider";
 import { uploadImage } from "@/utils/functions/imageControls";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { usePathname } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -260,16 +260,106 @@ export default function page() {
     router.push(`/admin/dashboard/results/${id}`);
   };
 
+  const [score, setScore] = useState("");
+  const [description, setDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null); // Error handling state
+  const [formVisible, setFormVisible] = useState(true); // State to control form visibility
+
+  const fetchData = () => {
+    const resultDocRef = doc(db, "results", id);
+
+    const unsubscribe = onSnapshot(
+      resultDocRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setData(snapshot.data()?.result || []); // Update state with data
+          setIsLoading(false); // Stop loading
+        } else {
+          setData([]); // Clear data if the document does not exist
+          setIsLoading(false);
+        }
+      },
+      (error) => {
+        setError(error);
+        setIsLoading(false); // Stop loading in case of error
+      }
+    );
+
+    return unsubscribe;
+  };
+
+  const handleSubmit2 = async (e) => {
+    e.preventDefault();
+
+    if (!score || !description) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const resultDocRef = doc(db, "results", id);
+      const resultDocSnapshot = await getDoc(resultDocRef);
+
+      if (resultDocSnapshot.exists()) {
+        const resultData = resultDocSnapshot.data();
+        const updatedResults = resultData.result.map((userResult) => {
+          if (userResult.userId === slug) {
+            return { ...userResult, score, description };
+          }
+          return userResult;
+        });
+
+        await updateDoc(resultDocRef, {
+          result: updatedResults,
+        });
+      } else {
+        await updateDoc(resultDocRef, {
+          result: [{ userId: slug, score, description }],
+        });
+      }
+      setIsPopupVisible(false);
+      setFormVisible(false);
+
+      alert("Result successfully updated!");
+    } catch (error) {
+      console.error("Error updating data:", error);
+      alert("An error occurred while submitting the result.");
+    } finally {
+      setIsSubmitting(false);
+      fetchData();
+
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = fetchData();
+    return () => unsubscribe();
+  }, [id]);
+
+  console.log(testdata);
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false); // State for popup visibility
+
+  const openPopup = () => {
+    setScore(testdata?.score || ""); // Set default value when popup opens
+    setDescription(testdata?.description || ""); // Set default value when popup opens
+    setIsPopupVisible(true);
+  };
+
   return (
-    <div className="lg:w-[70vw] ">
+    <div className="lg:w-[70vw]">
       <FaArrowLeft onClick={handleOnClick} className="cursor-pointer" />
-      <div className="py-10 px-4 lg:px-8 ">
+      <div className="py-10 px-4 lg:px-8">
         <div className="flex justify-center lg:justify-between items-center w-full">
           <p className="text-center text-[18px] lg:text-[32px] text-green-600 font-semibold">
-            The test has been submitted by student
+            The test has been submitted by the student
           </p>
         </div>
-        <p className=" text-[18px]  text-background05 ">
+        <p className="text-[18px] text-background05">
           Download the{" "}
           <span className="font-semibold">Submitted Answers PDF</span> to
           analyze student submissions and provide results effectively.
@@ -294,21 +384,158 @@ export default function page() {
               </tr>
             </thead>
             <tbody>
-              <tr className="text-center">
-                <td className="border border-gray-300 px-4 py-2">
-                  {testdata?.testTitle}
-                </td>
-                <td className="border border-gray-300 font-semibold px-4 py-2">
-                  {data?.score || "N/A"}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {testdata?.totalMarks}
-                </td>
-              </tr>
+              {isLoading ? (
+                <tr className="text-center">
+                  <td colSpan="3" className="border border-gray-300 px-4 py-2">
+                    Loading...
+                  </td>
+                </tr>
+              ) : (
+                <tr className="text-center">
+                  <td className="border border-gray-300 px-4 py-2">
+                    {testdata?.testTitle || "N/A"}
+                  </td>
+                  <td className="border border-gray-300 font-semibold px-4 py-2">
+                    {data?.score || "N/A"}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {testdata?.totalMarks || "N/A"}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
+
+          <div className="mt-10">
+            <div className="text-white bg-background05 p-2 w-fit rounded-t-xl">
+              Review
+            </div>
+            <div className="w-full h-fit border-2 rounded-b-xl rounded-r-xl p-6">
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                testdata?.result?.[0]?.description || "N/A"
+              )}
+            </div>
+            <div className="">
+              <button
+                className="text-background05 border border-background05 px-4 py-1 rounded-xl mt-4"
+                onClick={openPopup}
+              >
+                Edit
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+      {formVisible && !data?.score && (
+        <div className="max-w-lg mt-10 shadow-md rounded-xl relative">
+          <div
+            className="absolute h-fit w-full inset-0 bg-background05 opacity-5 rounded-xl"
+            style={{ zIndex: -1 }}
+          />
+          <div className="w-full bg-background05 rounded-t-xl p-6">
+            <h1 className="text-lg font-semibold text-white">
+              Marks Input Form
+            </h1>
+          </div>
+
+          <form onSubmit={handleSubmit2} className="space-y-4 p-6 relative">
+            <div>
+              <label className="block text-sm font-medium text-black">
+                Marks Scored (out of 100)
+              </label>
+              <input
+                type="number"
+                value={score}
+                onChange={(e) => setScore(e.target.value)}
+                placeholder="Enter Marks Here..."
+                className="w-1/2 mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Package Description
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter Description here...."
+                maxLength={100}
+                className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
+              ></textarea>
+              <p className="text-right text-sm text-gray-500">
+                Max. 100 characters
+              </p>
+            </div>
+            <button
+              type="submit"
+              className={` py-2 px-4 text-white rounded-md ${
+                isSubmitting
+                  ? "bg-teal-400 cursor-not-allowed"
+                  : "bg-teal-600 hover:bg-teal-700"
+              }`}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* Popup Form */}
+      {isPopupVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg max-w-md w-full relative">
+            <h2 className="text-xl font-bold mb-4">Popup Form</h2>
+            <form onSubmit={handleSubmit2} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-black">
+                  Marks Scored (out of 100)
+                </label>
+                <input
+                  type="number"
+                  value={score} // Use the state value here
+                  onChange={(e) => setScore(e.target.value)} // Update state on change
+                  placeholder="Enter Marks Here..."
+                  className="w-1/2 mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Package Description
+                </label>
+                <textarea
+                  value={description} // Use the state value here
+                  onChange={(e) => setDescription(e.target.value)} // Update state on change
+                  placeholder="Enter Description here...."
+                  maxLength={100}
+                  className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600"
+                ></textarea>
+                <p className="text-right text-sm text-gray-500">
+                  Max. 100 characters
+                </p>
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  className="py-2 px-4 bg-gray-300 rounded-md"
+                  onClick={() => setIsPopupVisible(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="py-2 px-4 bg-teal-600 text-white rounded-md hover:bg-teal-700"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
