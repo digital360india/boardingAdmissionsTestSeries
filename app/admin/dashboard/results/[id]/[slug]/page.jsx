@@ -9,7 +9,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaRegFilePdf } from "react-icons/fa6";
 
-export default function page() {
+export default function Page() {
   const [data, setData] = useState([]);
   const [testdata, setTestdata] = useState("");
   const { results } = useContext(ResultContext);

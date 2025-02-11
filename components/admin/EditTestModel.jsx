@@ -17,11 +17,7 @@ const EditTestModal = ({
 }) => {
   const [pdfFile, setPdfFile] = useState(null);
   const [uploading, setUploading] = useState(false);
-
-  if (!isOpen) return null;
-  const handlePdfChange = (e) => {
-    setPdfFile(e.target.files[0]);
-  };
+  const [filterText, setFilterText] = useState("");
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +36,6 @@ const EditTestModal = ({
       setUploading(false);
     }
   };
-  const [filterText, setFilterText] = useState("");
 
   const subjects = [
     "Math",
@@ -57,6 +52,10 @@ const EditTestModal = ({
   const filteredSubjects = subjects.filter((subject) =>
     subject.toLowerCase().includes(filterText.toLowerCase())
   );
+  if (!isOpen) return null;
+  const handlePdfChange = (e) => {
+    setPdfFile(e.target.files[0]);
+  };
 
   return (
     <div className="absolute -top-8 left-0 w-full flex justify-center md:h-screen h-[105%] bg-background00 z-50">
