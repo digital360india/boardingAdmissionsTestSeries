@@ -3,13 +3,14 @@ import { db } from "@/firebase/firebase";
 import { ResultContext } from "@/providers/resultDataProvider";
 import { uploadImage } from "@/utils/functions/imageControls";
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaRegFilePdf } from "react-icons/fa6";
 
 export default function page() {
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [testdata, setTestdata] = useState("");
   const { results } = useContext(ResultContext);
