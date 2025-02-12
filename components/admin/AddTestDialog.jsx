@@ -20,16 +20,18 @@ const AddTestDialog = ({
 }) => {
   const [pdfFile, setPdfFile] = useState(null);
   const [uploading, setUploading] = useState(false);
- 
-
-  if (!isOpen) return null;
+  const [pdfPreview , setPdfPreview] = useState(null);
 
   const handlePdfChange = (e) => {
-    setPdfFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setPdfFile(file);
+      setPdfPreview(URL.createObjectURL(file));
+    }
   };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
     try {
       if (pdfFile) {
         setUploading(true);
@@ -43,6 +45,9 @@ const AddTestDialog = ({
       setUploading(false);
     }
   };
+
+  if (!isOpen) return null;
+
 
   return (
     <div className="absolute -top-4 left-0 flex items-center w-full bg-background00 z-50">
@@ -98,37 +103,41 @@ const AddTestDialog = ({
           <label className="block text-[14px] text-neutral02 font-medium">
             Test Questions:
           </label>
-          <div className="relative flex flex-col items-center justify-center w-full bg-background05 bg-opacity-5 p-4 border-2 border-background05 border-dashed rounded-lg text-center">
-            <div className="flex gap-2">
-            <img src="/Upload icon.svg" alt="Upload Icon" className="w-6 mb-2" />
-            <p>
-              <span className="font-medium cursor-pointer">
-                Drag & drop files
-              </span>{" "}
-              or{" "}
-              <label
-                htmlFor="file-upload"
-                className="text-background05 font-medium cursor-pointer underline"
-              >
-                Browse
-              </label>
-            </p>
-            </div>
-            <p className="text-xs text-gray-400 mt-1">
-              Supported formats: JPEG, PNG
-            </p>
-            <input
-              id="file-upload"
-              type="file"
-              accept="application/pdf"
-              onChange={handlePdfChange}
-              className="absolute opacity-0 cursor-pointer top-0 left-0 w-full h-full"
-              style={{ pointerEvents: "none" }}
-            />
-          </div>
-          {uploading && (
-            <p className="text-sm text-gray-500 mt-2">Uploading PDF...</p>
-          )}
+          <div className="flex flex-col items-center">
+      {/* Upload Box */}
+      <div className="relative flex flex-col items-center justify-center w-full bg-background05 bg-opacity-5 p-4 border-2 border-background05 border-dashed rounded-lg text-center">
+        <div className="flex gap-2">
+          <img src="/Upload icon.svg" alt="Upload Icon" className="w-6 mb-2" />
+          <p>
+            <span className="font-medium cursor-pointer">Drag & drop files</span> or{" "}
+            <label
+              htmlFor="file-upload"
+              className="text-background05 font-medium cursor-pointer underline"
+            >
+              Browse
+            </label>
+          </p>
+        </div>
+        <p className="text-xs text-gray-400 mt-1">Supported formats: PDF</p>
+        <input
+          id="file-upload"
+          type="file"
+          accept="application/pdf"
+          onChange={handlePdfChange}
+          className="absolute opacity-0 cursor-pointer top-0 left-0 w-full h-full"
+          style={{ pointerEvents: "none" }}
+        />
+      </div>
+
+      {uploading && <p className="text-sm text-gray-500 mt-2">Uploading PDF...</p>}
+
+      {pdfPreview && (
+        <div className="mt-4 w-full max-w-[500px] border custom-scrollbar border-gray-300 shadow-md rounded-lg">
+          <iframe src={pdfPreview} className="w-full h-[500px]" />
+          <p className="text-center text-sm text-gray-600 mt-2">PDF Preview</p>
+        </div>
+      )}
+    </div>
         </div>
         <div>
           <label className="block text-[14px] text-neutral02">Select Subjects:</label>
