@@ -32,7 +32,6 @@ const EditTestModal = ({
       setShowPdf(true);
       setTimeout(() => {
         setUploading(false);
-        
       }, 1500);
     } else {
       alert("Please upload a valid PDF file.");
@@ -218,7 +217,7 @@ const EditTestModal = ({
                 Total Marks
               </label>
               <input
-                type="number"
+                type="text"
                 name="totalMarks"
                 value={editTest.totalMarks}
                 onChange={(e) => {

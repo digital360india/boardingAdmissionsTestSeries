@@ -210,7 +210,7 @@ const AddTestDialog = ({
                 Total Marks:
               </label>
               <input
-                type="number"
+                type="text"
                 placeholder="Total Marks"
                 name="totalMarks"
                 value={newTest.totalMarks}
