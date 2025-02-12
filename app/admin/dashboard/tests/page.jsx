@@ -323,18 +323,8 @@ const TestPage = () => {
     subject.toLowerCase().includes(subjectSearch.toLowerCase())
   );
 
-  if (loading)
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
-  if (!Array.isArray(tests) || tests.length === 0) {
-    return <p>No tests available.</p>;
-  }
+
+
   return (
     <div className="space-y-4 relative">
       <ToastContainer />

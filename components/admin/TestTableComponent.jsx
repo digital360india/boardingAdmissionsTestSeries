@@ -101,7 +101,7 @@ const TestTable = ({
       {paginatedData.map((test, index) => (
         <tr
           key={test.id}
-          className={`duration-100 ${
+          className={`duration-100 h-20 ${
             index % 2 !== 0 ? `bg-white` : `bg-white`
           } hover:bg-slate-300 text-base sm:text-sm md:text-base`}
         >
@@ -118,7 +118,7 @@ const TestTable = ({
             {test.totalMarks || "N/A"}
           </td>
           <td className="p-2 w-1/6 sm:w-1/4 md:w-1/6 lg:w-1/6">
-            <div className="relative inline-block">
+            <div className="md:absolute relative inline-block -mt-6">
               <button
                 onClick={() => toggleDropdown(test.id)}
                 className={`${
