@@ -13,6 +13,18 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     { title: "Dashboard", src: "/admin/dashboard", icon: <FaHome /> },
 
     {
+      title: "Course Packages",
+      src: "/admin/dashboard/coursepackages",
+      icon: <LucidePackageOpen />
+      
+    },
+    {
+      title: "Courses",
+      src: "/admin/dashboard/courses",
+      icon: <LucidePackageOpen />
+      
+    },
+    {
       title: "Test Packages",
       src: "/admin/dashboard/testpackages",
       icon: <LucidePackageOpen />
@@ -37,6 +49,12 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     {
       title: "My Leads",
       src: "/admin/dashboard/leads",
+      icon: <AiFillContacts />
+      
+    },
+    {
+      title: "Keywords",
+      src: "/admin/dashboard/keywords",
       icon: <AiFillContacts />
       
     },
@@ -91,9 +109,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </div>
 
         <ul className="pt-6 flex-1">
-          <div className="flex items-center gap-6 bg-[#075D70] text-white font-bold text-[18px] rounded-lg px-6 py-2 w-full cursor-pointer">
-            <img src="/Graph1.svg" className="h-10 w-10" alt="graph1" /> Dashboard
-          </div>
+         
           {Menus.map((Menu, index) => (
             <li
               key={index}
