@@ -119,7 +119,7 @@ export const TopNavBar = () => {
         <div className="flex gap-4 items-center">
           <div>
             <Link href="#">
-              <img src="/notifications.svg" alt="Notifications" />
+              <img src="/Notifications.svg" alt="Notifications" />
             </Link>
           </div>
           <div className="flex gap-4 items-center">

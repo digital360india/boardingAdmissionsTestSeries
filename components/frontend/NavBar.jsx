@@ -92,7 +92,7 @@ const Navbar = ({ scrollToTestPackages, logo }) => {
       >
         <div className="flex justify-between items-center mb-4">
           <Image
-            src="./Ace.svg"
+            src="/Ace.svg"
             alt="Logo"
             className="w-[100px]"
             width={1000}

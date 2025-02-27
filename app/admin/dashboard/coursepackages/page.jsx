@@ -6,6 +6,7 @@ import CoursePackagesList from "@/components/admin/AllCoursePackages";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import { TestContext } from "@/providers/testProvider";
+import "@/components/admin/ScrollbarCss.css";
 
 const Page = () => {
   const [courses, setCourses] = useState([]);
@@ -31,7 +32,7 @@ const Page = () => {
   const [schoolSearch, setSchoolSearch] = useState("");
   const [thumbnailImageFile, setThumbnailImageFile] = useState(null);
   const { testPackages } = useContext(TestContext);
-
+ 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -97,6 +98,16 @@ const Page = () => {
     fetchCoursePackages();
   }, []);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isModalOpen]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -158,7 +169,7 @@ const Page = () => {
     }
 
     try {
-      const docRef =  await addDoc(collection(db, "coursePackages"), {
+      const docRef = await addDoc(collection(db, "coursePackages"), {
         ...formData,
         price: parseFloat(formData.price),
         discountedPrice: parseFloat(formData.discountedPrice),
@@ -231,19 +242,23 @@ const Page = () => {
       </button>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[80vw] relative max-h-screen overflow-y-auto">
-            <button
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
+          <div className="bg-background00  rounded-lg shadow-lg max-w-5xl w-full relative max-h-screen overflow-y-auto border-background05 border custom-scrollbar">
+            {/* <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-600"
             >
               &times;
-            </button>
-            <h2 className="text-xl font-bold mb-4">Create Course Package</h2>
-            <form onSubmit={handlePackageCreation}>
-              <div className="flex flex-col md:flex-row gap-4">
+            </button> */}
+            <h2 className="text-2xl font-semibold mb-1 bg-background05 text-white p-4 text-center">
+              Create Course Package
+            </h2>
+            <form onSubmit={handlePackageCreation} className="p-6">
+              <div className="flex flex-col md:flex-row gap-4 ">
                 <div className="mb-4 w-1/2">
-                  <label className="block text-gray-700">Package Name:</label>
+                  <label className="block text-15px font-semibold text-neutral02">
+                    Package Name:
+                  </label>
                   <input
                     type="text"
                     name="packageName"
@@ -254,7 +269,7 @@ const Page = () => {
                   />
                 </div>
                 <div className="mb-4 w-1/2">
-                  <label className="block text-gray-700">
+                  <label className="block text-15px font-semibold text-neutral02">
                     Thumbnail Image:
                   </label>
                   <input
@@ -265,9 +280,11 @@ const Page = () => {
                   />
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col md:flex-row md:justify-between gap-4">
                 <div className="mb-4 w-1/4">
-                  <label className="block text-gray-700">Price:</label>
+                  <label className="block text-15px font-semibold text-neutral02">
+                    Price:
+                  </label>
                   <input
                     type="number"
                     step="0.01"
@@ -279,7 +296,7 @@ const Page = () => {
                   />
                 </div>
                 <div className="mb-4  w-1/4">
-                  <label className="block text-gray-700">
+                  <label className="block text-15px font-semibold text-neutral02">
                     Discounted Price:
                   </label>
                   <input
@@ -293,7 +310,9 @@ const Page = () => {
                   />
                 </div>
                 <div className="mb-4  w-1/4">
-                  <label className="block text-gray-700">Starting Date:</label>
+                  <label className="block text-15px font-semibold text-neutral02">
+                    Starting Date:
+                  </label>
                   <input
                     type="date"
                     name="startingDate"
@@ -316,7 +335,7 @@ const Page = () => {
                     onChange={(e) => setCourseSearch(e.target.value)}
                     className="mb-2 p-2 border border-gray-300 rounded"
                   />
-                  <div className="h-32 overflow-y-auto">
+                  <div className="h-32 overflow-y-auto custom-scrollbar">
                     {loading ? (
                       <p>Loading courses...</p>
                     ) : error ? (
@@ -353,7 +372,7 @@ const Page = () => {
                     onChange={(e) => setTestPackageSearch(e.target.value)}
                     className="mb-2 p-2 border border-gray-300 rounded"
                   />
-                  <div className="h-32 overflow-y-auto">
+                  <div className="h-32 overflow-y-auto custom-scrollbar">
                     {loading ? (
                       <p>Loading test packages...</p>
                     ) : error ? (
@@ -392,7 +411,7 @@ const Page = () => {
                     onChange={(e) => setSchoolSearch(e.target.value)}
                     className="mb-2 p-2 border border-gray-300 rounded"
                   />
-                  <div className="h-32 overflow-y-auto">
+                  <div className="h-32 overflow-y-auto custom-scrollbar">
                     {loading ? (
                       <p>Loading schools...</p>
                     ) : error ? (
@@ -420,7 +439,7 @@ const Page = () => {
                 </div>
                 <div className="mb-4 w-1/4 h-48 border p-2 rounded">
                   <h3 className="text-lg font-semibold mb-2">Select Boards:</h3>
-                  <div className="space-y-2 h-32 overflow-y-scroll">
+                  <div className="space-y-2 h-32 overflow-y-scroll custom-scrollbar">
                     {boards.map((board) => (
                       <div key={board.id} className="flex items-center gap-2">
                         <input
@@ -434,12 +453,21 @@ const Page = () => {
                   </div>
                 </div>
               </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
-              >
-                Create Package
-              </button>
+              <div className="flex justify-between">
+                <button
+                  type="submit"
+                  className="bg-background05 text-white px-4 py-2 rounded-md shadow-md "
+                >
+                  Create Package
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="mr-3 inline-flex justify-center py-2 px-4 border text-[#9999A4] border-[#9999A4] shadow-sm text-sm font-medium rounded-md  "
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>

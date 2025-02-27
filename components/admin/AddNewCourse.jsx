@@ -5,6 +5,7 @@ import { addDoc, collection, updateDoc, getDocs } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useRouter } from "next/navigation";
 import showError from "@/utils/functions/showError";
+import "@/components/admin/ScrollbarCss.css";
 
 const AddCourseDialog = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,18 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
   const [boardsList, setBoardsList] = useState([]);
   const router = useRouter();
 
+   useEffect(() => {
+        if (isOpen) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "auto";
+        }
+    
+        // Cleanup function to reset overflow when component unmounts
+        return () => {
+          document.body.style.overflow = "auto";
+        };
+      }, [isOpen]);
   useEffect(() => {
     const fetchSchoolsAndBoards = async () => {
       try {
@@ -161,17 +174,21 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 text-sm"
+      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 text-sm rounded-lg"
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative z-60"
+        className="bg-background00  rounded-lg shadow-lg max-w-5xl w-full  relative z-50 border-2 border-background05 "
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-md font-bold mb-2">Add New Course</h2>
-        <form onSubmit={handleSubmit}>
+        <h2 className=" bg-background05 p-4 text-white text-2xl font-semibold text-center rounded-t-lg">
+          Add New Course
+        </h2>
+        <form onSubmit={handleSubmit} className="p-6">
           <div className="mb-2">
-            <label className="block text-gray-700">Course Name:</label>
+            <label className="block text-15px font-semibold text-neutral02">
+              Course Name:
+            </label>
             <input
               type="text"
               name="courseName"
@@ -181,9 +198,11 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
               required
             />
           </div>
-          <div className="flex ">
+          <div className="flex gap-2">
             <div className="mb-2">
-              <label className="block text-gray-700">Hero Image:</label>
+              <label className="block text-15px font-semibold text-neutral02">
+                Hero Image:
+              </label>
               <input
                 type="file"
                 name="heroImage"
@@ -194,7 +213,9 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
             </div>
 
             <div className="mb-2">
-              <label className="block text-gray-700">Thumbnail Image:</label>
+              <label className="block text-15px font-semibold text-neutral02">
+                Thumbnail Image:
+              </label>
               <input
                 type="file"
                 name="thumbnailImage"
@@ -205,7 +226,9 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
             </div>
 
             <div className="mb-2">
-              <label className="block text-gray-700">Mobile View Image:</label>
+              <label className="block text-15px font-semibold text-neutral02">
+                Mobile View Image:
+              </label>
               <input
                 type="file"
                 name="mobileViewImage"
@@ -217,7 +240,9 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
           </div>
 
           <div className="mb-2">
-            <label className="block text-gray-700">Description:</label>
+            <label className="block text-15px font-semibold text-neutral02">
+              Description:
+            </label>
             <textarea
               name="description"
               value={formData.description}
@@ -229,7 +254,9 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
           </div>
 
           <div className="mb-2">
-            <label className="block text-gray-700">Course Price:</label>
+            <label className="block text-15px font-semibold text-neutral02">
+              Course Price:
+            </label>
             <input
               type="number"
               name="price"
@@ -240,48 +267,52 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
             />
           </div>
 
-          <div className="mb-2 h-20  overflow-y-scroll">
-            <label className="block text-gray-700">
-              Schools Being Targeted:
-            </label>
-            {schoolsList.map((school) => (
-              <div key={school.id}>
-                <label>
-                  <input
-                    type="checkbox"
-                    value={school.id}
-                    checked={formData.targetedSchools.includes(school.id)}
-                    onChange={(e) => handleCheckboxChange(e, "schools")}
-                  />
-                  {school.schoolName}
-                </label>
-              </div>
-            ))}
-          </div>
-
-          <div className="mb-2 h-20 overflow-y-scroll">
-            <label className="block text-gray-700">
-              Boards Being Targeted:
-            </label>
-            {boardsList.map((board) => (
-              <div key={board.id}>
-                <label>
-                  <input
-                    type="checkbox"
-                    value={board.id}
-                    checked={formData.targetedBoards.includes(board.id)}
-                    onChange={(e) => handleCheckboxChange(e, "boards")}
-                  />
-                  {board.boardName}
-                </label>
-              </div>
-            ))}
-          </div>
-
           <div className="flex justify-between">
+            <div>
+              <label className="block text-15px font-semibold text-neutral02">
+                Schools Being Targeted:
+              </label>
+              <div className="mb-2 h-24  overflow-y-scroll custom-scrollbar border border-gray-300 p-2">
+                {schoolsList.map((school) => (
+                  <div key={school.id}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value={school.id}
+                        checked={formData.targetedSchools.includes(school.id)}
+                        onChange={(e) => handleCheckboxChange(e, "schools")}
+                      />
+                      {school.schoolName}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-15px font-semibold text-neutral02 ">
+                Boards Being Targeted:
+              </label>
+              <div className="mb-2 h-24 overflow-y-scroll custom-scrollbar border border-gray-300 p-2">
+                {boardsList.map((board) => (
+                  <div key={board.id}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value={board.id}
+                        checked={formData.targetedBoards.includes(board.id)}
+                        onChange={(e) => handleCheckboxChange(e, "boards")}
+                      />
+                      {board.boardName}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex   justify-between pt-3">
             <button
               type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded"
+              className="bg-background05 text-white py-2 px-4 rounded-md"
               disabled={loading}
             >
               {loading ? "Adding..." : "Add Course"}
@@ -289,7 +320,7 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-500 text-white py-2 px-4 rounded"
+              className="text-[#9999A4] border-[#9999A4] py-2 px-4 rounded-md border"
             >
               Cancel
             </button>
