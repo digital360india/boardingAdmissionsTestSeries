@@ -684,7 +684,7 @@ const CoursePackagesList = ({ coursePackages, onDelete, setIsModalOpen }) => {
                                       />
                                       <label
                                         htmlFor={`board-${board.id}`}
-                                        className="ml-2 block text-sm text-gray-700"
+                                        className="ml-2 block text-15px font-semibold text-neutral02"
                                       >
                                         {board.boardName}
                                       </label>
@@ -716,7 +716,7 @@ const CoursePackagesList = ({ coursePackages, onDelete, setIsModalOpen }) => {
                                       />
                                       <label
                                         htmlFor={`school-${school.id}`}
-                                        className="ml-2 block text-sm text-gray-700"
+                                        className="ml-2 block text-15px font-semibold text-neutral02"
                                       >
                                         {school.schoolName}
                                       </label>
@@ -748,7 +748,7 @@ const CoursePackagesList = ({ coursePackages, onDelete, setIsModalOpen }) => {
                                       />
                                       <label
                                         htmlFor={`test-${testpackage.id}`}
-                                        className="ml-2 block text-sm text-gray-700"
+                                        className="ml-2 block text-15px font-semibold text-neutral02"
                                       >
                                         {testpackage.packageName}
                                       </label>
@@ -780,7 +780,7 @@ const CoursePackagesList = ({ coursePackages, onDelete, setIsModalOpen }) => {
                                       />
                                       <label
                                         htmlFor={`course-${course.id}`}
-                                        className="ml-2 block text-sm text-gray-700"
+                                        className="ml-2 block text-15px font-semibold text-neutral02"
                                       >
                                         {course.courseName}
                                       </label>

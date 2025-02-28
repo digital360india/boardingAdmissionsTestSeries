@@ -25,18 +25,18 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
   const [boardsList, setBoardsList] = useState([]);
   const router = useRouter();
 
-   useEffect(() => {
-        if (isOpen) {
-          document.body.style.overflow = "hidden";
-        } else {
-          document.body.style.overflow = "auto";
-        }
-    
-        // Cleanup function to reset overflow when component unmounts
-        return () => {
-          document.body.style.overflow = "auto";
-        };
-      }, [isOpen]);
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // Cleanup function to reset overflow when component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
   useEffect(() => {
     const fetchSchoolsAndBoards = async () => {
       try {
@@ -255,7 +255,7 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
 
           <div className="mb-2">
             <label className="block text-15px font-semibold text-neutral02">
-              Course Price:
+              Price:
             </label>
             <input
               type="number"
@@ -275,14 +275,17 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
               <div className="mb-2 h-24  overflow-y-scroll custom-scrollbar border border-gray-300 p-2">
                 {schoolsList.map((school) => (
                   <div key={school.id}>
-                    <label>
+                    <label className="flex items-start space-x-2 space-y-2">
                       <input
+                        className="mt-[10px]"
                         type="checkbox"
                         value={school.id}
                         checked={formData.targetedSchools.includes(school.id)}
                         onChange={(e) => handleCheckboxChange(e, "schools")}
                       />
-                      {school.schoolName}
+                      <span className="text-15px font-semibold text-neutral02 ">
+                        {school.schoolName}
+                      </span>
                     </label>
                   </div>
                 ))}
@@ -295,14 +298,17 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
               <div className="mb-2 h-24 overflow-y-scroll custom-scrollbar border border-gray-300 p-2">
                 {boardsList.map((board) => (
                   <div key={board.id}>
-                    <label>
-                      <input
+                    <label className="flex items-start space-x-2 space-y-2">
+                    <input
+                    className="mt-[10px]"
                         type="checkbox"
                         value={board.id}
                         checked={formData.targetedBoards.includes(board.id)}
                         onChange={(e) => handleCheckboxChange(e, "boards")}
                       />
-                      {board.boardName}
+                      <span className="text-15px font-semibold text-neutral02">
+                        {board.boardName}
+                      </span>
                     </label>
                   </div>
                 ))}

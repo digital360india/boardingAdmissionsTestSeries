@@ -345,16 +345,17 @@ const Page = () => {
                         {filteredCourses.map((course) => (
                           <div
                             key={course.id}
-                            className="flex items-center gap-2"
+                            className="space-x-2 flex items-start"
                           >
                             <input
+                              className="mt-1"
                               type="checkbox"
                               checked={selectedCourses.includes(course.id)}
                               onChange={(e) =>
                                 handleCourseSelection(e, course.id)
                               }
                             />
-                            <span>{course.courseName}</span>
+                            <span className="text-15px font-semibold text-neutral02">{course.courseName}</span>
                           </div>
                         ))}
                       </div>
@@ -382,9 +383,10 @@ const Page = () => {
                         {testPackages.map((testpackage) => (
                           <div
                             key={testpackage.id}
-                            className="flex items-center gap-2"
+                            className="space-x-2 flex items-start"
                           >
                             <input
+                              className="mt-[5.2px]"
                               type="checkbox"
                               checked={selectedTestPackage.includes(
                                 testpackage.id
@@ -393,7 +395,7 @@ const Page = () => {
                                 handleTestPackageSelection(e, testpackage.id)
                               }
                             />
-                            <span>{testpackage.packageName}</span>
+                            <span className="text-15px font-semibold text-neutral02">{testpackage.packageName}</span>
                           </div>
                         ))}
                       </div>
@@ -421,16 +423,17 @@ const Page = () => {
                         {filteredSchools.map((school) => (
                           <div
                             key={school.id}
-                            className="flex items-center gap-2"
+                            className="space-x-2 flex items-start"
                           >
                             <input
+                              className="mt-[5.2px]"
                               type="checkbox"
                               checked={selectedSchools.includes(school.id)}
                               onChange={(e) =>
                                 handleSchoolSelection(e, school.id)
                               }
                             />
-                            <span>{school.schoolName}</span>
+                            <span className="text-15px font-semibold text-neutral02">{school.schoolName}</span>
                           </div>
                         ))}
                       </div>
@@ -441,13 +444,17 @@ const Page = () => {
                   <h3 className="text-lg font-semibold mb-2">Select Boards:</h3>
                   <div className="space-y-2 h-32 overflow-y-scroll custom-scrollbar">
                     {boards.map((board) => (
-                      <div key={board.id} className="flex items-center gap-2">
+                      <div
+                        key={board.id}
+                        className="flex items-start space-x-2"
+                      >
                         <input
+                          className="mt-[5.2px]"
                           type="checkbox"
                           checked={selectedBoards.includes(board.id)}
                           onChange={(e) => handleBoardSelection(e, board.id)}
                         />
-                        <span>{board.boardName}</span>
+                        <span className="text-15px font-semibold text-neutral02">{board.boardName}</span>
                       </div>
                     ))}
                   </div>

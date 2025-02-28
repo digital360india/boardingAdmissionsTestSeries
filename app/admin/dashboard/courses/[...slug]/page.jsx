@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getDocs, collection } from "firebase/firestore";
 import { FiPenTool, FiVideo } from "react-icons/fi";
-import { MdAutoDelete, MdEdit, MdFolderDelete } from "react-icons/md";
+import { MdAutoDelete, MdDelete, MdEdit, MdFolderDelete } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 import "@/components/admin/ScrollbarCss.css";
 
@@ -42,6 +42,8 @@ const CoursePage = () => {
     videoUrl: "",
     pdfs: [],
   });
+  const [deletingLecture, setDeletingLecture] = useState(null);
+
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -91,6 +93,18 @@ const CoursePage = () => {
     fetchCourse();
   }, [uniqueID]);
 
+  useEffect(() => {
+    if (deletingLecture) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // Cleanup function to reset overflow when component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [deletingLecture]);
   const handleCourseUpdate = async () => {
     try {
       const docRef = doc(db, "courses", uniqueID);
@@ -113,6 +127,7 @@ const CoursePage = () => {
       setCourse((prev) => ({ ...prev, chapters: updatedChapters }));
 
       alert("Lecture deleted successfully");
+      setDeletingLecture(null);
     } catch (err) {
       console.error("Error deleting lecture:", err);
       alert("Failed to delete lecture");
@@ -506,7 +521,9 @@ const CoursePage = () => {
                   onChange={(e) => handleCheckboxChange(e, "schools")}
                   className="mr-2"
                 />
-                {school.schoolName}
+                <span className="text-15px font-semibold text-neutral02">
+                  {school.schoolName}
+                </span>
               </label>
             ))}
           </div>
@@ -525,7 +542,9 @@ const CoursePage = () => {
                   onChange={(e) => handleCheckboxChange(e, "boards")}
                   className="mr-2"
                 />
-                {board.boardName}
+                <span className="text-15px font-semibold text-neutral02">
+                  {board.boardName}
+                </span>
               </label>
             ))}
           </div>
@@ -732,10 +751,16 @@ const CoursePage = () => {
                             />
                           </label>
                           <button
-                            onClick={() => handleDeleteLecture(index, lIndex)}
+                            // onClick={() => handleDeleteLecture(index, lIndex)}
+                            onClick={() =>
+                              setDeletingLecture({
+                                chapterIndex: index,
+                                lectureIndex: lIndex,
+                              })
+                            }
                             className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors mt-2"
                           >
-                            <MdFolderDelete />
+                            <MdDelete className="w-6 h-6" />
                           </button>
                           <button
                             onClick={() => handleLectureEdit(index, lIndex)}
@@ -853,6 +878,36 @@ const CoursePage = () => {
           ))}
         </ul>
       </div>
+
+      {deletingLecture && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-background06 p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
+            <p className="mb-6">
+              Are you sure you want to delete this package?
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setDeletingLecture(null)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() =>
+                  handleDeleteLecture(
+                    deletingLecture.chapterIndex,
+                    deletingLecture.lectureIndex
+                  )
+                }
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isEditingLecture && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto">
