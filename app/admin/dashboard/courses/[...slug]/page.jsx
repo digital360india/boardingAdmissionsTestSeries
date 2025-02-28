@@ -464,31 +464,32 @@ const CoursePage = () => {
         </button>
       </div>
       <div className="md:flex justify-between md:gap-10 ">
-
-      <div className="mb-4 md:w-[50%]">
-        <label className="block text-15px font-semibold text-neutral02 mb-2">
-          Course Name:
-        </label>
-        <input
-          type="text"
-          value={course.courseName || ""}
-          onChange={(e) => setCourse({ ...course, courseName: e.target.value })}
-          className="border border-gray-300 p-4 md:h-16 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      <div className="mb-4 md:w-[50%]">
-        <label className="block text-15px font-semibold text-neutral02 mb-2">
-          Description:
-        </label>
-        <textarea
-          value={course.description || ""}
-          onChange={(e) =>
-            setCourse({ ...course, description: e.target.value })
-          }
-          className="border border-gray-300 p-3 rounded-lg w-full h-28 md:h-16 custom-scrollbar overflow-y-scroll resize-none shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <div className="mb-4 md:w-[50%]">
+          <label className="block text-15px font-semibold text-neutral02 mb-2">
+            Course Name:
+          </label>
+          <input
+            type="text"
+            value={course.courseName || ""}
+            onChange={(e) =>
+              setCourse({ ...course, courseName: e.target.value })
+            }
+            className="border border-gray-300 p-4 md:h-16 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+        </div>
+        <div className="mb-4 md:w-[50%]">
+          <label className="block text-15px font-semibold text-neutral02 mb-2">
+            Description:
+          </label>
+          <textarea
+            value={course.description || ""}
+            onChange={(e) =>
+              setCourse({ ...course, description: e.target.value })
+            }
+            className="border border-gray-300 p-3 rounded-lg w-full h-28 md:h-16 custom-scrollbar overflow-y-scroll resize-none shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
-          </div>
 
       <div className="md:flex justify-between md:gap-10 mb-5">
         <div className="md:w-[50%]">
@@ -530,7 +531,6 @@ const CoursePage = () => {
           </div>
         </div>
       </div>
-     
 
       <h2 className="text-2xl font-semibold mt-8 mb-4 text-gray-800">
         Add Chapter
@@ -574,7 +574,7 @@ const CoursePage = () => {
             {newChapter.lectures.map((lecture, idx) => (
               <div key={idx} className="mb-6">
                 <label className="block text-gray-700 text-md font-medium mb-2">
-                  Lecture Name:
+                  Lecture Name: {idx}
                 </label>
                 <input
                   type="text"
@@ -658,7 +658,11 @@ const CoursePage = () => {
                 Add Lectures to Chapter
               </button>
               <button
-                onClick={() => setShowLectureDialog(false)}
+                onClick={() => {
+                  setShowLectureDialog(false);
+                  setNewLectureDescription(""); // Reset lecture description
+                  setNewChapter({ lectures: [] }); // Reset lectures array
+                }}
                 className="bg-red-600 text-white p-2 rounded-lg ml-2 hover:bg-red-700 transition-colors"
               >
                 Cancel
