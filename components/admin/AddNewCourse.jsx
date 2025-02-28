@@ -267,8 +267,8 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
             />
           </div>
 
-          <div className="flex justify-between">
-            <div>
+          <div className="flex justify-between gap-10">
+            <div className="md:w-[50%]">
               <label className="block text-15px font-semibold text-neutral02">
                 Schools Being Targeted:
               </label>
@@ -288,7 +288,7 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
                 ))}
               </div>
             </div>
-            <div>
+            <div className="md:w-[50%]">
               <label className="block text-15px font-semibold text-neutral02 ">
                 Boards Being Targeted:
               </label>
@@ -311,18 +311,18 @@ const AddCourseDialog = ({ isOpen, onClose }) => {
           </div>
           <div className="flex   justify-between pt-3">
             <button
-              type="submit"
-              className="bg-background05 text-white py-2 px-4 rounded-md"
-              disabled={loading}
-            >
-              {loading ? "Adding..." : "Add Course"}
-            </button>
-            <button
               type="button"
               onClick={onClose}
               className="text-[#9999A4] border-[#9999A4] py-2 px-4 rounded-md border"
             >
               Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-background05 text-white py-2 px-4 rounded-md"
+              disabled={loading}
+            >
+              {loading ? "Adding..." : "Add Course"}
             </button>
           </div>
 

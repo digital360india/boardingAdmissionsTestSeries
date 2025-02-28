@@ -32,7 +32,7 @@ const Page = () => {
   const [schoolSearch, setSchoolSearch] = useState("");
   const [thumbnailImageFile, setThumbnailImageFile] = useState(null);
   const { testPackages } = useContext(TestContext);
- 
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -175,7 +175,7 @@ const Page = () => {
         discountedPrice: parseFloat(formData.discountedPrice),
         startingDate: new Date(formData.startingDate).toISOString(),
         dateOfCreation: new Date().toISOString(),
-        testPackages: selectedTestPackage,
+        targetedTestPackages: selectedTestPackage,
         courses: selectedCourses,
         schools: selectedSchools,
         boards: selectedBoards,
@@ -234,12 +234,12 @@ const Page = () => {
 
   return (
     <div className="p-4">
-      <button
+      {/* <button
         onClick={() => setIsModalOpen(true)}
         className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition "
       >
         Create Course Package
-      </button>
+      </button> */}
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
@@ -455,17 +455,17 @@ const Page = () => {
               </div>
               <div className="flex justify-between">
                 <button
-                  type="submit"
-                  className="bg-background05 text-white px-4 py-2 rounded-md shadow-md "
-                >
-                  Create Package
-                </button>
-                <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="mr-3 inline-flex justify-center py-2 px-4 border text-[#9999A4] border-[#9999A4] shadow-sm text-sm font-medium rounded-md  "
                 >
                   Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-background05 text-white px-4 py-2 rounded-md shadow-md "
+                >
+                  Create Package
                 </button>
               </div>
             </form>
@@ -476,6 +476,7 @@ const Page = () => {
       <CoursePackagesList
         coursePackages={coursePackages}
         onDelete={handleDelete}
+        setIsModalOpen={setIsModalOpen}
       />
     </div>
   );

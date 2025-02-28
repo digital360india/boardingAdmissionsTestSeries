@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { db } from "@/firebase/firebase"; 
+import { db } from "@/firebase/firebase";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import Link from "next/link";
+
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
@@ -30,12 +31,16 @@ const CourseList = () => {
   }, []);
 
   const handleDelete = async (courseId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this course?"
+    );
     if (!confirmDelete) return;
 
     try {
       await deleteDoc(doc(db, "courses", courseId));
-      setCourses((prevCourses) => prevCourses.filter((course) => course.id !== courseId));
+      setCourses((prevCourses) =>
+        prevCourses.filter((course) => course.id !== courseId)
+      );
     } catch (err) {
       console.error("Error deleting course:", err);
       setError("Failed to delete the course. Please try again.");
@@ -56,25 +61,36 @@ const CourseList = () => {
   };
 
   return (
-    <div className="course-list p-4">
-      <h2 className="text-xl font-bold mb-4">Courses</h2>
+    <div className="course-list ">
+      {/* <h2 className="text-xl font-bold mb-4">Courses</h2> */}
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => (
-          <div key={course.id} className="course-card border rounded-lg p-4 shadow-lg relative">
-            <Link href={`/admin/dashboard/courses/${course.id}`} className="block min-h-96">
-              <img
-                src={course?.heroImage}
-                alt={course?.courseName}
-                className="w-full h-40 object-cover rounded"
-              />
-              <h3 className="text-lg font-semibold mt-2">{course.courseName}</h3>
-              <p className="text-gray-700 mt-2">{limitText(course.description,80)}</p>
-            </Link>
-            <button 
-              onClick={() => handleDelete(course.id)}
-              className="mt-4 text-red-500 hover:text-red-700 absolute bottom-4 right-4"
+          <div
+            key={course.id}
+            className="course-card border rounded-lg p-4 shadow-lg relative"
+          >
+            <img
+              src={course?.heroImage}
+              alt={course?.courseName}
+              className="w-full h-40 object-cover rounded"
+            />
+            <h3 className="text-lg font-semibold mt-2">{course.courseName}</h3>
+            <p className="text-gray-700 mt-2">
+              {limitText(course.description, 80)}
+            </p>
+            <Link
+              href={`/admin/dashboard/courses/${course.id}`}
+              className="block mt-12"
             >
-              Delete Course
+              <button className=" text-white bg-background05 hover:text-[#075D70] hover:bg-white hover:border-[#075D70] absolute bottom-4 left-4 border  rounded-md p-2">
+                View Course
+              </button>
+            </Link>
+            <button
+              onClick={() => handleDelete(course.id)}
+              className="mt-4 text-white bg-red-500 hover:text-red-700  hover:bg-white hover:border-red-600 absolute bottom-4 right-4 border border-red-600 rounded-md p-2"
+            >
+              Delete
             </button>
           </div>
         ))}
@@ -83,4 +99,4 @@ const CourseList = () => {
   );
 };
 
-export default CourseList
+export default CourseList;

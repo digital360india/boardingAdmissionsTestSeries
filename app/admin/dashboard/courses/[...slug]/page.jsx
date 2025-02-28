@@ -8,6 +8,7 @@ import { getDocs, collection } from "firebase/firestore";
 import { FiPenTool, FiVideo } from "react-icons/fi";
 import { MdAutoDelete, MdEdit, MdFolderDelete } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
+import "@/components/admin/ScrollbarCss.css";
 
 const CoursePage = () => {
   const router = useRouter();
@@ -449,8 +450,7 @@ const CoursePage = () => {
   if (error)
     return <div className="text-center py-6 text-red-600">{error}</div>;
   return (
-    <div className="container mx-auto p-8 bg-gray-50 rounded-lg shadow-lg">
-      
+    <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
       <div className="flex justify-between items-center">
         {" "}
         <h1 className="text-2xl font-extrabold mb-6 text-gray-900">
@@ -458,60 +458,26 @@ const CoursePage = () => {
         </h1>
         <button
           onClick={handleCourseUpdate}
-          className="bg-green-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-800 transition-colors"
         >
           Save{" "}
         </button>
       </div>
-      <div className="mb-6">
-        <label className="block text-gray-700 text-lg font-medium mb-2">
+      <div className="md:flex justify-between md:gap-10 ">
+
+      <div className="mb-4 md:w-[50%]">
+        <label className="block text-15px font-semibold text-neutral02 mb-2">
           Course Name:
         </label>
         <input
           type="text"
           value={course.courseName || ""}
           onChange={(e) => setCourse({ ...course, courseName: e.target.value })}
-          className="border border-gray-300 p-4 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border border-gray-300 p-4 md:h-16 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-
-      <div className="mb-4">
-        <h2 className="text-xl ">Targeted Schools : </h2>
-        <div className="flex flex-col max-h-72 overflow-y-scroll">
-          {schoolsList.map((school) => (
-            <label key={school.id} className="mr-4">
-              <input
-                type="checkbox"
-                value={school.id}
-                checked={course.targetedSchools.includes(school.id)}
-                onChange={(e) => handleCheckboxChange(e, "schools")}
-                className="mr-2"
-              />
-              {school.schoolName}
-            </label>
-          ))}
-        </div>
-      </div>
-      <div className="mb-4">
-        <h2 className="text-xl ">Targeted Boards : </h2>
-        <div className="flex flex-col max-h-72 overflow-y-scroll">
-          {boardsList.map((board) => (
-            <label key={board.id} className="mr-4">
-              <input
-                type="checkbox"
-                value={board.id}
-                checked={course.targetedBoards.includes(board.id)}
-                onChange={(e) => handleCheckboxChange(e, "boards")}
-                className="mr-2"
-              />
-              {board.boardName}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-gray-700 text-lg font-medium mb-2">
+      <div className="mb-4 md:w-[50%]">
+        <label className="block text-15px font-semibold text-neutral02 mb-2">
           Description:
         </label>
         <textarea
@@ -519,15 +485,58 @@ const CoursePage = () => {
           onChange={(e) =>
             setCourse({ ...course, description: e.target.value })
           }
-          className="border border-gray-300 p-4 rounded-lg w-full h-20 overflow-y-scroll resize-none shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+          className="border border-gray-300 p-3 rounded-lg w-full h-28 md:h-16 custom-scrollbar overflow-y-scroll resize-none shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
       </div>
+          </div>
+
+      <div className="md:flex justify-between md:gap-10 mb-5">
+        <div className="md:w-[50%]">
+          <h2 className="text-15px font-semibold text-neutral02 mb-2">
+            Targeted Schools :{" "}
+          </h2>
+          <div className="flex flex-col max-h-28 overflow-y-scroll custom-scrollbar  rounded-md border border-gray-300 p-2">
+            {schoolsList.map((school) => (
+              <label key={school.id} className="mr-4">
+                <input
+                  type="checkbox"
+                  value={school.id}
+                  checked={course.targetedSchools.includes(school.id)}
+                  onChange={(e) => handleCheckboxChange(e, "schools")}
+                  className="mr-2"
+                />
+                {school.schoolName}
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className="md:w-[50%]">
+          <h2 className="text-15px font-semibold text-neutral02 mt-4 md:mt-0 mb-2">
+            Targeted Boards :{" "}
+          </h2>
+          <div className="flex flex-col max-h-28 overflow-y-scroll rounded-md custom-scrollbar border border-gray-300 p-2">
+            {boardsList.map((board) => (
+              <label key={board.id} className="mr-4">
+                <input
+                  type="checkbox"
+                  value={board.id}
+                  checked={course.targetedBoards.includes(board.id)}
+                  onChange={(e) => handleCheckboxChange(e, "boards")}
+                  className="mr-2"
+                />
+                {board.boardName}
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+     
 
       <h2 className="text-2xl font-semibold mt-8 mb-4 text-gray-800">
         Add Chapter
       </h2>
       <div className="mb-6">
-        <label className="block text-gray-700 text-lg font-medium mb-2">
+        <label className="block text-15px font-semibold text-neutral02 mb-2">
           Chapter Name:
         </label>
         <input
@@ -538,6 +547,22 @@ const CoursePage = () => {
           }
           className="border border-gray-300 p-4 rounded-lg w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+      </div>
+
+      <div className="space-x-4">
+        <button
+          onClick={handleAddChapter}
+          className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition-colors"
+        >
+          Add Chapter
+        </button>
+
+        <button
+          onClick={handleDeleteCourse}
+          className="bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 transition-colors mt-4"
+        >
+          Delete Course
+        </button>
       </div>
 
       {showLectureDialog && (
@@ -642,20 +667,6 @@ const CoursePage = () => {
           </div>
         </div>
       )}
-
-      <button
-        onClick={handleAddChapter}
-        className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition-colors"
-      >
-        Add Chapter
-      </button>
-
-      <button
-        onClick={handleDeleteCourse}
-        className="bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 transition-colors mt-4"
-      >
-        Delete Course
-      </button>
 
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Chapters</h2>

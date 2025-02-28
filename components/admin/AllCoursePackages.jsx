@@ -11,7 +11,7 @@ import {
 import { CiClock2 } from "react-icons/ci";
 import { MdGroups, MdDelete, MdEdit } from "react-icons/md";
 
-const CoursePackagesList = ({ coursePackages, onDelete }) => {
+const CoursePackagesList = ({ coursePackages, onDelete, setIsModalOpen }) => {
   const [editingPackage, setEditingPackage] = useState(null);
   const [deletingPackage, setDeletingPackage] = useState(null);
 
@@ -33,18 +33,18 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
   const [coursePackagesState, setCoursePackagesState] =
     useState(coursePackages);
 
-    useEffect(() => {
-      if (editingPackage || deletingPackage) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "auto";
-      }
-  
-      // Cleanup function to reset overflow when component unmounts
-      return () => {
-        document.body.style.overflow = "auto";
-      };
-    }, [editingPackage, deletingPackage]);
+  useEffect(() => {
+    if (editingPackage || deletingPackage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // Cleanup function to reset overflow when component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [editingPackage, deletingPackage]);
   const fetchBoardsAndSchools = async () => {
     try {
       const boardsSnapshot = await getDocs(collection(db, "boards"));
@@ -159,11 +159,21 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
     courses.find((course) => course.id === courseId)?.courseName || "Unknown";
 
   return (
-    <div className="bg-white  min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="  min-h-screen  px-4 ">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Course Packages
-        </h2>
+        <div className="flex justify-between pb-4">
+          <h2 className="text-3xl font-bold text-center text-gray-800 ">
+            Course Packages
+          </h2>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-500 text-white p-2 rounded-md shadow-md hover:bg-blue-600 transition "
+          >
+            <span className="font-bold text-[20px]">+</span> Create Course
+            Package
+          </button>
+        </div>
         <div className="">
           {coursePackagesState.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -273,14 +283,14 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
                                 key={schoolId}
                                 className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded"
                               >
-                                {getCourseName(schoolId)}
+                                {getSchoolName(schoolId)}
                               </span>
                             ))}
                           </div>
                         </div>
                       </div>
                       <div className="absolute left-6 bottom-5">
-                        <div className="flex gap-5">
+                        <div className="flex gap-4">
                           <div
                             onClick={() => {
                               setEditingPackage(pkg.id);
@@ -299,16 +309,16 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
                                 schools: pkg.schools || [],
                               });
                             }}
-                            className="text-yellow-500   cursor-pointer hover:text-yellow-600 "
+                            className="text-yellow-500   cursor-pointer hover:text-yellow-600 border border-yellow-500 rounded-md"
                           >
-                            <MdEdit className="w-5 h-5" />
+                            <MdEdit className="w-6 h-6" />
                           </div>
                           <div
                             // onClick={() => handleDelete(pkg.id)}
                             onClick={() => setDeletingPackage(pkg.id)}
-                            className=" text-red-500 hover:text-red-600 cursor-pointer font-bold "
+                            className=" text-red-500 hover:text-red-600 cursor-pointer font-bold border border-red-500 rounded-md"
                           >
-                            <MdDelete className="w-5 h-5" />
+                            <MdDelete className="w-6 h-6" />
                           </div>
                         </div>
                       </div>
@@ -782,17 +792,17 @@ const CoursePackagesList = ({ coursePackages, onDelete }) => {
 
                             <div className="mt-8 flex justify-between">
                               <button
-                                type="submit"
-                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-background05"
-                              >
-                                Save Changes
-                              </button>
-                              <button
                                 type="button"
                                 onClick={() => setEditingPackage(null)}
                                 className="mr-3 inline-flex justify-center py-2 px-4 border shadow-sm text-sm font-medium rounded-md text-[#9999A4] border-[#9999A4] "
                               >
                                 Cancel
+                              </button>
+                              <button
+                                type="submit"
+                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-background05"
+                              >
+                                Save Changes
                               </button>
                             </div>
                           </form>
