@@ -5,30 +5,31 @@ import { FaEdit, FaHome, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { UserContext } from "@/providers/userProvider";
 import { LucidePackageOpen } from "lucide-react";
-import { AiFillContacts } from "react-icons/ai";
+import { LuWholeWord } from "react-icons/lu";
+import { FaNoteSticky } from "react-icons/fa6";
+import { PiNotepadFill,PiChalkboardTeacherBold } from "react-icons/pi";
+import { MdLeaderboard } from "react-icons/md";
 
 export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { handleLogout } = useContext(UserContext);
   const Menus = [
-    { title: "Dashboard", src: "/admin/dashboard", icon: <FaHome /> },
-
+    { title: "Dashboard", 
+      src: "/admin/dashboard", 
+      icon: <FaHome /> },
     {
       title: "Course Packages",
       src: "/admin/dashboard/coursepackages",
-      icon: <LucidePackageOpen />
-      
+      icon: <LucidePackageOpen />,
     },
     {
       title: "Courses",
       src: "/admin/dashboard/courses",
-      icon: <LucidePackageOpen />
-      
+      icon: <PiChalkboardTeacherBold />      ,
     },
     {
       title: "Test Packages",
       src: "/admin/dashboard/testpackages",
-      icon: <LucidePackageOpen />
-      
+      icon: <PiNotepadFill />      ,
     },
     {
       title: "Test",
@@ -38,7 +39,7 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     {
       title: "Results",
       src: "/admin/dashboard/results",
-      icon: <FaEdit />,
+      icon: <FaNoteSticky />,
     },
     {
       title: "Users",
@@ -49,22 +50,20 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     {
       title: "My Leads",
       src: "/admin/dashboard/leads",
-      icon: <AiFillContacts />
-      
+      icon: <MdLeaderboard />
+      ,
     },
     {
       title: "Keywords",
       src: "/admin/dashboard/keywords",
-      icon: <AiFillContacts />
-      
+      icon: <LuWholeWord />,
     },
-
   ];
   const path = usePathname();
 
   return (
     <div className="md:block hidden">
-       <div
+      <div
         className={`fixed top-0 left-0 h-screen bg-white p-5 pt-8 duration-300 flex flex-col ${
           isSidebarOpen ? "w-72" : "w-[85px]"
         }`}
@@ -109,7 +108,6 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </div>
 
         <ul className="pt-6 flex-1">
-         
           {Menus.map((Menu, index) => (
             <li
               key={index}
@@ -159,8 +157,6 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             </span>
           </button>
         </ul>
-
-       
       </div>
     </div>
   );
