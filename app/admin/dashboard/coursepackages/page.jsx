@@ -185,7 +185,7 @@ const Page = () => {
         packageUID: "aceentranceexams",
       });
 
-      await updateDoc(docRef, { uid: docRef.id });
+      await updateDoc(docRef, { id: docRef.id });
 
       const querySnapshot = await getDocs(collection(db, "coursePackages"));
       const packageList = querySnapshot.docs.map((doc) => ({
