@@ -7,6 +7,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { TestSeriesContext } from "@/providers/testSeriesProvider";
 import { TestContext } from "@/providers/testProvider";
 import "@/components/admin/ScrollbarCss.css";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [courses, setCourses] = useState([]);
@@ -30,6 +31,7 @@ const Page = () => {
   const [courseSearch, setCourseSearch] = useState("");
   const [testPackageSearch, setTestPackageSearch] = useState("");
   const [schoolSearch, setSchoolSearch] = useState("");
+  const [creating, setCreating] = useState(false);
   const [thumbnailImageFile, setThumbnailImageFile] = useState(null);
   const { testPackages } = useContext(TestContext);
 
@@ -152,7 +154,7 @@ const Page = () => {
 
   const handlePackageCreation = async (e) => {
     e.preventDefault();
-
+    setCreating(true);
     let thumbnailImageUrl = "";
     if (thumbnailImageFile) {
       const storageRef = ref(storage, `thumbnails/${thumbnailImageFile.name}`);
@@ -180,9 +182,10 @@ const Page = () => {
         schools: selectedSchools,
         boards: selectedBoards,
         thumbnailImage: thumbnailImageUrl,
+        packageUID: "aceentranceexams",
       });
 
-      await updateDoc(docRef, { id: docRef.id });
+      await updateDoc(docRef, { uid: docRef.id });
 
       const querySnapshot = await getDocs(collection(db, "coursePackages"));
       const packageList = querySnapshot.docs.map((doc) => ({
@@ -190,7 +193,7 @@ const Page = () => {
         ...doc.data(),
       }));
       setCoursePackages(packageList);
-
+      setCreating(false);
       setFormData({
         packageName: "",
         price: "",
@@ -204,10 +207,11 @@ const Page = () => {
       setSelectedBoards([]);
       setThumbnailImageFile(null);
       setIsModalOpen(false);
-      alert("Course package created successfully!");
+      toast.success("Course package created successfully!");
     } catch (err) {
+      setCreating(false);
       console.error("Error creating course package:", err);
-      setError("Failed to create course package. Please try again.");
+      toast.error("Failed to create course package. Please try again.");
     }
   };
   const handleFileChange = (e) => {
@@ -234,22 +238,9 @@ const Page = () => {
 
   return (
     <div className="p-4">
-      {/* <button
-        onClick={() => setIsModalOpen(true)}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition "
-      >
-        Create Course Package
-      </button> */}
-
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
           <div className="bg-background00  rounded-lg shadow-lg max-w-5xl w-full relative max-h-screen overflow-y-auto border-background05 border custom-scrollbar">
-            {/* <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-600"
-            >
-              &times;
-            </button> */}
             <h2 className="text-2xl font-semibold mb-1 bg-background05 text-white p-4 text-center">
               Create Course Package
             </h2>
@@ -355,7 +346,9 @@ const Page = () => {
                                 handleCourseSelection(e, course.id)
                               }
                             />
-                            <span className="text-15px font-semibold text-neutral02">{course.courseName}</span>
+                            <span className="text-15px font-semibold text-neutral02">
+                              {course.courseName}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -395,7 +388,9 @@ const Page = () => {
                                 handleTestPackageSelection(e, testpackage.id)
                               }
                             />
-                            <span className="text-15px font-semibold text-neutral02">{testpackage.packageName}</span>
+                            <span className="text-15px font-semibold text-neutral02">
+                              {testpackage.packageName}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -433,7 +428,9 @@ const Page = () => {
                                 handleSchoolSelection(e, school.id)
                               }
                             />
-                            <span className="text-15px font-semibold text-neutral02">{school.schoolName}</span>
+                            <span className="text-15px font-semibold text-neutral02">
+                              {school.schoolName}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -454,7 +451,9 @@ const Page = () => {
                           checked={selectedBoards.includes(board.id)}
                           onChange={(e) => handleBoardSelection(e, board.id)}
                         />
-                        <span className="text-15px font-semibold text-neutral02">{board.boardName}</span>
+                        <span className="text-15px font-semibold text-neutral02">
+                          {board.boardName}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -470,9 +469,14 @@ const Page = () => {
                 </button>
                 <button
                   type="submit"
-                  className="bg-background05 text-white px-4 py-2 rounded-md shadow-md "
+                  disabled={creating}
+                  className={` px-4 py-2 rounded-md shadow-md ${
+                    creating
+                      ? "bg-white text-background05 border border-background05"
+                      : "bg-background05 text-white"
+                  } `}
                 >
-                  Create Package
+                  {creating ? "Creating..." : "Create Package"}
                 </button>
               </div>
             </form>
