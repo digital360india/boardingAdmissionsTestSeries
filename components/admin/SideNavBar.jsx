@@ -9,6 +9,7 @@ import { LuWholeWord } from "react-icons/lu";
 import { FaNoteSticky } from "react-icons/fa6";
 import { PiNotepadFill,PiChalkboardTeacherBold } from "react-icons/pi";
 import { MdLeaderboard } from "react-icons/md";
+import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 
 export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { handleLogout } = useContext(UserContext);
@@ -20,6 +21,11 @@ export const SideNavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       title: "Course Packages",
       src: "/admin/dashboard/coursepackages",
       icon: <LucidePackageOpen />,
+    },
+    {
+      title: "Payments",
+      src: "/admin/dashboard/payments",
+      icon: <RiMoneyRupeeCircleLine />,
     },
     {
       title: "Courses",
