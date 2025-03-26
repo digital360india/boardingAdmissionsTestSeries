@@ -203,6 +203,7 @@ const PaymentPageAdmin = () => {
               <TableCell>Email</TableCell>
               <TableCell>Phone</TableCell>
               <TableCell>Amount</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -213,6 +214,17 @@ const PaymentPageAdmin = () => {
                 <TableCell>{payment.email}</TableCell>
                 <TableCell>{payment.phone}</TableCell>
                 <TableCell>₹{payment.paymentPrice}</TableCell>
+                <TableCell>
+                  {payment.paid ? (
+                    <span className="bg-green-500 px-2 py-1 rounded text-white">
+                      Paid
+                    </span>
+                  ) : (
+                    <span className="bg-red-500 px-2 py-1 rounded text-white">
+                      Pending
+                    </span>
+                  )}
+                </TableCell>
                 <TableCell align="center">
                   <Stack spacing={1}>
                     <Link
