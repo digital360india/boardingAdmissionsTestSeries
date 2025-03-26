@@ -1,206 +1,244 @@
 "use client"
-import { usePathname } from 'next/navigation';
-import { startTransition, useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '@/firebase/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import axios from 'axios';
+import { collection, getDocs, deleteDoc, doc, setDoc } from 'firebase/firestore';
+import {
+  Container,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Link,
+  Stack,
+  Collapse,
+} from '@mui/material';
 
-const PaymentDetail = () => {
-  const path = usePathname();
-  const segments = path.split('/');
-  const id = segments[2]; // URL format: /somePath/{id}/...
-  const [paymentData, setPaymentData] = useState(null);
-  const [loading, setLoading] = useState(true);
+const PaymentPageAdmin = () => {
+  const [openForm, setOpenForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    paymentTitle: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    paymentPrice: '',
+  });
+  const [payments, setPayments] = useState([]);
+
+  // Fetch payments from Firestore
+  const getAllPaymentsData = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'payments'));
+      const paymentsList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPayments(paymentsList);
+    } catch (error) {
+      console.error('Error fetching payments:', error);
+    }
+  };
 
   useEffect(() => {
-    if (id) {
-      fetchPaymentData(id);
-    }
-  }, [id]);
+    getAllPaymentsData();
+  }, []);
 
-  const fetchPaymentData = async (paymentId) => {
-    try {
-      const docRef = doc(db, 'payments', paymentId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setPaymentData({ id: docSnap.id, ...docSnap.data() });
-        console.log("Fetched data:", docSnap.data());
-      } else {
-        console.error('No such document!');
-      }
-    } catch (error) {
-      console.error('Error fetching payment:', error);
-    } finally {
-      setLoading(false);
+  // Generate a unique custom ID: BA-Sept-XXXXX-{timestamp}
+  const generateCustomId = (name) => {
+    const prefix = 'BA-Sept-';
+    let trimmedName = name.trim().toUpperCase().slice(0, 5);
+    while (trimmedName.length < 5) {
+      trimmedName += 'X';
     }
+    const timestamp = Date.now(); // Unique timestamp in milliseconds
+    return `${prefix}${trimmedName}-${timestamp}`;
   };
 
-  const createOrders = async ({ productId, packageName, totalAmount, currency }) => {
+  // Add new payment
+  const addNewPayment = async () => {
     try {
-      const response = await axios.post("/api/create-order", {
-        productId,
-        packageName,
-        totalAmount: Number(totalAmount),
-        currency,
+      const customId = generateCustomId(formData.name);
+      const dataToSave = { ...formData, id: customId };
+      await setDoc(doc(db, 'payments', customId), dataToSave);
+      setPayments([...payments, dataToSave]);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        paymentTitle: '',
+        city: '',
+        postalCode: '',
+        paymentPrice: '',
       });
-      return response.data;
+      setOpenForm(false); // close the form after submission
     } catch (error) {
-      console.error("Error creating orders", error);
-      return { error: "Error creating orders" };
+      console.error('Error adding payment:', error);
     }
   };
 
-  const verifyPayment = async (data) => {
+  // Delete payment by id
+  const deletePayment = async (id) => {
     try {
-      const response = await axios.post("/api/verify-payment", data);
-      return response.data;
+      await deleteDoc(doc(db, 'payments', id));
+      setPayments(payments.filter((payment) => payment.id !== id));
     } catch (error) {
-      console.error("Error verifying payment", error);
-      return { error: "Error verifying payment" };
+      console.error('Error deleting payment:', error);
     }
   };
-
-  function handleBuy() {
-    startTransition(async () => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.async = true;
-
-      script.onload = async () => {
-        const paymentPrice = Number(paymentData.paymentPrice) || 0;
-        const totalAmount = paymentPrice * 1.18; // including 18% GST
-
-        const result = await createOrders({
-          productId: id,
-          packageName: paymentData.paymentTitle,
-          totalAmount,
-          currency: "INR",
-        });
-
-        if (result.error) {
-          alert("Error creating orders");
-          return;
-        }
-
-        const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure this is set in your env
-          amount: result.amount,
-          currency: "INR",
-          name: "Payment Gateway",
-          order_id: result.orderId,
-          handler: async function (response) {
-            const dateOfPurchase = new Date().toLocaleString("en-US", {
-              timeZone: "Asia/Kolkata",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-              second: "numeric",
-              hour12: true,
-              timeZoneName: "short",
-            });
-            const dateOfExpiry = new Date(new Date().getTime() + 180 * 24 * 60 * 60 * 1000)
-              .toLocaleString("en-US", {
-                timeZone: "Asia/Kolkata",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric",
-                hour12: true,
-                timeZoneName: "short",
-              });
-            const paymentObject = {
-              email: paymentData.email,
-              title: paymentData.paymentTitle,
-              phoneNumber: paymentData.phone,
-              dateOfPurchase,
-              dateOfExpiry,
-            };
-
-            const verifyResult = await verifyPayment(response);
-            if (verifyResult.error) {
-              alert("Payment Failed");
-              return;
-            }
-            alert("Payment Successful");
-          },
-        };
-
-        const rzp = new window.Razorpay(options);
-        rzp.open();
-      };
-
-      document.body.appendChild(script);
-    });
-  }
-
-  if (loading)
-    return <div className="text-center text-2xl mt-10">Loading...</div>;
-  if (!paymentData)
-    return <div className="text-center text-2xl mt-10">Payment not found.</div>;
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left side: Payment Information */}
-        <div className="bg-white shadow-lg rounded-lg p-8">
-          <h2 className="text-4xl font-bold mb-6">Payment Information</h2>
-          <div className="mb-6">
-            <p className="text-lg text-gray-600">Payment Title</p>
-            <p className="text-2xl font-semibold">{paymentData.paymentTitle}</p>
-          </div>
-          <div className="mb-6">
-            <p className="text-lg text-gray-600">Purchaser Name</p>
-            <p className="text-2xl font-semibold">{paymentData.name}</p>
-          </div>
-          <div className="mb-6">
-            <p className="text-lg text-gray-600">Payment Date</p>
-            <p className="text-2xl font-semibold">
-              {new Date().toLocaleDateString("en-US", {
-                timeZone: "Asia/Kolkata",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </div>
-          <div className="mb-6">
-            <p className="text-lg text-gray-600">Amount</p>
-            <p className="text-2xl font-semibold">₹{paymentData.paymentPrice}</p>
-          </div>
-          <div className="mb-6">
-            <p className="text-lg text-gray-600">Email</p>
-            <p className="text-2xl font-semibold">{paymentData.email}</p>
-          </div>
-          <div className="mb-6">
-            <p className="text-lg text-gray-600">Phone</p>
-            <p className="text-2xl font-semibold">{paymentData.phone}</p>
-          </div>
-        </div>
-        {/* Right side: Payment Action */}
-        <div className="bg-white shadow-lg rounded-lg p-8 flex flex-col justify-between">
-          <div>
-            <h2 className="text-4xl font-bold mb-6">Proceed with Payment</h2>
-            <p className="text-xl mb-6">
-              Complete your transaction by clicking the button below to pay via Razorpay.
-            </p>
-          </div>
-          <button
-            onClick={handleBuy}
-            className="w-full bg-green-500 hover:bg-green-600 text-white py-4 px-8 rounded-lg text-2xl font-bold"
-          >
-            Pay with Razorpay
-          </button>
-          <div className="mt-4 text-center text-sm text-gray-500">
-            Secure Payment Processing via Razorpay.
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Manage Payments
+      </Typography>
+      
+      {/* Button to toggle form */}
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ mb: 2 }}
+        onClick={() => setOpenForm(!openForm)}
+      >
+        {openForm ? 'Close Form' : 'New Payment'}
+      </Button>
+      
+      {/* Collapse form */}
+      <Collapse in={openForm}>
+        <Paper sx={{ p: 3, mb: 4 }}>
+          <Stack spacing={2}>
+            <TextField
+              label="Name"
+              variant="outlined"
+              fullWidth
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+            <TextField
+              label="Phone"
+              variant="outlined"
+              fullWidth
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
+            />
+            <TextField
+              label="Address"
+              variant="outlined"
+              fullWidth
+              value={formData.address}
+              onChange={(e) =>
+                setFormData({ ...formData, address: e.target.value })
+              }
+            />
+            <TextField
+              label="City"
+              variant="outlined"
+              fullWidth
+              value={formData.city}
+              onChange={(e) =>
+                setFormData({ ...formData, city: e.target.value })
+              }
+            />
+            <TextField
+              label="Payment Title"
+              variant="outlined"
+              fullWidth
+              value={formData.paymentTitle}
+              onChange={(e) =>
+                setFormData({ ...formData, paymentTitle: e.target.value })
+              }
+            />
+            <TextField
+              label="Postal Code"
+              variant="outlined"
+              fullWidth
+              value={formData.postalCode}
+              onChange={(e) =>
+                setFormData({ ...formData, postalCode: e.target.value })
+              }
+            />
+            <TextField
+              label="Payment Price"
+              variant="outlined"
+              fullWidth
+              type="number"
+              value={formData.paymentPrice}
+              onChange={(e) =>
+                setFormData({ ...formData, paymentPrice: e.target.value })
+              }
+            />
+            <Button variant="contained" color="primary" onClick={addNewPayment}>
+              Add Payment
+            </Button>
+          </Stack>
+        </Paper>
+      </Collapse>
+      
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell align="center">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {payments.map((payment) => (
+              <TableRow key={payment.id}>
+                <TableCell>{payment.name}</TableCell>
+                <TableCell>{payment.email}</TableCell>
+                <TableCell>{payment.phone}</TableCell>
+                <TableCell>₹{payment.paymentPrice}</TableCell>
+                <TableCell align="center">
+                  <Stack spacing={1}>
+                    <Link
+                      href={`https://www.boardingadmissions.com/boardingadmissionspayments/${payment.id}`}
+                      target="_blank"
+                      underline="hover"
+                    >
+                      Payment Link
+                    </Link>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => deletePayment(payment.id)}
+                    >
+                      Delete
+                    </Button>
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 
-export default PaymentDetail;
+export default PaymentPageAdmin;
