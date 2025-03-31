@@ -52,15 +52,21 @@ const PaymentPageAdmin = () => {
   }, []);
 
   // Generate a unique custom ID: BA-Sept-XXXXX-{timestamp}
-  const generateCustomId = (name) => {
-    const prefix = 'BA-Sept-';
-    let trimmedName = name.trim().toUpperCase().slice(0, 5);
-    while (trimmedName.length < 5) {
-      trimmedName += 'X';
-    }
-    const timestamp = Date.now(); // Unique timestamp in milliseconds
-    return `${prefix}${trimmedName}-${timestamp}`;
-  };
+const generateCustomId = (name) => {
+  const prefix = 'BA-Sept-';
+  
+  // Remove special characters and spaces, keep only letters and numbers
+  let sanitized = name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 5);
+
+  // Ensure it's exactly 5 characters by padding with "X"
+  while (sanitized.length < 5) {
+    sanitized += 'X';
+  }
+
+  const timestamp = Date.now(); // Unique timestamp in milliseconds
+  return `${prefix}${sanitized}-${timestamp}`;
+};
+
 
   // Add new payment
   const addNewPayment = async () => {
