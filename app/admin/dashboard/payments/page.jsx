@@ -30,9 +30,12 @@ const PaymentPageAdmin = () => {
     city: '',
     postalCode: '',
     paymentPrice: '',
+    coupon:'',
+    couponPercentage: "",
   });
   const [payments, setPayments] = useState([]);
 
+  
   // Fetch payments from Firestore
   const getAllPaymentsData = async () => {
     try {
@@ -84,6 +87,8 @@ const generateCustomId = (name) => {
         city: '',
         postalCode: '',
         paymentPrice: '',
+        coupon:"",
+        couponPercentage: "",
       });
       setOpenForm(false); // close the form after submission
     } catch (error) {
@@ -175,13 +180,24 @@ const generateCustomId = (name) => {
                 setFormData({ ...formData, paymentTitle: e.target.value })
               }
             />
-            <TextField
-              label="Postal Code"
+      <TextField
+              label="Coupon"
               variant="outlined"
               fullWidth
-              value={formData.postalCode}
+              value={formData.coupon}
               onChange={(e) =>
-                setFormData({ ...formData, postalCode: e.target.value })
+                setFormData({ ...formData, coupon: e.target.value })
+              }
+            />
+               <TextField
+              label="Coupon Percentage"
+              variant="outlined"
+              fullWidth
+              placeholder='write 10% as 10'
+              type="number"
+              value={formData.couponPercentage}
+              onChange={(e) =>
+                setFormData({ ...formData, couponPercentage: e.target.value })
               }
             />
             <TextField
@@ -210,6 +226,7 @@ const generateCustomId = (name) => {
               <TableCell>Phone</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Coupon</TableCell>
               <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -231,6 +248,8 @@ const generateCustomId = (name) => {
                     </span>
                   )}
                 </TableCell>
+                <TableCell>{payment.coupon} {payment.couponPercentage}%</TableCell>
+
                 <TableCell align="center">
                   <Stack spacing={1}>
                     <Link
