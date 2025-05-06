@@ -1,10 +1,13 @@
 "use client";
 
+import { db } from "@/firebase/firebase";
 import { UserContext } from "@/providers/userProvider";
-import { LucidePackageOpen } from "lucide-react";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { LucidePackageOpen, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiFillContacts } from "react-icons/ai";
 import { FaEdit, FaHome, FaUser } from "react-icons/fa";
 import { IoPerson, IoMenu, IoClose } from "react-icons/io5";
@@ -48,9 +51,46 @@ export const TopNavBar = () => {
   ];
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showNotificationPopup, setShowNotificationPopup] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [allStatusesUpdated, setAllStatusesUpdated] = useState(false);
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    const q = query(
+      collection(db, "leads"),
+      where("timestamp", ">=", startOfDay),
+      where("timestamp", "<=", endOfDay)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const newLeads = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      const sortedLeads = newLeads.sort(
+        (a, b) => b.timestamp?.toDate() - a.timestamp?.toDate()
+      );
+
+      setNotifications(sortedLeads);
+
+      setAllStatusesUpdated(false); // Reset the status when new leads are fetched
+      const allUpdated = sortedLeads.every(
+        (lead) => lead.disposition && lead.disposition !== "NA"
+      );
+      setAllStatusesUpdated(allUpdated);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div>
@@ -117,10 +157,85 @@ export const TopNavBar = () => {
         </div>
 
         <div className="flex gap-4 items-center">
-          <div>
-            <Link href="#">
-              <img src="/Notifications.svg" alt="Notifications" />
-            </Link>
+          <div
+            onClick={() => setShowNotificationPopup(true)}
+            className="cursor-pointer"
+          >
+            {allStatusesUpdated ? (
+              <>
+                <Image
+                  src="/bell.png"
+                  width={1000}
+                  height={1000}
+                  alt="Notifications"
+                  className="w-6 h-6"
+                />
+              </>
+            ) : (
+              <>
+                <Image
+                  src="/notificationdot.png"
+                  width={1000}
+                  height={1000}
+                  alt="Notifications"
+                  className="w-6 h-6"
+                />
+              </>
+            )}
+          </div>
+
+          {showNotificationPopup && (
+            <div
+              className="fixed inset-0 bg-black/30 z-40"
+              onClick={() => setShowNotificationPopup(false)}
+            ></div>
+          )}
+
+          <div
+            className={`fixed top-0 right-0 z-50 min-h-screen w-96 bg-gray-100 shadow-lg transform transition-transform duration-300 ease-in-out ${
+              showNotificationPopup ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="p-3 relative h-full">
+              <button
+                onClick={() => setShowNotificationPopup(false)}
+                className="absolute top-2 right-2 text-black"
+              >
+                <X />
+              </button>
+              <h2 className="text-lg font-semibold mb-4 text-[#151D48]">
+                Notifications
+              </h2>
+
+              <div>
+                {notifications.length > 0 ? (
+                  notifications.map((lead, index) => (
+                    <div
+                      key={lead.id}
+                      className={`p-3 rounded-md border-b border-black flex justify-between items-center mt-5
+                      
+                         ${
+                           !lead.disposition || lead.disposition === "NA"
+                             ? "bg-[#206e7fce] text-white"
+                             : "bg-white text-black"
+                         }`}
+                    >
+                      <p className="font-semibold">
+                        Name: {lead.name || "Unnamed"}
+                      </p>
+
+                      <p className="text-sm ">
+                        {lead.timestamp?.toDate
+                          ? lead.timestamp.toDate().toLocaleTimeString()
+                          : "No Time"}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No new leads for today.</p>
+                )}
+              </div>
+            </div>
           </div>
           <div className="flex gap-4 items-center">
             <IoPerson className="text-[55px] p-2 border rounded-xl" />

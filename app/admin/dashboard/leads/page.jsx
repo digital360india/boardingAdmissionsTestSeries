@@ -33,6 +33,24 @@ const Page = () => {
   });
   const [dropdownOpen, setDropdownOpen] = useState(null);
 
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersSnap = await getDocs(collection(db, "users"));
+        const userList = usersSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setUsers(userList);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -42,7 +60,12 @@ const Page = () => {
         ...doc.data(),
       }));
       setLeads(leadList);
-      setNaCount(leadList.filter((lead) => lead.disposition === "NA").length);
+      setNaCount(
+        leadList.filter(
+          (lead) =>
+            !lead.disposition || lead.disposition.trim().toUpperCase() === "NA"
+        ).length
+      );
       setHotCount(leadList.filter((lead) => lead.disposition === "Hot").length);
       setColdCount(
         leadList.filter((lead) => lead.disposition === "Cold").length
@@ -100,6 +123,11 @@ const Page = () => {
     fetchData();
     setDropdownOpen(null);
   };
+  const handleAssignMember = async (leadId, LeadAssignMember) => {
+    await updateDoc(doc(db, "leads", leadId), { LeadAssignMember });
+    fetchData();
+    setDropdownOpen(null);
+  };
 
   useEffect(() => {
     fetchData();
@@ -128,7 +156,9 @@ const Page = () => {
     <div className="p-6">
       <div className="bg-white p-4 rounded-lg shadow-md mb-5">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-blue-900">Today&apos;s Leads</h2>
+          <h2 className="text-xl font-bold text-blue-900">
+            Today&apos;s Leads
+          </h2>
           <button className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg shadow-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +218,9 @@ const Page = () => {
                 <th className="py-2 px-4 text-left">Name</th>
                 <th className="py-2 px-4 text-left">Email</th>
                 <th className="py-2 px-4 text-left">Phone</th>
+                <th className="py-2 px-4 text-left">Date</th>
                 <th className="py-2 px-4 text-left">Disposition</th>
+                <th className="py-2 px-4 text-left">Assign Member</th>
                 <th className="py-2 px-4 text-left">Actions</th>
               </tr>
             </thead>
@@ -199,17 +231,44 @@ const Page = () => {
                   <td className="py-2 px-4">{lead.email}</td>
                   <td className="py-2 px-4">{lead.phonenumber}</td>
                   <td className="py-2 px-4">
-                    <button
-                      className="text-black px-2 py-1 rounded"
-                      onClick={() =>
-                        handleDispositionChange(
-                          lead.id,
-                          lead.disposition === "Hot" ? "Cold" : "Hot"
-                        )
+                    {lead.timestamp?.toDate
+                      ? lead.timestamp.toDate().toLocaleDateString()
+                      : "No date"}
+                  </td>
+
+                  <td className="py-2 px-4">
+                    <select
+                      value={lead.disposition || "NA"}
+                      onChange={(e) =>
+                        handleDispositionChange(lead.id, e.target.value)
                       }
+                      className="border rounded px-2 py-1 text-sm"
                     >
-                      {lead.disposition || "NA"}
-                    </button>
+                      {(!lead.disposition || lead.disposition === "NA") && (
+                        <option value="NA">NA</option>
+                      )}
+                      <option value="Hot">Hot</option>
+                      <option value="Cold">Cold</option>
+                    </select>
+                  </td>
+                  <td className="py-2 px-4">
+                    <select
+                      value={lead.LeadAssignMember || "NA"}
+                      onChange={(e) =>
+                        handleAssignMember(lead.id, e.target.value)
+                      }
+                      className="border rounded px-2 py-1 text-sm"
+                    >
+                      {(!lead.LeadAssignMember ||
+                        lead.LeadAssignMember === "NA") && (
+                        <option value="NA">NA</option>
+                      )}
+                      {users.map((user) => (
+                        <option key={user.id} value={user.displayName}>
+                          {user.displayName || "Unnamed User"}
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   <td className="py-2 px-4">
                     <div className="relative">
@@ -256,9 +315,9 @@ const Page = () => {
               {Array.from({ length: totalPages }, (_, index) => {
                 const page = index + 1;
                 if (
-                  page <= 3 || 
-                  page > totalPages - 2 || 
-                  (page >= currentPage - 1 && page <= currentPage + 1) 
+                  page <= 3 ||
+                  page > totalPages - 2 ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
                 ) {
                   return (
                     <button
@@ -274,8 +333,8 @@ const Page = () => {
                 }
 
                 if (
-                  (page === 4 && currentPage > 4) || 
-                  (page === totalPages - 2 && currentPage < totalPages - 3) 
+                  (page === 4 && currentPage > 4) ||
+                  (page === totalPages - 2 && currentPage < totalPages - 3)
                 ) {
                   return (
                     <span key={page} className="px-4 py-2">
